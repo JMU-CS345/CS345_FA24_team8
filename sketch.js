@@ -6,7 +6,7 @@ let scaleFactor = 1;
 
 
 function preload() {
-  guy = loadImage('mort/base/idle.png');
+  guy = loadImage('assets/mort/base/idle.png');
 }
 
 
