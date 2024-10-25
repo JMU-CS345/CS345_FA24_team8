@@ -17,7 +17,7 @@ let facingRight = true; // To keep track of the character's direction
 
 function preload() {
   map = loadImage('assets/Office_Design_2.gif');
-  guy = loadImage('assets/mort/move.png');
+  guy = loadImage('assets/mort/base/move.png');
 }
 
 
@@ -31,7 +31,7 @@ function setup() {
 function draw() {
   background(220);
   image(map, 0, 10);
-  //image(guy, x, y, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight);
+  image(guy, x, y, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight);
 
   let newWidth = frameWidth * scaleFactor;
   let newHeight = frameHeight * scaleFactor;
@@ -92,7 +92,7 @@ function draw() {
     scale(-1, 1); // Flip the sprite horizontally when facing left
   }
   
-  image(guy, 0, 0, guyWidth * 5, guyHeight * 5, guyX, guyY, guyWidth, guyHeight);
+  // image(guy, 0, 0, guyWidth * 5, guyHeight * 5, guyX, guyY, guyWidth, guyHeight);
   
   pop(); // Restore the previous transformation state
 }
