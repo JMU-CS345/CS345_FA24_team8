@@ -16,7 +16,7 @@ let facingRight = true; // To keep track of the character's direction
 
 
 function preload() {
-  map = loadImage('assets/Office_Design_2.gif');
+  map1 = loadImage('assets/Office_Design_2.gif');
   guy = loadImage('assets/mort/base/move.png');
 }
 
@@ -30,12 +30,7 @@ function setup() {
 
 function draw() {
   background(220);
-  image(map, 0, 10);
-  image(guy, x, y, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight);
-
-  let newWidth = frameWidth * scaleFactor;
-  let newHeight = frameHeight * scaleFactor;
-  //image(img, x, y, newWidth, newHeight, 0, 0, frameWidth, frameHeight);
+  image(map1, 0, 10);
 
   moving = false; // Reset moving state at the start of each frame
 
@@ -92,30 +87,25 @@ function draw() {
     scale(-1, 1); // Flip the sprite horizontally when facing left
   }
   
-  // image(guy, 0, 0, guyWidth * 5, guyHeight * 5, guyX, guyY, guyWidth, guyHeight);
+  image(guy, 0, 0, guyWidth * 5, guyHeight * 5, guyX, guyY, guyWidth, guyHeight);
   
   pop(); // Restore the previous transformation state
 }
 
 let walls = [
   { x1: 0, y1: 203, x2: 32, y2: 203 },
-  { x1: 0, y1: 332, x2: 32, y2: 332 },
-  { x1: 32, y1: 332, x2: 42, y2: 332 },
-  { x1: 32, y1: 392, x2: 319, y2: 392 },
-  { x1: 353, y1: 332, x2: 512, y2: 332 },
-  { x1: 353, y1: 392, x2: 512, y2: 392 },
+  { x1: 0, y1: 342, x2: 32, y2: 342 },
+  { x1: 32, y1: 342, x2: 319, y2: 342 },
+  { x1: 32, y1: 400, x2: 319, y2: 400 },
+  { x1: 353, y1: 342, x2: 400, y2: 342 },
+  { x1: 343, y1: 400, x2: 400, y2: 400 },
   { x1: 32, y1: 137, x2: 0, y2: 137 },
-  { x1: 32, y1: 73, x2: 512, y2: 73 },
-  { x1: 33, y1: 0, x2: 512, y2: 0 },
-  { x1: 33, y1: 137, x2: 31, y2: 0 },
+  { x1: 32, y1: 73, x2: 400, y2: 73 },
+  { x1: 33, y1: 0, x2: 400, y2: 0 },
+  { x1: 31, y1: 137, x2: 31, y2: 0 },
   { x1: 33, y1: 203, x2: 33, y2: 342 },
-  { x1: 319, y1: 332, x2: 319, y2: 392 },
-  { x1: 352, y1: 332, x2: 352, y2: 392 },
-  { x1: 353, y1: 392, x2: 512, y2: 392 },
-  { x1: 32, y1: 332, x2: 319, y2: 332 },
-  { x1: 480, y1: 0, x2: 480, y2: 554 },
-  { x1: 125, y1: 332, x2: 125, y2: 554 },
-  { x1: 125, y1: 525, x2: 554, y2: 525 },
+  { x1: 319, y1: 342, x2: 319, y2: 400 },
+  { x1: 352, y1: 342, x2: 352, y2: 400 },
 ];
 
 function checkCollision(newX, newY) {
@@ -135,27 +125,4 @@ function checkCollision(newX, newY) {
 
 function withinCanvas(newX, newY) {
   return newX >= 0 && newX + frameWidth <= width && newY >= 0 && newY + frameHeight <= height;
-}
-
-function movement() {
-  let newX = x;
-  let newY = y;
-
-  if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-    newY -= 1.5;
-  }
-  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-    newX -= 1.5;
-  }
-  if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-    newY += 1.5;
-  }
-  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-    newX += 1.5;
-  }
-
-  if (!checkCollision(newX, newY) && withinCanvas(newX, newY)) {
-    x = newX;
-    y = newY;
-  }
 }
