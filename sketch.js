@@ -132,3 +132,26 @@ function checkCollision(newX, newY) {
 function withinCanvas(newX, newY) {
   return newX >= 0 && newX + frameWidth <= width && newY >= 0 && newY + frameHeight <= height;
 }
+
+function movement() {
+  let newX = x;
+  let newY = y;
+
+  if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+    newY -= 1.5;
+  }
+  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+    newX -= 1.5;
+  }
+  if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+    newY += 1.5;
+  }
+  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+    newX += 1.5;
+  }
+
+  if (!checkCollision(newX, newY) && withinCanvas(newX, newY)) {
+    x = newX;
+    y = newY;
+  }
+}
