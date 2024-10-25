@@ -17,6 +17,7 @@ let facingRight = true; // To keep track of the character's direction
 
 function preload() {
   map = loadImage('assets/Office_Design_2.gif');
+  guy = loadImage('assets/mort/move.png');
 }
 
 
@@ -25,8 +26,6 @@ function setup() {
 
   x = width / 2;
   y = width / 2;
-
-  guy = loadImage('assets/mort/move.png');
 }
 
 function draw() {
