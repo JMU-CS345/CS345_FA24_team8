@@ -22,7 +22,7 @@ function preload() {
 
 
 function setup() {
-  createCanvas(512, 544);
+  createCanvas(700, 700);
 
   x = width / 2;
   y = width / 2;
@@ -30,7 +30,7 @@ function setup() {
 
 function draw() {
   background(220);
-  image(map1, 0, 10);
+  image(map1, 90, 120);
 
   moving = false; // Reset moving state at the start of each frame
 
