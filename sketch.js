@@ -22,7 +22,7 @@ function preload() {
 
 
 function setup() {
-  createCanvas(700, 700);
+  createCanvas(512, 544);
 
   x = width / 2;
   y = width / 2;
@@ -89,7 +89,7 @@ function draw() {
 
   image(guy, 0, 0, guyWidth * 2, guyHeight * 2, guyX, guyY, guyWidth, guyHeight);
 
-  pop(); // Restore the previous transformation state
+  pop();
 
   if (!checkCollision(newX, newY) && withinCanvas(newX, newY)) {
     x = newX;
