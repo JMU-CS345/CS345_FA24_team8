@@ -83,11 +83,11 @@ function draw() {
   if (facingRight) {
     translate(x, y); // Normal translate when facing right
   } else {
-    translate(x + guyWidth * 5, y); // Adjust translate when facing left
+    translate(x + guyWidth * 2, y); // Adjust translate when facing left
     scale(-1, 1); // Flip the sprite horizontally when facing left
   }
   
-  image(guy, 0, 0, guyWidth * 5, guyHeight * 5, guyX, guyY, guyWidth, guyHeight);
+  image(guy, 0, 0, guyWidth * 2, guyHeight * 2, guyX, guyY, guyWidth, guyHeight);
   
   pop(); // Restore the previous transformation state
 }
