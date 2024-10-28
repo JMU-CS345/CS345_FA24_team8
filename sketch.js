@@ -38,16 +38,16 @@ function draw() {
   if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
     y -= 1;
     moving = true;
-  } 
+  }
   if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
     x -= 1;
     moving = true;
     facingRight = false;
-  } 
+  }
   if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
     y += 1;
     moving = true;
-  } 
+  }
   if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
     x += 1;
     moving = true;
@@ -79,17 +79,23 @@ function draw() {
   guyY = 0;
 
   push(); // Save the current transformation state
-  
+
   if (facingRight) {
     translate(x, y); // Normal translate when facing right
   } else {
     translate(x + guyWidth * 2, y); // Adjust translate when facing left
     scale(-1, 1); // Flip the sprite horizontally when facing left
   }
-  
+
   image(guy, 0, 0, guyWidth * 2, guyHeight * 2, guyX, guyY, guyWidth, guyHeight);
-  
+
   pop(); // Restore the previous transformation state
+
+  if (!checkCollision(newX, newY) && withinCanvas(newX, newY)) {
+    x = newX;
+    y = newY;
+  }
+
 }
 
 let walls = [
