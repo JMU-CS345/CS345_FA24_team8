@@ -9,7 +9,10 @@ let guyX;
 let guyY;
 let guyWidth = 24;
 let guyHeight = 24;
+let numWorkers;
+let money;
 let frame = 0;
+let clickValue;
 let dela = 5; // Animation delay
 let moving = false;
 let facingRight = true; // To keep track of the character's direction
@@ -26,11 +29,19 @@ function setup() {
 
   x = 125;
   y = 282;
+  numWorkers = 2;
+  money = 50;
+  textSize(24); // Set text size for display
+  textAlign(LEFT, TOP);
 }
 
 function draw() {
   background(220);
   image(map1, 90, 120);
+
+  fill(0); // Set text color to black
+  text("Money: $" + money, 10, 10);
+  clickValue = numWorkers
 
   moving = false; // Reset moving state at the start of each frame
 
@@ -124,7 +135,7 @@ let walls = [
   { topLeft: { x: 435, y: 442 }, bottomRight: { x: 569, y: 501 } },
   { topLeft: { x: 219, y: 453 }, bottomRight: { x: 410, y: 502 } },
   { topLeft: { x: 204, y: 450 }, bottomRight: { x: 217, y: 644 } },
-  { topLeft: { x: 206, y: 633 }, bttomRight: { x: 584, y: 643 } }
+  { topLeft: { x: 206, y: 633 }, bottomRight: { x: 584, y: 643 } }
 ];
 
 function checkCollision(px, py, pWidth, pHeight, wall) {
@@ -138,4 +149,8 @@ function checkCollision(px, py, pWidth, pHeight, wall) {
 
 function withinCanvas(newX, newY) {
   return newX >= 0 && newX + frameWidth <= width && newY >= 0 && newY + frameHeight <= height;
+}
+
+function mousePressed() {
+  money += clickValue; // Increase money by 10 on mouse press
 }
