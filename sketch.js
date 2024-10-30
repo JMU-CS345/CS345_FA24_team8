@@ -18,7 +18,8 @@ let moving = false;
 let facingRight = true; // To keep track of the character's direction
 
 
-let timerValue = 5;
+let timerMinutes = 1; 
+let timerSeconds = 0;
 
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
@@ -43,15 +44,18 @@ function draw() {
   background(220);
   image(map1, 90, 120);
 
-  fill(0); // Set text color to black
+  fill(0); 
   text("Money: $" + money, 10, 10);
-  text("Time until rent: " + timerValue, 10, 40);
+  
+  
+  text("Time until rent: " + nf(timerMinutes, 2) + ":" + nf(timerSeconds, 2), 10, 40);
 
   moving = false; // Reset moving state at the start of each frame
 
-  // Movement and animation logic
   let newX = x;
   let newY = y;
+
+  // Movement and animation logic
   if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
     newY -= 1;
     moving = true;
@@ -71,7 +75,6 @@ function draw() {
     facingRight = true;
   }
 
-  // Check for collision
   for (let wall of walls) {
     if (checkCollision(newX, newY, guyWidth, guyHeight, wall)) {
       // Reset position if a collision occurs
@@ -110,14 +113,18 @@ function draw() {
   pop();
 }
 
-// Timer function
+
 function timeIt() {
-  if (timerValue > 0) {
-    timerValue--;
-  } else {
+  if (timerMinutes === 0 && timerSeconds === 0) {
     alert("Rent is due! $250 deducted.");
     money -= 250; 
-    timerValue = 5; 
+    timerMinutes = 3; 
+    timerSeconds = 0;
+  } else if (timerSeconds === 0) {
+    timerMinutes--; 
+    timerSeconds = 59; 
+  } else {
+    timerSeconds--; 
   }
 }
 
@@ -151,3 +158,4 @@ function withinCanvas(newX, newY) {
 function mousePressed() {
   money += clickValue;
 }
+
