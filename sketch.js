@@ -24,8 +24,8 @@ function preload() {
 function setup() {
   createCanvas(700, 700);
 
-  x = width / 2;
-  y = width / 2;
+  x = 125;
+  y = 282;
 }
 
 function draw() {
@@ -52,6 +52,23 @@ function draw() {
     x += 1;
     moving = true;
     facingRight = true;
+  }
+  for (let wall of walls) {
+    if (checkCollision(x, y, guyWidth, guyHeight, wall)) {
+      // Reset position if a collision occurs
+      if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+        y += 1;
+      }
+      if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+        x += 1;
+      }
+      if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+        y -= 1;
+      }
+      if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+        x -= 1;
+      }
+    }
   }
 
   // Handle animation frames if the character is moving
@@ -90,48 +107,33 @@ function draw() {
   image(guy, 0, 0, guyWidth * 2, guyHeight * 2, guyX, guyY, guyWidth, guyHeight);
 
   pop();
-
-  if (!checkCollision(newX, newY) && withinCanvas(newX, newY)) {
+/*
+  if (!checkCollision(newX, newY  ) && withinCanvas(newX, newY)) {
     x = newX;
     y = newY;
   }
-
+*/
 }
 
 let walls = [
-  { x1: 0, y1: 203, x2: 32, y2: 203 },
-  { x1: 0, y1: 332, x2: 32, y2: 332 },
-  { x1: 32, y1: 332, x2: 42, y2: 332 },
-  { x1: 32, y1: 392, x2: 319, y2: 392 },
-  { x1: 353, y1: 332, x2: 512, y2: 332 },
-  { x1: 353, y1: 392, x2: 512, y2: 392 },
-  { x1: 32, y1: 137, x2: 0, y2: 137 },
-  { x1: 32, y1: 73, x2: 512, y2: 73 },
-  { x1: 33, y1: 0, x2: 512, y2: 0 },
-  { x1: 33, y1: 137, x2: 31, y2: 0 },
-  { x1: 33, y1: 203, x2: 33, y2: 342 },
-  { x1: 319, y1: 332, x2: 319, y2: 392 },
-  { x1: 352, y1: 332, x2: 352, y2: 392 },
-  { x1: 353, y1: 392, x2: 512, y2: 392 },
-  { x1: 32, y1: 332, x2: 319, y2: 332 },
-  { x1: 480, y1: 0, x2: 480, y2: 554 },
-  { x1: 125, y1: 332, x2: 125, y2: 554 },
-  { x1: 125, y1: 525, x2: 554, y2: 525 },
+  { topLeft: { x: 79, y: 182 }, bottomRight: { x: 122, y: 247 } },
+  { topLeft: { x: 122, y: 131 }, bottomRight: { x: 570, y: 181 } },
+  { topLeft: { x: 570, y: 121 }, bottomRight: { x: 592, y: 643 } },
+  { topLeft: { x: 90, y: 312 }, bottomRight: { x: 121, y: 451 } },
+  { topLeft: { x: 111, y: 442 }, bottomRight: { x: 409, y: 452 } },
+  { topLeft: { x: 435, y: 442 }, bottomRight: { x: 569, y: 501 } },
+  { topLeft: { x: 219, y: 453 }, bottomRight: { x: 410, y: 502 } },
+  { topLeft: { x: 204, y: 450 }, bottomRight: { x: 217, y: 644 } },
+  { topLeft: { x: 206, y: 633 }, bttomRight: { x: 584, y: 643 } }
 ];
 
-function checkCollision(newX, newY) {
-  for (let wall of walls) {
-    if (wall.y1 === wall.y2 && newY + frameHeight > wall.y1 && newY < wall.y1 &&
-      ((newX + frameWidth > wall.x1 && newX < wall.x2) || (newX < wall.x1 && newX + frameWidth > wall.x2))) {
-      return true;
-    }
-
-    if (wall.x1 === wall.x2 && newX + frameWidth > wall.x1 && newX < wall.x1 &&
-      ((newY + frameHeight > wall.y1 && newY < wall.y2) || (newY < wall.y1 && newY + frameHeight > wall.y2))) {
-      return true;
-    }
-  }
-  return false;
+function checkCollision(px, py, pWidth, pHeight, wall) {
+  return (
+    px + pWidth > wall.topLeft.x &&
+    px < wall.bottomRight.x &&
+    py + pHeight > wall.topLeft.y &&
+    py < wall.bottomRight.y
+  );
 }
 
 function withinCanvas(newX, newY) {
