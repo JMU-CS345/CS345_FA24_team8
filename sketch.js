@@ -14,6 +14,10 @@ let dela = 5; // Animation delay
 let moving = false;
 let facingRight = true; // To keep track of the character's direction
 
+// var timerValue = 5;
+// var startButton; 
+
+
 
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
@@ -26,11 +30,18 @@ function setup() {
 
   x = width / 2;
   y = width / 2;
+  
+  // setInterval(timeIt, 1000);
 }
 
 function draw() {
   background(220);
   image(map1, 90, 120);
+
+  // if (timerValue == 0) {
+  //   alert("rent is due!: 250 ")
+  //   timerValue = 5;
+  // }
 
   moving = false; // Reset moving state at the start of each frame
 
@@ -137,3 +148,10 @@ function checkCollision(newX, newY) {
 function withinCanvas(newX, newY) {
   return newX >= 0 && newX + frameWidth <= width && newY >= 0 && newY + frameHeight <= height;
 }
+
+
+// function timeIt() {
+//   if (timerValue > 0) {
+//     timerValue--;
+//   }
+//}
