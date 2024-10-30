@@ -18,11 +18,12 @@ let moving = false;
 let facingRight = true; // To keep track of the character's direction
 
 
+let timerValue = 5;
+
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
   guy = loadImage('assets/mort/base/move.png');
 }
-
 
 function setup() {
   createCanvas(700, 700);
@@ -31,8 +32,11 @@ function setup() {
   y = 282;
   numWorkers = 2;
   money = 50;
-  textSize(24); // Set text size for display
+  clickValue = numWorkers;
+  textSize(24); 
   textAlign(LEFT, TOP);
+
+  setInterval(timeIt, 1000); 
 }
 
 function draw() {
@@ -41,46 +45,44 @@ function draw() {
 
   fill(0); // Set text color to black
   text("Money: $" + money, 10, 10);
-  clickValue = numWorkers
+  text("Time until rent: " + timerValue, 10, 40);
 
   moving = false; // Reset moving state at the start of each frame
 
   // Movement and animation logic
+  let newX = x;
+  let newY = y;
   if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-    y -= 1;
+    newY -= 1;
     moving = true;
   }
   if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-    x -= 1;
+    newX -= 1;
     moving = true;
     facingRight = false;
   }
   if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-    y += 1;
+    newY += 1;
     moving = true;
   }
   if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-    x += 1;
+    newX += 1;
     moving = true;
     facingRight = true;
   }
+
+  // Check for collision
   for (let wall of walls) {
-    if (checkCollision(x, y, guyWidth, guyHeight, wall)) {
+    if (checkCollision(newX, newY, guyWidth, guyHeight, wall)) {
       // Reset position if a collision occurs
-      if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-        y += 1;
-      }
-      if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-        x += 1;
-      }
-      if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-        y -= 1;
-      }
-      if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-        x -= 1;
-      }
+      newX = x;
+      newY = y;
     }
   }
+
+  // Update position if no collision
+  x = newX;
+  y = newY;
 
   // Handle animation frames if the character is moving
   if (moving) {
@@ -89,17 +91,6 @@ function draw() {
     }
   } else {
     frame = 0;
-  }
-
-  if (x > width) {
-    x = -24;
-  } else if (x < -24) {
-    x = width;
-  }
-  if (y > height) {
-    y = -24;
-  } else if (y < -24) {
-    y = height;
   }
 
   // Set the sprite frame position for the animation
@@ -116,16 +107,21 @@ function draw() {
   }
 
   image(guy, 0, 0, guyWidth * 2, guyHeight * 2, guyX, guyY, guyWidth, guyHeight);
-
   pop();
-/*
-  if (!checkCollision(newX, newY  ) && withinCanvas(newX, newY)) {
-    x = newX;
-    y = newY;
-  }
-*/
 }
 
+// Timer function
+function timeIt() {
+  if (timerValue > 0) {
+    timerValue--;
+  } else {
+    alert("Rent is due! $250 deducted.");
+    money -= 250; 
+    timerValue = 5; 
+  }
+}
+
+// Wall collision boundaries
 let walls = [
   { topLeft: { x: 79, y: 182 }, bottomRight: { x: 122, y: 247 } },
   { topLeft: { x: 122, y: 131 }, bottomRight: { x: 570, y: 181 } },
@@ -151,6 +147,7 @@ function withinCanvas(newX, newY) {
   return newX >= 0 && newX + frameWidth <= width && newY >= 0 && newY + frameHeight <= height;
 }
 
+// Mouse click increases money by clickValue
 function mousePressed() {
-  money += clickValue; // Increase money by 10 on mouse press
+  money += clickValue;
 }
