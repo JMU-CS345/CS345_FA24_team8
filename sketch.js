@@ -135,6 +135,9 @@ function keyPressed() {
   if (key === 'p' || key === 'P') {
     togglePause();
   }
+  if (key === ' ') {
+    money += numLvl1Workers;
+  }
 }
 
 function timeIt() {
