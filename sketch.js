@@ -6,6 +6,7 @@ let guyY;
 let guyWidth = 24;
 let guyHeight = 24;
 let numWorkers;
+let numLvl1Workers;
 let money;
 let frame = 0;
 let clickValue;
@@ -16,6 +17,7 @@ let timerMinutes = 1;
 let timerSeconds = 0;
 let isPaused = false;
 let gameUI;
+let moneyPerSecond;
 
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
@@ -26,6 +28,7 @@ function setup() {
   createCanvas(700, 700);
   x = 125;
   y = 282;
+  numLvl1Workers = 2;
   numWorkers = 2;
   money = 50;
   clickValue = numWorkers;
@@ -36,6 +39,8 @@ function setup() {
 function draw() {
   background(220);
   image(map1, 90, 120);
+
+  moneyPerSecond = numLvl1Workers;
   
   // Update pause button hover state and draw UI
   gameUI.checkPauseButtonHover(mouseX, mouseY);
@@ -144,6 +149,7 @@ function timeIt() {
       timerSeconds = 59;
     } else {
       timerSeconds--;
+      money += numLvl1Workers
     }
   }
 }
