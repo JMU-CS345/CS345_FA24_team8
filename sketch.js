@@ -1,8 +1,4 @@
 let guy;
-let frameWidth = 24;
-let frameHeight = 24;
-let scaleFactor = 1;
-
 let x = 200;
 let y = 200;
 let guyX;
@@ -15,11 +11,11 @@ let frame = 0;
 let clickValue;
 let dela = 5; // Animation delay
 let moving = false;
-let facingRight = true; // To keep track of the character's direction
-
-
-let timerMinutes = 1; 
+let facingRight = true;
+let timerMinutes = 1;
 let timerSeconds = 0;
+let isPaused = false;
+let gameUI;
 
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
@@ -28,34 +24,37 @@ function preload() {
 
 function setup() {
   createCanvas(700, 700);
-
   x = 125;
   y = 282;
   numWorkers = 2;
   money = 50;
   clickValue = numWorkers;
-  textSize(24); 
-  textAlign(LEFT, TOP);
-
-  setInterval(timeIt, 1000); 
+  gameUI = new GameUI();
+  setInterval(timeIt, 1000);
 }
 
 function draw() {
   background(220);
   image(map1, 90, 120);
-
-  fill(0); 
-  text("Money: $" + money, 10, 10);
   
-  
-  text("Time until rent: " + nf(timerMinutes, 2) + ":" + nf(timerSeconds, 2), 10, 40);
+  // Update pause button hover state and draw UI
+  gameUI.checkPauseButtonHover(mouseX, mouseY);
+  gameUI.drawUI({
+    money,
+    timerMinutes,
+    timerSeconds,
+    isPaused,
+    width,
+    height
+  });
 
-  moving = false; // Reset moving state at the start of each frame
+  if (isPaused) return;
 
+  // Movement logic
+  moving = false;
   let newX = x;
   let newY = y;
 
-  // Movement and animation logic
   if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
     newY -= 1;
     moving = true;
@@ -75,60 +74,80 @@ function draw() {
     facingRight = true;
   }
 
+  // Wall collision checks
   for (let wall of walls) {
     if (checkCollision(newX, newY, guyWidth, guyHeight, wall)) {
-      // Reset position if a collision occurs
       newX = x;
       newY = y;
     }
   }
 
-  // Update position if no collision
   x = newX;
   y = newY;
 
-  // Handle animation frames if the character is moving
+  // Animation handling
   if (moving) {
     if (frameCount % dela === 0) {
-      frame = (frame + 1) % 6; // Loop through 6 frames
+      frame = (frame + 1) % 6;
     }
   } else {
     frame = 0;
   }
 
-  // Set the sprite frame position for the animation
   guyX = frame * guyWidth;
   guyY = 0;
 
-  push(); // Save the current transformation state
-
+  // Character rendering
+  push();
   if (facingRight) {
-    translate(x, y); // Normal translate when facing right
+    translate(x, y);
   } else {
-    translate(x + guyWidth * 2, y); // Adjust translate when facing left
-    scale(-1, 1); // Flip the sprite horizontally when facing left
+    translate(x + guyWidth * 2, y);
+    scale(-1, 1);
   }
-
   image(guy, 0, 0, guyWidth * 2, guyHeight * 2, guyX, guyY, guyWidth, guyHeight);
   pop();
 }
 
-
-function timeIt() {
-  if (timerMinutes === 0 && timerSeconds === 0) {
-    alert("Rent is due! $250 deducted.");
-    money -= 250; 
-    timerMinutes = 3; 
-    timerSeconds = 0;
-  } else if (timerSeconds === 0) {
-    timerMinutes--; 
-    timerSeconds = 59; 
-  } else {
-    timerSeconds--; 
+function mousePressed() {
+  // Check if pause button was clicked
+  if (gameUI.pauseButtonHovered) {
+    togglePause();
+    return;
+  }
+  
+  // Only add money if not paused
+  if (!isPaused) {
+    money += clickValue;
   }
 }
 
-// Wall collision boundaries
+function togglePause() {
+  isPaused = !isPaused;
+}
+
+function keyPressed() {
+  if (key === 'p' || key === 'P') {
+    togglePause();
+  }
+}
+
+function timeIt() {
+  if (!isPaused) {
+    if (timerMinutes === 0 && timerSeconds === 0) {
+      alert("Rent is due! $250 deducted.");
+      money -= 250;
+      timerMinutes = 3;
+      timerSeconds = 0;
+    } else if (timerSeconds === 0) {
+      timerMinutes--;
+      timerSeconds = 59;
+    } else {
+      timerSeconds--;
+    }
+  }
+}
+
 let walls = [
   { topLeft: { x: 79, y: 182 }, bottomRight: { x: 122, y: 247 } },
   { topLeft: { x: 122, y: 131 }, bottomRight: { x: 570, y: 181 } },
@@ -149,13 +168,3 @@ function checkCollision(px, py, pWidth, pHeight, wall) {
     py < wall.bottomRight.y
   );
 }
-
-function withinCanvas(newX, newY) {
-  return newX >= 0 && newX + frameWidth <= width && newY >= 0 && newY + frameHeight <= height;
-}
-
-// Mouse click increases money by clickValue
-function mousePressed() {
-  money += clickValue;
-}
-
