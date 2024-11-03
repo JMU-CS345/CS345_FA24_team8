@@ -34,7 +34,7 @@ class GameUI {
     }
   
     // Draw money display
-    drawMoneyDisplay(money) {
+    drawMoneyDisplay(money, mult) {
       push();
       translate(this.MONEY_DISPLAY.x, this.MONEY_DISPLAY.y);
       fill('#4a5c68');
@@ -58,6 +58,7 @@ class GameUI {
       textSize(16);
       fill('#9bbc0f');
       text(money.toString(), 32, this.MONEY_DISPLAY.height/2);
+      text("$" + mult.toString() + "/sec", 100, this.MONEY_DISPLAY.height/2);
       
       pop();
     }
@@ -136,7 +137,7 @@ class GameUI {
   
     // Draw all UI elements
     drawUI(gameState) {
-      this.drawMoneyDisplay(gameState.money);
+      this.drawMoneyDisplay(gameState.money, gameState.moneyPerSecond);
       this.drawTimerDisplay(gameState.timerMinutes, gameState.timerSeconds);
       this.drawPauseButton();
       

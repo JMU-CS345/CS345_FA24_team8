@@ -17,7 +17,7 @@ let timerMinutes = 1;
 let timerSeconds = 0;
 let isPaused = false;
 let gameUI;
-let moneyPerSecond;
+let moneyPerSecond = 1;
 
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
@@ -50,7 +50,8 @@ function draw() {
     timerSeconds,
     isPaused,
     width,
-    height
+    height,
+    moneyPerSecond
   });
 
   if (isPaused) return;
