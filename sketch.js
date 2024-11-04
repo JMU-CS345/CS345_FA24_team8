@@ -21,6 +21,7 @@ let moneyPerSecond = 1;
 let currentFloor = 1;
 let inElevator = false;
 let showFloorMenu = false;
+let showWalls = false; // New variable to control wall visibility
 
 let box = { x: 0, y: 0, width: 0, height: 0, dragging: false };
 let cornersHovered = null; // Track which corner is hovered
@@ -52,7 +53,7 @@ function setup() {
 
 function draw() {
   background(220);
-  
+
   if (showFloorMenu) {
     gameUI.drawFloorMenu(currentFloor);
     return;
@@ -167,6 +168,21 @@ function draw() {
   }
   image(guy, 0, 0, guyWidth * 2, guyHeight * 2, guyX, guyY, guyWidth, guyHeight);
   pop();
+
+  // Show walls if toggled
+  if (showWalls) {
+    for (let wall of walls) {
+      fill(0, 100);
+      rect(wall.topLeft.x, wall.topLeft.y,
+           wall.bottomRight.x - wall.topLeft.x,
+           wall.bottomRight.y - wall.topLeft.y);
+      if (hoveredWall === wall) {
+        fill(255, 0, 0);
+        text(`Top Left: (${wall.topLeft.x}, ${wall.topLeft.y})`, wall.topLeft.x, wall.topLeft.y - 10);
+        text(`Bottom Right: (${wall.bottomRight.x}, ${wall.bottomRight.y})`, wall.topLeft.x, wall.topLeft.y + 10);
+      }
+    }
+  }
 }
 
 function mousePressed() {
@@ -177,7 +193,7 @@ function mousePressed() {
       showFloorMenu = false;
       inElevator = false;
       x = elevator.x + elevator.width + 5;
-      y = elevator.y + elevator.height/2;
+      y = elevator.y + elevator.height / 2;
       return;
     }
   }
@@ -199,6 +215,10 @@ function togglePause() {
 function keyPressed() {
   if (key === 'p' || key === 'P') {
     togglePause();
+  }
+
+  if (key === 'm' || key === 'M') {
+    showWalls = !showWalls; // Toggle wall visibility
   }
 }
 
@@ -237,4 +257,21 @@ function checkCollision(px, py, pWidth, pHeight, wall) {
     py + pHeight > wall.topLeft.y &&
     py < wall.bottomRight.y
   );
+}
+
+function checkCornersHover(mx, my) {
+  const corners = [
+    { x: box.x, y: box.y }, // Top-left
+    { x: box.x + box.width, y: box.y }, // Top-right
+    { x: box.x, y: box.y + box.height }, // Bottom-left
+    { x: box.x + box.width, y: box.y + box.height } // Bottom-right
+  ];
+
+  for (let corner of corners) {
+    if (dist(mx, my, corner.x, corner.y) < 10) { // 10 pixels radius for hover
+      return corner;
+    }
+  }
+
+  return null; // No corner hovered
 }
