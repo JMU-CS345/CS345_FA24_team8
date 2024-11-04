@@ -18,10 +18,20 @@ let timerSeconds = 0;
 let isPaused = false;
 let gameUI;
 let moneyPerSecond = 1;
+let currentFloor = 1;
+let inElevator = false;
+let showFloorMenu = false;
 
 let box = { x: 0, y: 0, width: 0, height: 0, dragging: false };
 let cornersHovered = null; // Track which corner is hovered
 let hoveredWall = null; // Track which wall is hovered
+
+let elevator = {
+  x: 50,
+  y: 247,
+  width: 40,
+  height: 65
+};
 
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
@@ -42,11 +52,24 @@ function setup() {
 
 function draw() {
   background(220);
+  
+  if (showFloorMenu) {
+    gameUI.drawFloorMenu(currentFloor);
+    return;
+  }
+
   image(map1, 90, 120);
+
+  // Draw elevator
+  fill(100);
+  rect(elevator.x, elevator.y, elevator.width, elevator.height);
+  fill(150);
+  textSize(12);
+  textAlign(CENTER, CENTER);
+  text("Floor " + currentFloor, elevator.x + elevator.width/2, elevator.y + elevator.height/2);
 
   moneyPerSecond = numLvl1Workers;
 
-  // Update pause button hover state and draw UI
   gameUI.checkPauseButtonHover(mouseX, mouseY);
   gameUI.drawUI({
     money,
@@ -60,12 +83,21 @@ function draw() {
 
   if (isPaused) return;
 
-  // Draw the red box if it's created
+  // Check for elevator collision
+  if (checkCollision(x, y, guyWidth * 2, guyHeight * 2, {
+    topLeft: { x: elevator.x, y: elevator.y },
+    bottomRight: { x: elevator.x + elevator.width, y: elevator.y + elevator.height }
+  })) {
+    if (!inElevator) {
+      inElevator = true;
+      showFloorMenu = true;
+    }
+  }
+
   if (box.width > 0 && box.height > 0) {
-    fill(255, 0, 0, 150); // Red with transparency
+    fill(255, 0, 0, 150);
     rect(box.x, box.y, box.width, box.height);
 
-    // Check corners for hover
     cornersHovered = checkCornersHover(mouseX, mouseY);
     if (cornersHovered) {
       fill(0);
@@ -73,7 +105,6 @@ function draw() {
     }
   }
 
-  // Movement logic
   moving = false;
   let newX = x;
   let newY = y;
@@ -97,31 +128,25 @@ function draw() {
     facingRight = true;
   }
 
-  // Wall collision checks
   let collisionDetected = false;
-  hoveredWall = null; // Reset hovered wall
+  hoveredWall = null;
 
   for (let wall of walls) {
     if (checkCollision(newX, newY, guyWidth * 2, guyHeight * 2, wall)) {
       collisionDetected = true;
       break;
     }
-    // Check if the mouse is hovering over any wall
     if (mouseX >= wall.topLeft.x && mouseX <= wall.bottomRight.x &&
         mouseY >= wall.topLeft.y && mouseY <= wall.bottomRight.y) {
-      hoveredWall = wall; // Set the hovered wall
+      hoveredWall = wall;
     }
   }
 
-  // Update position if no collision is detected
   if (!collisionDetected) {
     x = newX;
     y = newY;
   }
 
-
-
-  // Animation handling
   if (moving) {
     if (frameCount % dela === 0) {
       frame = (frame + 1) % 6;
@@ -133,7 +158,6 @@ function draw() {
   guyX = frame * guyWidth;
   guyY = 0;
 
-  // Character rendering
   push();
   if (facingRight) {
     translate(x, y);
@@ -146,13 +170,23 @@ function draw() {
 }
 
 function mousePressed() {
-  // Check if pause button was clicked
+  if (showFloorMenu) {
+    let selectedFloor = gameUI.handleFloorSelection(mouseX, mouseY);
+    if (selectedFloor !== null) {
+      currentFloor = selectedFloor;
+      showFloorMenu = false;
+      inElevator = false;
+      x = elevator.x + elevator.width + 5;
+      y = elevator.y + elevator.height/2;
+      return;
+    }
+  }
+
   if (gameUI.pauseButtonHovered) {
     togglePause();
     return;
   }
 
-  // Only add money if not paused
   if (!isPaused) {
     money += clickValue;
   }
