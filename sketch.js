@@ -19,6 +19,10 @@ let isPaused = false;
 let gameUI;
 let moneyPerSecond = 1;
 
+let box = { x: 0, y: 0, width: 0, height: 0, dragging: false };
+let cornersHovered = null; // Track which corner is hovered
+let hoveredWall = null; // Track which wall is hovered
+
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
   guy = loadImage('assets/mort/base/move.png');
@@ -41,7 +45,7 @@ function draw() {
   image(map1, 90, 120);
 
   moneyPerSecond = numLvl1Workers;
-  
+
   // Update pause button hover state and draw UI
   gameUI.checkPauseButtonHover(mouseX, mouseY);
   gameUI.drawUI({
@@ -55,6 +59,19 @@ function draw() {
   });
 
   if (isPaused) return;
+
+  // Draw the red box if it's created
+  if (box.width > 0 && box.height > 0) {
+    fill(255, 0, 0, 150); // Red with transparency
+    rect(box.x, box.y, box.width, box.height);
+
+    // Check corners for hover
+    cornersHovered = checkCornersHover(mouseX, mouseY);
+    if (cornersHovered) {
+      fill(0);
+      text(`(${cornersHovered.x}, ${cornersHovered.y})`, mouseX + 5, mouseY - 5);
+    }
+  }
 
   // Movement logic
   moving = false;
@@ -81,15 +98,28 @@ function draw() {
   }
 
   // Wall collision checks
+  let collisionDetected = false;
+  hoveredWall = null; // Reset hovered wall
+
   for (let wall of walls) {
-    if (checkCollision(newX, newY, guyWidth, guyHeight, wall)) {
-      newX = x;
-      newY = y;
+    if (checkCollision(newX, newY, guyWidth * 2, guyHeight * 2, wall)) {
+      collisionDetected = true;
+      break;
+    }
+    // Check if the mouse is hovering over any wall
+    if (mouseX >= wall.topLeft.x && mouseX <= wall.bottomRight.x &&
+        mouseY >= wall.topLeft.y && mouseY <= wall.bottomRight.y) {
+      hoveredWall = wall; // Set the hovered wall
     }
   }
 
-  x = newX;
-  y = newY;
+  // Update position if no collision is detected
+  if (!collisionDetected) {
+    x = newX;
+    y = newY;
+  }
+
+
 
   // Animation handling
   if (moving) {
@@ -121,7 +151,7 @@ function mousePressed() {
     togglePause();
     return;
   }
-  
+
   // Only add money if not paused
   if (!isPaused) {
     money += clickValue;
@@ -150,7 +180,7 @@ function timeIt() {
       timerSeconds = 59;
     } else {
       timerSeconds--;
-      money += numLvl1Workers
+      money += numLvl1Workers;
     }
   }
 }
@@ -160,11 +190,10 @@ let walls = [
   { topLeft: { x: 122, y: 131 }, bottomRight: { x: 570, y: 181 } },
   { topLeft: { x: 570, y: 121 }, bottomRight: { x: 592, y: 643 } },
   { topLeft: { x: 90, y: 312 }, bottomRight: { x: 121, y: 451 } },
-  { topLeft: { x: 111, y: 442 }, bottomRight: { x: 409, y: 452 } },
-  { topLeft: { x: 435, y: 442 }, bottomRight: { x: 569, y: 501 } },
-  { topLeft: { x: 219, y: 453 }, bottomRight: { x: 410, y: 502 } },
   { topLeft: { x: 204, y: 450 }, bottomRight: { x: 217, y: 644 } },
-  { topLeft: { x: 206, y: 633 }, bottomRight: { x: 584, y: 643 } }
+  { topLeft: { x: 206, y: 633 }, bottomRight: { x: 584, y: 643 } },
+  { topLeft: { x: 108, y: 442 }, bottomRight: { x: 395, y: 503 } },
+  { topLeft: { x: 455, y: 442 }, bottomRight: { x: 570, y: 503 } },
 ];
 
 function checkCollision(px, py, pWidth, pHeight, wall) {
