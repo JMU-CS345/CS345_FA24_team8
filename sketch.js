@@ -142,9 +142,11 @@ function keyPressed() {
 
 function timeIt() {
   if (!isPaused) {
-    if (timerMinutes === 0 && timerSeconds === 0) {
+    if (timerMinutes === 0 && timerSeconds === 0 && money < 0) {
+      restart();
+    } else if (timerMinutes === 0 && timerSeconds === 0) {
       alert("Rent is due! $500 deducted.");
-      money -= 500;
+      money -= 2000;
       timerMinutes = 3;
       timerSeconds = 0;
     } else if (timerSeconds === 0) {
@@ -155,6 +157,19 @@ function timeIt() {
       money += numLvl1Workers
     }
   }
+}
+
+function restart() {
+  x = 125;
+  y = 282;
+  numLvl1Workers = 2;
+  numWorkers = 2;
+  money = 50;
+  clickValue = numWorkers;
+  gameUI = new GameUI();
+  setInterval(timeIt, 1000);
+  timerMinutes = 3;
+  timerSeconds = 0;
 }
 
 let walls = [
