@@ -146,7 +146,7 @@ function timeIt() {
       restart();
     } else if (timerMinutes === 0 && timerSeconds === 0) {
       alert("Rent is due! $500 deducted.");
-      money -= 2000;
+      money -= 500;
       timerMinutes = 3;
       timerSeconds = 0;
     } else if (timerSeconds === 0) {
