@@ -253,6 +253,7 @@ function keyPressed() {
 
 
 function timeIt() {
+<<<<<<< HEAD
  if (!isPaused) {
    if (timerMinutes === 0 && timerSeconds === 0) {
      alert("Rent is due! $500 deducted.");
@@ -272,6 +273,24 @@ function timeIt() {
  }
 
 
+=======
+  if (!isPaused) {
+    if (timerMinutes === 0 && timerSeconds === 0) {
+      alert("Rent is due! $500 deducted.");
+      money -= 500;
+      timerMinutes = 3;
+      timerSeconds = 0;
+    } else if (timerSeconds === 0) {
+      timerMinutes--;
+      timerSeconds = 59;
+    } else {
+      timerSeconds--;
+      money += numLvl1Workers
+    }
+  }
+}
+
+>>>>>>> parent of 65d202c (Update sketch.js)
 let walls = [
  { topLeft: { x: 79, y: 182 }, bottomRight: { x: 122, y: 247 } },
  { topLeft: { x: 122, y: 131 }, bottomRight: { x: 570, y: 181 } },
