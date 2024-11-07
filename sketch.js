@@ -72,6 +72,7 @@ function draw() {
   moneyPerSecond = numLvl1Workers;
 
   gameUI.checkPauseButtonHover(mouseX, mouseY);
+  gameUI.checkToolboxButtonHover(mouseX, mouseY);
   gameUI.drawUI({
     money,
     timerMinutes,
@@ -82,7 +83,7 @@ function draw() {
     moneyPerSecond
   });
 
-  if (isPaused) return;
+  if (isPaused || gameUI.showUpgradesMenu) return;
 
   // Check for elevator collision
   if (checkCollision(x, y, guyWidth * 2, guyHeight * 2, {
@@ -192,8 +193,9 @@ function mousePressed() {
       currentFloor = selectedFloor;
       showFloorMenu = false;
       inElevator = false;
-      x = elevator.x + elevator.width + 5;
-      y = elevator.y + elevator.height / 2;
+      
+      x = elevator.x + elevator.width + 30;
+      y = elevator.y + elevator.height / 2 - (guyHeight);
       return;
     }
   }
@@ -203,7 +205,11 @@ function mousePressed() {
     return;
   }
 
-  if (!isPaused) {
+  if (gameUI.handleToolboxClick(mouseX, mouseY)) {
+    return;
+  }
+
+  if (!isPaused && !gameUI.showUpgradesMenu) {
     money += clickValue;
   }
 }
@@ -219,6 +225,10 @@ function keyPressed() {
 
   if (key === 'm' || key === 'M') {
     showWalls = !showWalls; // Toggle wall visibility
+  }
+
+  if (key === 'u' || key === 'U') {
+    gameUI.showUpgradesMenu = !gameUI.showUpgradesMenu;
   }
 }
 

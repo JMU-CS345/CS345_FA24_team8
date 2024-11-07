@@ -24,7 +24,22 @@ class GameUI {
       width: 300,
       height: 400
     };
+    // New toolbox position for 700x700 canvas
+    this.TOOLBOX_BUTTON = {
+      x: 658,
+      y: 658,
+      width: 32,
+      height: 32
+    };
+    this.UPGRADES_MENU = {
+      x: 150,
+      y: 100,
+      width: 400,
+      height: 450
+    };
     this.pauseButtonHovered = false;
+    this.toolboxButtonHovered = false;
+    this.showUpgradesMenu = false;
   }
 
   checkPauseButtonHover(mouseX, mouseY) {
@@ -140,6 +155,10 @@ class GameUI {
       this.drawPauseOverlay(gameState.width, gameState.height);
     }
     this.drawPauseButton(gameState.isPaused);
+    this.drawToolboxButton();
+    if (this.showUpgradesMenu) {
+      this.drawUpgradesMenu();
+    }
   }
 
   drawFloorMenu(currentFloor) {
@@ -180,5 +199,77 @@ class GameUI {
       }
     }
     return null;
+  }
+
+  // New methods for toolbox and upgrades menu
+  checkToolboxButtonHover(mouseX, mouseY) {
+    this.toolboxButtonHovered = mouseX >= this.TOOLBOX_BUTTON.x &&
+      mouseX <= this.TOOLBOX_BUTTON.x + this.TOOLBOX_BUTTON.width &&
+      mouseY >= this.TOOLBOX_BUTTON.y &&
+      mouseY <= this.TOOLBOX_BUTTON.y + this.TOOLBOX_BUTTON.height;
+    return this.toolboxButtonHovered;
+  }
+
+  handleToolboxClick(mouseX, mouseY) {
+    if (this.checkToolboxButtonHover(mouseX, mouseY)) {
+      this.showUpgradesMenu = !this.showUpgradesMenu;
+      return true;
+    }
+    
+    // Click outside the upgrades menu closes it
+    if (this.showUpgradesMenu) {
+      const menu = this.UPGRADES_MENU;
+      if (mouseX < menu.x || mouseX > menu.x + menu.width ||
+          mouseY < menu.y || mouseY > menu.y + menu.height) {
+        this.showUpgradesMenu = false;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  drawToolboxButton() {
+    push();
+    translate(this.TOOLBOX_BUTTON.x, this.TOOLBOX_BUTTON.y);
+    if (this.toolboxButtonHovered) {
+      scale(1.1);
+    }
+    
+    // Button background
+    fill('#4a5c68');
+    rect(0, 0, 32, 32, 4);
+
+    // Not sure how I want the button to look yet, so leaving it blank for the time being.
+
+    pop();
+  }
+
+  drawUpgradesMenu() {
+    push();
+    // Dim background
+    fill(0, 0, 0, 127);
+    rect(0, 0, width, height);
+    
+    // Menu background
+    fill('#4a5c68');
+    rect(this.UPGRADES_MENU.x, this.UPGRADES_MENU.y, 
+         this.UPGRADES_MENU.width, this.UPGRADES_MENU.height, 8);
+    
+    // Title
+    textAlign(CENTER, TOP);
+    textSize(24);
+    fill('#9bbc0f');
+    text("Upgrades", 
+         this.UPGRADES_MENU.x + this.UPGRADES_MENU.width/2, 
+         this.UPGRADES_MENU.y + 20);
+    
+    // Placeholder for upgrades content
+    fill('#2c353b');
+    rect(this.UPGRADES_MENU.x + 20, 
+         this.UPGRADES_MENU.y + 60,
+         this.UPGRADES_MENU.width - 40, 
+         this.UPGRADES_MENU.height - 80, 4);
+    
+    pop();
   }
 }
