@@ -38,6 +38,21 @@ let elevator = {
   height: 65
 };
 
+let workerPositions1 = [];  
+let workerPositions2 = []; 
+let occupiedPositions = [];
+let workerCost = 400;
+
+// Coordinates and size of the worker to clone
+const worker1X = 130; 
+const worker1Y = 45;
+const workerWidth = 30;
+const workerHeight = 50;
+
+// Coordinates for second worker
+// const worker2X = 290; 
+// const worker2Y = 250;
+
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
   guy = loadImage('assets/mort/base/move.png');
@@ -57,6 +72,11 @@ function setup() {
   clickValue = numWorkers;
   gameUI = new GameUI();
   setInterval(timeIt, 1000);
+
+
+  initializeWorkerPositions();
+
+
 }
 
 function draw() {
@@ -68,6 +88,20 @@ function draw() {
   }
 
   image(map1, 90, 120);
+
+
+  for (let pos of occupiedPositions) {
+    if (pos.useWorker1) {
+        // Copy and display the first worker section
+        copy(map1, worker1X, worker1Y, workerWidth, workerHeight, 
+             90 + pos.x, 120 + pos.y, workerWidth, workerHeight);
+    } else {
+        // Copy and display the second worker section
+        copy(map1, worker2X, worker2Y, workerWidth, workerHeight, 
+             90 + pos.x, 120 + pos.y, workerWidth, workerHeight);
+    }
+}
+
 
   // Draw elevator
   fill(100);
@@ -257,6 +291,48 @@ function keyPressed() {
   if (key === 'u' || key === 'U') {
     gameUI.showUpgradesMenu = !gameUI.showUpgradesMenu;
   }
+
+
+
+  if (key === 'b' || 'B') {
+    if (money >= workerCost) {
+    money -= workerCost;
+
+    let newWorkerPos;
+    
+    // Check if workerPositions1 still has positions
+    if (workerPositions1.length > 0) {
+        newWorkerPos = workerPositions1.shift();  // Use position from workerPositions1
+        newWorkerPos.useWorker1 = true;
+    } else if (workerPositions2.length > 0) {
+        newWorkerPos = workerPositions2.shift();  // Use position from workerPositions2
+        newWorkerPos.useWorker1 = false;
+    }
+
+    // Add the worker to the occupied positions list if we have a valid position
+    if (newWorkerPos) {
+        occupiedPositions.push(newWorkerPos);
+      }
+    }
+  }
+}
+
+function initializeWorkerPositions() {
+  workerPositions1.push({ x: 800, y: 800 });  // 1st
+  // workerPositions1.push({ x: 320, y: 50 });  // 2nd
+  // workerPositions1.push({ x: 98, y: 175 });  // 3rd 
+  // workerPositions1.push({ x: 194, y: 175 }); // 4th
+  // workerPositions1.push({ x: 290, y: 175 }); // 5th
+  // workerPositions1.push({ x: 383, y: 175 });  // 6th
+  
+        
+  // workerPositions2.push({ x: 386, y: 250 });  // 7th buy
+  // workerPositions2.push({ x: 98, y: 250 });  // 8th buy
+  // workerPositions2.push({ x: 194, y: 250 });  // 9th buy
+  // workerPositions2.push({ x: 130, y: 120 });  // 10th buy
+  // workerPositions2.push({ x: 226, y: 120 });  // 11th buy
+  // workerPositions2.push({ x: 323, y: 120 });  // 12th buy
+
 }
 
 function timeIt() {
