@@ -1,3 +1,22 @@
+let workerPositions1 = [];
+let workerPositions2 = [];
+let occupiedPositions = [];
+let workerCost = 50;
+let money = 1000;
+
+// Coordinates and size of the worker to clone
+const worker1X = 130; 
+const worker1Y = 50;
+const workerWidth = 30;
+const workerHeight = 50;
+
+const mapOffsetX = 90; 
+const mapOffsetY = 120; 
+
+// Coordinates for second worker
+const worker2X = 290; 
+const worker2Y = 250;
+
 let guy;
 let x = 200;
 let y = 200;
@@ -11,7 +30,6 @@ let numLvl2Workers;
 let numLvl3Workers;
 let numLvl4Workers;
 let numLvl5Workers;
-let money;
 let frame = 0;
 let clickValue;
 let dela = 5; // Animation delay
@@ -25,12 +43,12 @@ let moneyPerSecond = 1;
 let currentFloor = 1;
 let inElevator = false;
 let showFloorMenu = false;
-let showWalls = false; // New variable to control wall visibility
+let showWalls = false;
 let maxWorkerCount;
 
 let box = { x: 0, y: 0, width: 0, height: 0, dragging: false };
-let cornersHovered = null; // Track which corner is hovered
-let hoveredWall = null; // Track which wall is hovered
+let cornersHovered = null;
+let hoveredWall = null;
 
 let elevator = {
   x: 50,
@@ -38,22 +56,6 @@ let elevator = {
   width: 40,
   height: 65
 };
-
-let workerPositions1 = [];  
-let workerPositions2 = []; 
-let occupiedPositions = [];
-let workerCost = 400;
-
-// Coordinates and size of the worker to clone
-const worker1X = 130; 
-const worker1Y = 45;
-const workerWidth = 30;
-const workerHeight = 50;
-
-// Coordinates for second worker
-// const worker2X = 290; 
-// const worker2Y = 250;
-
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
   guy = loadImage('assets/mort/base/move.png');
@@ -91,19 +93,18 @@ function draw() {
 
   image(map1, 90, 120);
 
-
+  
   for (let pos of occupiedPositions) {
-    if (pos.useWorker1) {
-        // Copy and display the first worker section
-        copy(map1, worker1X, worker1Y, workerWidth, workerHeight, 
-             90 + pos.x, 120 + pos.y, workerWidth, workerHeight);
-    } else {
-        // Copy and display the second worker section
-        copy(map1, worker2X, worker2Y, workerWidth, workerHeight, 
-             90 + pos.x, 120 + pos.y, workerWidth, workerHeight);
+    if (pos.workerType === 1) {
+      // Copy worker 1's image to the new position
+      copy(map1, worker1X, worker1Y, workerWidth, workerHeight, 
+           mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
+    } else if (pos.workerType === 2) {
+      // Copy worker 2's image to the new position
+      copy(map1, worker2X, worker2Y, workerWidth, workerHeight, 
+           mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
     }
-}
-
+  }
 
   // Draw elevator
   fill(100);
@@ -295,30 +296,53 @@ function keyPressed() {
   }
 
 
-
   if (key === 'b' || key === 'B') {
     if (money >= workerCost) {
-      buyWorker();
       money -= workerCost;
-
-      let newWorkerPos;
-      
-      // Check if workerPositions1 still has positions
-      if (workerPositions1.length > 0) {
-          newWorkerPos = workerPositions1.shift();  // Use position from workerPositions1
-          newWorkerPos.useWorker1 = true;
-      } else if (workerPositions2.length > 0) {
-          newWorkerPos = workerPositions2.shift();  // Use position from workerPositions2
-          newWorkerPos.useWorker1 = false;
-      }
-
-      // Add the worker to the occupied positions list if we have a valid position
+      buyWorker();
+      let newWorkerPos = getNextWorkerPosition();
       if (newWorkerPos) {
-          occupiedPositions.push(newWorkerPos);
+        occupiedPositions.push(newWorkerPos);
+      } else {
+        console.log("No more available positions for workers!");
       }
+    } else {
+      console.log("Not enough money to buy a worker!");
     }
   }
+
 }
+
+function getNextWorkerPosition() {
+  if (workerPositions1.length > 0) {
+    let position = workerPositions1.shift();
+    return { x: position.x, y: position.y, workerType: 1 };
+  }
+  if (workerPositions2.length > 0) {
+    let position = workerPositions2.shift();
+    return { x: position.x, y: position.y, workerType: 2 };
+  }
+  return null;
+}
+
+function initializeWorkerPositions() {
+  workerPositions1.push({ x: 221, y: 50 });
+  workerPositions1.push({ x: 320, y: 50 });
+  workerPositions1.push({ x: 98, y: 175 });
+  workerPositions1.push({ x: 194, y: 175 });
+  workerPositions1.push({ x: 290, y: 175 });
+  workerPositions1.push({ x: 383, y: 175 });
+        
+  // // Predefined coordinates for worker type 2
+  workerPositions2.push({ x: 386, y: 250 });
+  workerPositions2.push({ x: 98, y: 250 });
+  workerPositions2.push({ x: 194, y: 250 });
+  workerPositions2.push({ x: 130, y: 120 });
+  workerPositions2.push({ x: 226, y: 120 });
+  workerPositions2.push({ x: 323, y: 120 });
+
+}
+
 
 function buyWorker() {
   if (currentFloor === 1 && (numLvl1Workers < maxWorkerCount)) {
@@ -334,23 +358,7 @@ function buyWorker() {
   }
 }
 
-function initializeWorkerPositions() {
-  workerPositions1.push({ x: 800, y: 800 });  // 1st
-  // workerPositions1.push({ x: 320, y: 50 });  // 2nd
-  // workerPositions1.push({ x: 98, y: 175 });  // 3rd 
-  // workerPositions1.push({ x: 194, y: 175 }); // 4th
-  // workerPositions1.push({ x: 290, y: 175 }); // 5th
-  // workerPositions1.push({ x: 383, y: 175 });  // 6th
   
-        
-  // workerPositions2.push({ x: 386, y: 250 });  // 7th buy
-  // workerPositions2.push({ x: 98, y: 250 });  // 8th buy
-  // workerPositions2.push({ x: 194, y: 250 });  // 9th buy
-  // workerPositions2.push({ x: 130, y: 120 });  // 10th buy
-  // workerPositions2.push({ x: 226, y: 120 });  // 11th buy
-  // workerPositions2.push({ x: 323, y: 120 });  // 12th buy
-
-}
 
 function timeIt() {
   if (!isPaused) {
