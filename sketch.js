@@ -26,6 +26,7 @@ let currentFloor = 1;
 let inElevator = false;
 let showFloorMenu = false;
 let showWalls = false; // New variable to control wall visibility
+let maxWorkerCount;
 
 let box = { x: 0, y: 0, width: 0, height: 0, dragging: false };
 let cornersHovered = null; // Track which corner is hovered
@@ -68,6 +69,7 @@ function setup() {
   numLvl3Workers = 0;
   numLvl4Workers = 0;
   numLvl5Workers = 0;
+  maxWorkerCount = 14;
   money = 50;
   clickValue = numWorkers;
   gameUI = new GameUI();
@@ -111,7 +113,7 @@ function draw() {
   textAlign(CENTER, CENTER);
   text("Floor " + currentFloor, elevator.x + elevator.width/2, elevator.y + elevator.height/2);
 
-  moneyPerSecond = numLvl1Workers;
+  moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
 
   gameUI.checkPauseButtonHover(mouseX, mouseY);
   gameUI.checkToolboxButtonHover(mouseX, mouseY);
@@ -294,26 +296,41 @@ function keyPressed() {
 
 
 
-  if (key === 'b' || 'B') {
+  if (key === 'b' || key === 'B') {
     if (money >= workerCost) {
-    money -= workerCost;
+      buyWorker();
+      money -= workerCost;
 
-    let newWorkerPos;
-    
-    // Check if workerPositions1 still has positions
-    if (workerPositions1.length > 0) {
-        newWorkerPos = workerPositions1.shift();  // Use position from workerPositions1
-        newWorkerPos.useWorker1 = true;
-    } else if (workerPositions2.length > 0) {
-        newWorkerPos = workerPositions2.shift();  // Use position from workerPositions2
-        newWorkerPos.useWorker1 = false;
-    }
+      let newWorkerPos;
+      
+      // Check if workerPositions1 still has positions
+      if (workerPositions1.length > 0) {
+          newWorkerPos = workerPositions1.shift();  // Use position from workerPositions1
+          newWorkerPos.useWorker1 = true;
+      } else if (workerPositions2.length > 0) {
+          newWorkerPos = workerPositions2.shift();  // Use position from workerPositions2
+          newWorkerPos.useWorker1 = false;
+      }
 
-    // Add the worker to the occupied positions list if we have a valid position
-    if (newWorkerPos) {
-        occupiedPositions.push(newWorkerPos);
+      // Add the worker to the occupied positions list if we have a valid position
+      if (newWorkerPos) {
+          occupiedPositions.push(newWorkerPos);
       }
     }
+  }
+}
+
+function buyWorker() {
+  if (currentFloor === 1 && (numLvl1Workers < maxWorkerCount)) {
+    numLvl1Workers++;
+  } else if (currentFloor === 2 && (numLvl2Workers < maxWorkerCount)) {
+    numLvl2Workers++;
+  } else if (currentFloor === 3 && (numLvl3Workers < maxWorkerCount)) {
+    numLvl3Workers++;
+  } else if (currentFloor === 4 && (numLvl4Workers < maxWorkerCount)) {
+    numLvl4Workers++;
+  } else if (currentFloor === 5 && (numLvl5Workers < maxWorkerCount)) {
+    numLvl5Workers++;
   }
 }
 
@@ -349,7 +366,7 @@ function timeIt() {
       timerSeconds = 59;
     } else {
       timerSeconds--;
-      money += numLvl1Workers
+      money += moneyPerSecond
     }
   }
 }
