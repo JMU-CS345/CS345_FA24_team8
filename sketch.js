@@ -7,13 +7,17 @@ let guyWidth = 24;
 let guyHeight = 24;
 let numWorkers;
 let numLvl1Workers;
+let numLvl2Workers;
+let numLvl3Workers;
+let numLvl4Workers;
+let numLvl5Workers;
 let money;
 let frame = 0;
 let clickValue;
 let dela = 5; // Animation delay
 let moving = false;
 let facingRight = true;
-let timerMinutes = 1;
+let timerMinutes = 3;
 let timerSeconds = 0;
 let isPaused = false;
 let gameUI;
@@ -45,6 +49,10 @@ function setup() {
   y = 282;
   numLvl1Workers = 2;
   numWorkers = 2;
+  numLvl2Workers = 0;
+  numLvl3Workers = 0;
+  numLvl4Workers = 0;
+  numLvl5Workers = 0;
   money = 50;
   clickValue = numWorkers;
   gameUI = new GameUI();
@@ -186,6 +194,25 @@ function draw() {
   }
 }
 
+function restart() {
+  x = 125;
+  y = 282;
+  numLvl1Workers = 2;
+  numLvl2Workers = 0;
+  numLvl3Workers = 0;
+  numLvl4Workers = 0;
+  numLvl5Workers = 0;
+  numWorkers = 2;
+  money = 50;
+  clickValue = numWorkers;
+  gameUI = new GameUI();
+  setInterval(timeIt, 1000);
+  timerMinutes = 3;
+  timerSeconds = 0;
+  selectedFloor = 1;
+  currentFloor = 1;
+}
+
 function mousePressed() {
   if (showFloorMenu) {
     let selectedFloor = gameUI.handleFloorSelection(mouseX, mouseY);
@@ -234,7 +261,9 @@ function keyPressed() {
 
 function timeIt() {
   if (!isPaused) {
-    if (timerMinutes === 0 && timerSeconds === 0) {
+    if (timerMinutes === 0 && timerSeconds === 0 && money < 0) {
+      restart();
+    } else if (timerMinutes === 0 && timerSeconds === 0) {
       alert("Rent is due! $500 deducted.");
       money -= 500;
       timerMinutes = 3;
@@ -244,7 +273,7 @@ function timeIt() {
       timerSeconds = 59;
     } else {
       timerSeconds--;
-      money += numLvl1Workers;
+      money += numLvl1Workers
     }
   }
 }
