@@ -300,17 +300,13 @@ function keyPressed() {
     if (money >= workerCost) {
       money -= workerCost;
       buyWorker();
+      workerCost += 100;
       let newWorkerPos = getNextWorkerPosition();
       if (newWorkerPos) {
         occupiedPositions.push(newWorkerPos);
-      } else {
-        console.log("No more available positions for workers!");
       }
-    } else {
-      console.log("Not enough money to buy a worker!");
     }
   }
-
 }
 
 function getNextWorkerPosition() {
