@@ -24,14 +24,19 @@ let guyX;
 let guyY;
 let guyWidth = 24;
 let guyHeight = 24;
+
+// Relating to number or workers
 let numWorkers;
 let numLvl1Workers;
 let numLvl2Workers;
 let numLvl3Workers;
 let numLvl4Workers;
 let numLvl5Workers;
-let frame = 0;
+let maxWorkerCount;
 let clickValue;
+let WorkerUpgradeQueue;
+
+let frame = 0;
 let dela = 5; // Animation delay
 let moving = false;
 let facingRight = true;
@@ -44,7 +49,6 @@ let currentFloor = 1;
 let inElevator = false;
 let showFloorMenu = false;
 let showWalls = false;
-let maxWorkerCount;
 
 let box = { x: 0, y: 0, width: 0, height: 0, dragging: false };
 let cornersHovered = null;
@@ -74,6 +78,25 @@ function setup() {
   maxWorkerCount = 14;
   money = 50;
   clickValue = numWorkers;
+  WorkerUpgradeQueue = []
+
+  // Start from floor 1 with worker #3
+  let floor = 1;
+  let workerNumber = 3;
+
+  // Fill queue with Strings saying "Floor __ Worker #__"
+  for (let i = 0; i < (5 * 13 + 1); i++) {  
+    let workerString = `Floor ${floor} Worker #${workerNumber}`;
+    WorkerUpgradeQueue.push(workerString);
+
+    workerNumber++;
+    
+    // If the worker number exceeds 14, move to the next floor
+    if (workerNumber > 14) {
+        workerNumber = 3;
+        floor++;
+    }
+  }
   gameUI = new GameUI();
   setInterval(timeIt, 1000);
 
@@ -248,6 +271,7 @@ function restart() {
   timerSeconds = 0;
   selectedFloor = 1;
   currentFloor = 1;
+  setup();
 }
 
 function mousePressed() {
@@ -298,6 +322,7 @@ function keyPressed() {
 
   if (key === 'b' || key === 'B') {
     if (money >= workerCost) {
+      WorkerUpgradeQueue.pop();
       money -= workerCost;
       buyWorker();
       workerCost += 100;
