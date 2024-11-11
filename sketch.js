@@ -40,22 +40,18 @@ let frame = 0;
 let dela = 5; // Animation delay
 let moving = false;
 let facingRight = true;
-let timerMinutes = 0;
-let timerSeconds = 10;
+let timerMinutes = 3;
+let timerSeconds = 0;
 let isPaused = false;
 let gameUI;
 let moneyPerSecond = 1;
 let currentFloor = 1;
 let inElevator = false;
 let showFloorMenu = false;
-<<<<<<< Updated upstream
 let showWalls = false;
-=======
-let showWalls = false; // New variable to control wall visibility
 let warning = false;
 let negative = 0;
 let gameOver = false;
->>>>>>> Stashed changes
 
 let box = { x: 0, y: 0, width: 0, height: 0, dragging: false };
 let cornersHovered = null;
@@ -123,7 +119,6 @@ function draw() {
 
   image(map1, 90, 120);
   gameTracker();
-
   if (warning) {
     getPositive();
     isGameOver();
@@ -286,9 +281,7 @@ function restart() {
   timerSeconds = 0;
   selectedFloor = 1;
   currentFloor = 1;
-<<<<<<< Updated upstream
   setup();
-=======
   warning = false;
   backPos = false;
   gameOver = false;
@@ -297,27 +290,30 @@ function restart() {
 function gameTracker() {
   if (!isPaused) {
     if (money < 0) {
-      if (!warning)
+      if (!warning) {
         alert("Warning!");
         warning = true;
+      }
+      }
     }
   }
-}
-
-function getPositive() {
-  if (money >= 0) {
-    negative++;
+  
+  
+  function getPositive() {
+    if (money >= 0) {
+      negative++;
+    }
   }
-}
-
-function isGameOver() {
-  if (!isPaused) {
-    if (warning && money < 0 && negative >= 1) {
+  
+  
+  function isGameOver() {
+    if (!isPaused) {
+      if (warning && money < 0 && negative >= 1) {
         gameOver = true;
       }
     }
->>>>>>> Stashed changes
-}
+  }
+  
 
 function mousePressed() {
   if (showFloorMenu) {
@@ -348,7 +344,8 @@ function mousePressed() {
 
   if (!isPaused && gameOver) {
     restart();
-  }
+    }
+    
 }
 
 function togglePause() {
@@ -368,7 +365,10 @@ function keyPressed() {
     gameUI.showUpgradesMenu = !gameUI.showUpgradesMenu;
   }
 
-<<<<<<< Updated upstream
+  if (gameOver && key === 'r' || key === 'R') {
+    restart();
+  }
+    
 
   if (key === 'b' || key === 'B') {
     if (money >= workerCost) {
@@ -381,10 +381,6 @@ function keyPressed() {
         occupiedPositions.push(newWorkerPos);
       }
     }
-=======
-  if (gameOver && key === 'r' || key === 'R') {
-    restart();
->>>>>>> Stashed changes
   }
 }
 
@@ -442,8 +438,8 @@ function timeIt() {
     } else if (timerMinutes === 0 && timerSeconds === 0) {
       alert("Rent is due! $500 deducted.");
       money -= 500;
-      timerMinutes = 0;
-      timerSeconds = 30;
+      timerMinutes = 3;
+      timerSeconds = 0;
     } else if (timerSeconds === 0) {
       timerMinutes--;
       timerSeconds = 59;
