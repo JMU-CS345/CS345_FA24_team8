@@ -58,6 +58,22 @@ class GameUI {
     return false;
   }
 
+  drawGameOverScreen(width, height) {
+    push();
+    fill(0, 0, 0, 127);
+    rect(0, 0, width, height);
+    
+    textAlign(CENTER, CENTER);
+    textSize(48);
+    fill(255);
+    text("GAME OVER", width / 2, height / 2 - 40);
+
+    textSize(24);
+    fill(255, 0, 0);
+    text("Click to Restart or Press R", width / 2, height / 2 + 40);
+    pop();
+  }
+
   drawMoneyDisplay(money, moneyPerSecond) {
     push();
     translate(this.MONEY_DISPLAY.x, this.MONEY_DISPLAY.y);
@@ -149,15 +165,19 @@ class GameUI {
   }
 
   drawUI(gameState) {
-    this.drawMoneyDisplay(gameState.money, gameState.moneyPerSecond);
-    this.drawTimerDisplay(gameState.timerMinutes, gameState.timerSeconds);
-    if (gameState.isPaused) {
-      this.drawPauseOverlay(gameState.width, gameState.height);
-    }
-    this.drawPauseButton(gameState.isPaused);
-    this.drawToolboxButton();
-    if (this.showUpgradesMenu) {
-      this.drawUpgradesMenu();
+    if (gameState.gameOver) {
+      this.drawGameOverScreen(gameState.width, gameState.height);
+    } else {
+      this.drawMoneyDisplay(gameState.money, gameState.moneyPerSecond);
+      this.drawTimerDisplay(gameState.timerMinutes, gameState.timerSeconds);
+      if (gameState.isPaused) {
+        this.drawPauseOverlay(gameState.width, gameState.height);
+      }
+      this.drawPauseButton(gameState.isPaused);
+      this.drawToolboxButton();
+      if (this.showUpgradesMenu) {
+        this.drawUpgradesMenu();
+      }
     }
   }
 
