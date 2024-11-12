@@ -5,16 +5,16 @@ let workerCost = 50;
 let money = 1000;
 
 // Coordinates and size of the worker to clone
-const worker1X = 130;
+const worker1X = 130; 
 const worker1Y = 50;
 const workerWidth = 30;
 const workerHeight = 50;
 
-const mapOffsetX = 90;
-const mapOffsetY = 120;
+const mapOffsetX = 90; 
+const mapOffsetY = 120; 
 
 // Coordinates for second worker
-const worker2X = 290;
+const worker2X = 290; 
 const worker2Y = 250;
 
 let guy;
@@ -24,14 +24,19 @@ let guyX;
 let guyY;
 let guyWidth = 24;
 let guyHeight = 24;
+
+// Relating to number or workers
 let numWorkers;
 let numLvl1Workers;
 let numLvl2Workers;
 let numLvl3Workers;
 let numLvl4Workers;
 let numLvl5Workers;
-let frame = 0;
+let maxWorkerCount;
 let clickValue;
+let WorkerUpgradeQueue;
+
+let frame = 0;
 let dela = 5; // Animation delay
 let moving = false;
 let facingRight = true;
@@ -44,7 +49,9 @@ let currentFloor = 1;
 let inElevator = false;
 let showFloorMenu = false;
 let showWalls = false;
-let maxWorkerCount;
+let warning = false;
+let negative = 0;
+let gameOver = false;
 
 let box = { x: 0, y: 0, width: 0, height: 0, dragging: false };
 let cornersHovered = null;
@@ -56,22 +63,9 @@ let elevator = {
   width: 40,
   height: 65
 };
-
-let hitbox = {
-  x: x + 14,
-  y: y - 2,
-  width: 30,
-  height: 35,
-};
-
-
-
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
   guy = loadImage('assets/mort/base/move.png');
-  chair = loadImage('assets/chair.png');
-  chair2 = loadImage('assets/chair.png');
-  test = loadImage('assets/test.png');
 }
 
 function setup() {
@@ -87,6 +81,25 @@ function setup() {
   maxWorkerCount = 14;
   money = 50;
   clickValue = numWorkers;
+  WorkerUpgradeQueue = []
+
+  // Start from floor 1 with worker #3
+  let floor = 1;
+  let workerNumber = 3;
+
+  // Fill queue with Strings saying "Floor __ Worker #__"
+  for (let i = 0; i < (5 * 13 + 1); i++) {  
+    let workerString = `Floor ${floor} Worker #${workerNumber}`;
+    WorkerUpgradeQueue.push(workerString);
+
+    workerNumber++;
+    
+    // If the worker number exceeds 14, move to the next floor
+    if (workerNumber > 14) {
+        workerNumber = 3;
+        floor++;
+    }
+  }
   gameUI = new GameUI();
   setInterval(timeIt, 1000);
 
@@ -105,16 +118,22 @@ function draw() {
   }
 
   image(map1, 90, 120);
+  gameTracker();
+  if (warning) {
+    getPositive();
+    isGameOver();
+  }
 
 
+  
   for (let pos of occupiedPositions) {
     if (pos.workerType === 1) {
       // Copy worker 1's image to the new position
-      copy(map1, worker1X, worker1Y, workerWidth, workerHeight,
+      copy(map1, worker1X, worker1Y, workerWidth, workerHeight, 
            mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
     } else if (pos.workerType === 2) {
       // Copy worker 2's image to the new position
-      copy(map1, worker2X, worker2Y, workerWidth, workerHeight,
+      copy(map1, worker2X, worker2Y, workerWidth, workerHeight, 
            mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
     }
   }
@@ -125,7 +144,7 @@ function draw() {
   fill(150);
   textSize(12);
   textAlign(CENTER, CENTER);
-  text("Floor " + currentFloor, elevator.x + elevator.width / 2, elevator.y + elevator.height / 2);
+  text("Floor " + currentFloor, elevator.x + elevator.width/2, elevator.y + elevator.height/2);
 
   moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
 
@@ -138,7 +157,8 @@ function draw() {
     isPaused,
     width,
     height,
-    moneyPerSecond
+    moneyPerSecond,
+    gameOver
   });
 
   if (isPaused || gameUI.showUpgradesMenu) return;
@@ -169,14 +189,18 @@ function draw() {
   let newX = x;
   let newY = y;
 
-  let collisionDetectedX = false;
-  let collisionDetectedY = false;
-
-  // Movement logic for X
+  if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+    newY -= 1;
+    moving = true;
+  }
   if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
     newX -= 1;
     moving = true;
     facingRight = false;
+  }
+  if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+    newY += 1;
+    moving = true;
   }
   if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
     newX += 1;
@@ -184,58 +208,23 @@ function draw() {
     facingRight = true;
   }
 
-  // Collision check for X direction
-  hitbox.x = newX + (facingRight ? 14 : 4); // Adjust based on direction
+  let collisionDetected = false;
+  hoveredWall = null;
+
   for (let wall of walls) {
-    if (checkCollision(hitbox.x, hitbox.y, hitbox.width, hitbox.height, wall)) {
-      collisionDetectedX = true;
+    if (checkCollision(newX, newY, guyWidth * 2, guyHeight * 2, wall)) {
+      collisionDetected = true;
       break;
+    }
+    if (mouseX >= wall.topLeft.x && mouseX <= wall.bottomRight.x &&
+        mouseY >= wall.topLeft.y && mouseY <= wall.bottomRight.y) {
+      hoveredWall = wall;
     }
   }
 
-  // Apply X movement if no collision detected
-  if (!collisionDetectedX) {
+  if (!collisionDetected) {
     x = newX;
-  } else {
-    // If collision is detected, stop movement in X direction
-    if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-      x += 1; // Undo movement
-    }
-    if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-      x -= 1; // Undo movement
-    }
-  }
-
-  // Movement logic for Y
-  if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-    newY -= 1;
-    moving = true;
-  }
-  if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-    newY += 1;
-    moving = true;
-  }
-
-  // Collision check for Y direction
-  hitbox.y = newY + 6;
-  for (let wall of walls) {
-    if (checkCollision(hitbox.x, hitbox.y, hitbox.width, hitbox.height, wall)) {
-      collisionDetectedY = true;
-      break;
-    }
-  }
-
-  // Apply Y movement if no collision detected
-  if (!collisionDetectedY) {
     y = newY;
-  } else {
-    // If collision is detected, stop movement in Y direction
-    if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-      y += 1; // Undo movement
-    }
-    if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-      y -= 1; // Undo movement
-    }
   }
 
   if (moving) {
@@ -252,39 +241,15 @@ function draw() {
   push();
   if (facingRight) {
     translate(x, y);
-    hitbox.x = x + 14;
   } else {
     translate(x + guyWidth * 2, y);
     scale(-1, 1);
-    hitbox.x = x + 5;
   }
   image(guy, 0, 0, guyWidth * 2, guyHeight * 2, guyX, guyY, guyWidth, guyHeight);
   pop();
 
   // Show walls if toggled
-
-
-  if (showWalls && box.width > 0 && box.height > 0) {
-    fill(255, 0, 0, 150);
-    rect(box.x, box.y, box.width, box.height);
-
-    // Show the coordinates of the top-left and bottom-right corners
-    fill(0);
-    textSize(12);
-    text(`Top Left: (${Math.floor(box.x)}, ${Math.floor(box.y)})`, box.x + 5, box.y - 10);
-    text(`Bottom Right: (${Math.floor(box.x + box.width)}, ${Math.floor(box.y + box.height)})`, box.x + 5, box.y + box.height + 10);
-  }
-
-  // Update box width and height if dragging
-  if (box.dragging) {
-    box.width = mouseX - box.x;
-    box.height = mouseY - box.y;
-  }
-
   if (showWalls) {
-
-    fill(255, 0, 0, 0);  // Fully transparent fill
-    rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
     for (let wall of walls) {
       fill(0, 100);
       rect(wall.topLeft.x, wall.topLeft.y,
@@ -297,10 +262,6 @@ function draw() {
       }
     }
   }
-
-  image(chair, 185, 292 );
-  image(chair2, 377, 292);
-  image(test, 90, 120);
 }
 
 function restart() {
@@ -320,7 +281,39 @@ function restart() {
   timerSeconds = 0;
   selectedFloor = 1;
   currentFloor = 1;
+  setup();
+  warning = false;
+  backPos = false;
+  gameOver = false;
 }
+
+function gameTracker() {
+  if (!isPaused) {
+    if (money < 0) {
+      if (!warning) {
+        alert("Warning!");
+        warning = true;
+      }
+      }
+    }
+  }
+  
+  
+  function getPositive() {
+    if (money >= 0) {
+      negative++;
+    }
+  }
+  
+  
+  function isGameOver() {
+    if (!isPaused) {
+      if (warning && money < 0 && negative >= 1) {
+        gameOver = true;
+      }
+    }
+  }
+  
 
 function mousePressed() {
   if (showFloorMenu) {
@@ -329,7 +322,7 @@ function mousePressed() {
       currentFloor = selectedFloor;
       showFloorMenu = false;
       inElevator = false;
-
+      
       x = elevator.x + elevator.width + 30;
       y = elevator.y + elevator.height / 2 - (guyHeight);
       return;
@@ -349,25 +342,15 @@ function mousePressed() {
     money += clickValue;
   }
 
-  if (showWalls && !box.dragging) {
-    box.x = mouseX;
-    box.y = mouseY;
-    box.dragging = true;
-  }
-
-}
-
-function mouseReleased() {
-  // Stop dragging the box when mouse is released
-  if (box.dragging) {
-    box.dragging = false;
-  }
+  if (!isPaused && gameOver) {
+    restart();
+    }
+    
 }
 
 function togglePause() {
   isPaused = !isPaused;
 }
-
 
 function keyPressed() {
   if (key === 'p' || key === 'P') {
@@ -382,9 +365,14 @@ function keyPressed() {
     gameUI.showUpgradesMenu = !gameUI.showUpgradesMenu;
   }
 
+  if (gameOver && key === 'r' || key === 'R') {
+    restart();
+  }
+    
 
   if (key === 'b' || key === 'B') {
     if (money >= workerCost) {
+      WorkerUpgradeQueue.pop();
       money -= workerCost;
       buyWorker();
       workerCost += 100;
@@ -415,7 +403,7 @@ function initializeWorkerPositions() {
   workerPositions1.push({ x: 194, y: 175 });
   workerPositions1.push({ x: 290, y: 175 });
   workerPositions1.push({ x: 383, y: 175 });
-
+        
   // // Predefined coordinates for worker type 2
   workerPositions2.push({ x: 386, y: 250 });
   workerPositions2.push({ x: 98, y: 250 });
@@ -441,7 +429,7 @@ function buyWorker() {
   }
 }
 
-
+  
 
 function timeIt() {
   if (!isPaused) {
@@ -464,28 +452,13 @@ function timeIt() {
 
 let walls = [
   { topLeft: { x: 79, y: 182 }, bottomRight: { x: 122, y: 247 } },
-  { topLeft: { x: 122, y: 131 }, bottomRight: { x: 570, y: 160} },
+  { topLeft: { x: 122, y: 131 }, bottomRight: { x: 570, y: 181 } },
   { topLeft: { x: 570, y: 121 }, bottomRight: { x: 592, y: 643 } },
   { topLeft: { x: 90, y: 312 }, bottomRight: { x: 121, y: 451 } },
   { topLeft: { x: 204, y: 450 }, bottomRight: { x: 217, y: 644 } },
   { topLeft: { x: 206, y: 633 }, bottomRight: { x: 584, y: 643 } },
   { topLeft: { x: 108, y: 442 }, bottomRight: { x: 395, y: 503 } },
   { topLeft: { x: 455, y: 442 }, bottomRight: { x: 570, y: 503 } },
-  { topLeft: { x: 241, y: 543 }, bottomRight: { x: 280, y: 579 } },
-  { topLeft: { x: 318, y: 565 }, bottomRight: { x: 375, y: 585 } },
-  { topLeft: { x: 350, y: 502 }, bottomRight: { x: 373, y: 568 } },
-  { topLeft: { x: 479, y: 539 }, bottomRight: { x: 535, y: 559 } },
-  { topLeft: { x: 479, y: 558 }, bottomRight: { x: 503, y: 616 } },
-  { topLeft: { x: 480, y: 597 }, bottomRight: { x: 533, y: 616 } },
-  { topLeft: { x: 455, y: 442 }, bottomRight: { x: 570, y: 503 } },
-  { topLeft: { x: 516, y: 231 }, bottomRight: { x: 562, y: 259 } },
-  { topLeft: { x: 455, y: 442 }, bottomRight: { x: 570, y: 503 } },
-  { topLeft: { x: 153, y: 338 }, bottomRight: { x: 532, y: 394 } },
-  { topLeft: { x: 188, y: 222 }, bottomRight: { x: 471, y: 278 } },
-  { topLeft: { x: 158, y: 331 }, bottomRight: { x: 526, y: 352 } },
-
-
-
 ];
 
 function checkCollision(px, py, pWidth, pHeight, wall) {
