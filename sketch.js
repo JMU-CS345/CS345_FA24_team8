@@ -121,6 +121,8 @@ function draw() {
   textSize(100);
   text("1", 140, 570)
 
+  noStroke();
+
   if (showFloorMenu) {
     gameUI.drawFloorMenu(currentFloor);
     return;
