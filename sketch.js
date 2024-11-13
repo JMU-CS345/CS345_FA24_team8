@@ -276,15 +276,14 @@ function restart() {
   money = 50;
   clickValue = numWorkers;
   gameUI = new GameUI();
-  setInterval(timeIt, 1000);
   timerMinutes = 3;
   timerSeconds = 0;
   selectedFloor = 1;
   currentFloor = 1;
-  setup();
   warning = false;
   backPos = false;
   gameOver = false;
+  negative = 0;
 }
 
 function gameTracker() {
