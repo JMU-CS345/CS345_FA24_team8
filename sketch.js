@@ -44,7 +44,7 @@ let timerMinutes = 3;
 let timerSeconds = 0;
 let isPaused = false;
 let gameUI;
-let moneyPerSecond = 1;
+let moneyPerSecond = 2;
 let currentFloor = 1;
 let inElevator = false;
 let showFloorMenu = false;
@@ -111,6 +111,13 @@ function setup() {
 
 function draw() {
   background(220);
+
+  let c = color(52, 235, 152)
+  c.setAlpha(128);
+
+  fill(c);
+  textSize(100);
+  text("1", 140, 570)
 
   if (showFloorMenu) {
     gameUI.drawFloorMenu(currentFloor);
@@ -429,7 +436,6 @@ function buyWorker() {
 }
 
   
-
 function timeIt() {
   if (!isPaused) {
     if (timerMinutes === 0 && timerSeconds === 0 && money < 0) {
