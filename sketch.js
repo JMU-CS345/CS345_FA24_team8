@@ -112,6 +112,8 @@ function setup() {
 function draw() {
   background(220);
 
+  strokeWeight(4);
+  stroke(51);
   let c = color(52, 235, 152)
   c.setAlpha(128);
 
