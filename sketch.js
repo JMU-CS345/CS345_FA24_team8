@@ -112,7 +112,6 @@ function setup() {
 function draw() {
   background(220);
 
-  strokeWeight(4);
   stroke(51);
   let c = color(52, 235, 152)
   c.setAlpha(128);
@@ -121,7 +120,7 @@ function draw() {
   textSize(100);
   text("1", 140, 570)
 
-  noStroke();
+  //noStroke();
 
   if (showFloorMenu) {
     gameUI.drawFloorMenu(currentFloor);
