@@ -1,6 +1,6 @@
-let workerPositions1 = [];
-let workerPositions2 = [];
-let occupiedPositions = [];
+let workerPositions1 = []; // buy worker 
+let workerPositions2 = [];  // but worker 
+let occupiedPositions = []; // buy worker
 let workerCost = 50;
 let money = 1000;
 
@@ -148,6 +148,7 @@ function draw() {
 
 
 
+  // buy worker 
   for (let pos of occupiedPositions) {
     if (pos.workerType === 1) {
       // Copy worker 1's image to the new position
@@ -396,24 +397,6 @@ function gameTracker() {
 
 function mousePressed() {
 
-
-  // if (showFloorMenu) {
-  //   let selectedFloor = gameUI.handleFloorSelection(mouseX, mouseY);
-  //   if (selectedFloor !== null) {
-  //     money -= floorPrice;
-  //     floorPrice += 500;
-  //     currentFloor = selectedFloor;
-  //     showFloorMenu = false;
-  //     inElevator = false;
-
-  //     x = elevator.x + elevator.width + 30;
-  //     y = elevator.y + elevator.height / 2 - (guyHeight);
-  //     return;
-
-  //   }
-  // }
-
-
   if (showFloorMenu) {
     let selectedFloor = gameUI.handleFloorSelection(mouseX, mouseY);
 
@@ -496,6 +479,7 @@ function keyPressed() {
   }
 }
 
+// buy worker 
 function getNextWorkerPosition() {
   if (workerPositions1.length > 0) {
     let position = workerPositions1.shift();
@@ -508,6 +492,8 @@ function getNextWorkerPosition() {
   return null;
 }
 
+
+//w buy worker
 function initializeWorkerPositions() {
   workerPositions1.push({ x: 221, y: 50 });
   workerPositions1.push({ x: 320, y: 50 });
@@ -526,7 +512,7 @@ function initializeWorkerPositions() {
 
 }
 
-
+// buy worker 
 function buyWorker() {
   if (currentFloor === 1 && (numLvl1Workers < maxWorkerCount)) {
     numLvl1Workers++;
