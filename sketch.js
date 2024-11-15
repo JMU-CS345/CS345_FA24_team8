@@ -78,6 +78,7 @@ function preload() {
   chair = loadImage('assets/chair.png');
   chair2 = loadImage('assets/chair.png');
   test = loadImage('assets/test.png');
+  desk = loadImage('assets/desk_occupied.png');
 }
 
 function setup() {
@@ -332,6 +333,7 @@ function draw() {
   image(chair, 185, 292 );
   image(chair2, 377, 292);
   image(test, 90, 120);
+  image(desk, 90, 120);
 }
 
 function restart() {
@@ -458,6 +460,20 @@ function mousePressed() {
     restart();
     }
 
+
+  if (showWalls && !box.dragging) {
+    box.x = mouseX;
+    box.y = mouseY;
+    box.dragging = true;
+  }
+
+}
+
+function mouseReleased() {
+// Stop dragging the box when mouse is released
+if (box.dragging) {
+  box.dragging = false;
+}
 }
 
 function togglePause() {
