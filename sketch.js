@@ -470,7 +470,7 @@ function mousePressed() {
 }
 
 function mouseReleased() {
-// Stop dragging the box when mouse is released
+// Stop dragging the boxwd when mouse is released
 if (box.dragging) {
   box.dragging = false;
 }
@@ -584,7 +584,7 @@ let walls = [
   { topLeft: { x: 90, y: 312 }, bottomRight: { x: 121, y: 451 } },
   { topLeft: { x: 204, y: 450 }, bottomRight: { x: 217, y: 644 } },
   { topLeft: { x: 206, y: 633 }, bottomRight: { x: 584, y: 643 } },
-  { topLeft: { x: 108, y: 442 }, bottomRight: { x: 395, y: 503 } },
+  { topLeft: { x: 108, y: 442 }, bottomRight: { x: 395, y: 488 } },
   { topLeft: { x: 455, y: 442 }, bottomRight: { x: 570, y: 503 } },
   { topLeft: { x: 241, y: 543 }, bottomRight: { x: 280, y: 579 } },
   { topLeft: { x: 318, y: 565 }, bottomRight: { x: 375, y: 585 } },
@@ -595,8 +595,8 @@ let walls = [
   { topLeft: { x: 455, y: 442 }, bottomRight: { x: 570, y: 503 } },
   { topLeft: { x: 516, y: 231 }, bottomRight: { x: 562, y: 259 } },
   { topLeft: { x: 455, y: 442 }, bottomRight: { x: 570, y: 503 } },
-  { topLeft: { x: 153, y: 338 }, bottomRight: { x: 532, y: 394 } },
-  { topLeft: { x: 188, y: 222 }, bottomRight: { x: 471, y: 278 } },
+  { topLeft: { x: 160, y: 338 }, bottomRight: { x: 532, y: 394 } },
+  { topLeft: { x: 188, y: 215 }, bottomRight: { x: 471, y: 278 } },
   { topLeft: { x: 158, y: 331 }, bottomRight: { x: 526, y: 352 } },
 ];
 
