@@ -118,7 +118,7 @@ function draw() {
 
   fill(c);
   textSize(100);
-  text("1", 140, 570)
+  text(currentFloor, 140, 570)
 
   //noStroke();
 
@@ -323,21 +323,64 @@ function gameTracker() {
     }
   }
   
+  let purchasedFloors = {
+    1: true, // The first floor is already purchased at the start
+    2: false,
+    3: false,
+    4: false,
+    5: false
+  };
+  
+  let floorPrice = 500; // Initial price for a floor
+  
 
 function mousePressed() {
+
+
+  // if (showFloorMenu) {
+  //   let selectedFloor = gameUI.handleFloorSelection(mouseX, mouseY);
+  //   if (selectedFloor !== null) {
+  //     money -= floorPrice;
+  //     floorPrice += 500; 
+  //     currentFloor = selectedFloor;
+  //     showFloorMenu = false;
+  //     inElevator = false;
+
+  //     x = elevator.x + elevator.width + 30;
+  //     y = elevator.y + elevator.height / 2 - (guyHeight);
+  //     return;
+      
+  //   }
+  // }
+
+
   if (showFloorMenu) {
     let selectedFloor = gameUI.handleFloorSelection(mouseX, mouseY);
+    
     if (selectedFloor !== null) {
+      if (!purchasedFloors[selectedFloor]) {
+        // Check if the player has enough money
+        if (money >= floorPrice) {
+          money -= floorPrice; // Deduct the floor price
+          purchasedFloors[selectedFloor] = true; // Mark floor as purchased
+          floorPrice += 500; // Increment price for the next floor
+        } else {
+          console.log("Not enough money to buy this floor!");
+          return; // Exit if the player can't afford the floor
+        }
+      }
+  
+      // Switch to the selected floor
       currentFloor = selectedFloor;
       showFloorMenu = false;
       inElevator = false;
-      
+  
+      // Set the player's position to exit the elevator
       x = elevator.x + elevator.width + 30;
       y = elevator.y + elevator.height / 2 - (guyHeight);
-      return;
     }
   }
-
+  
   if (gameUI.pauseButtonHovered) {
     togglePause();
     return;
