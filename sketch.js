@@ -93,7 +93,7 @@ function setup() {
   numLvl5Workers = 0;
   maxWorkerCount = 14;
   money = 50;
-  clickValue = numWorkers;
+  clickValue = moneyPerSecond;
   WorkerUpgradeQueue = []
 
   // Start from floor 1 with worker #3
@@ -124,6 +124,9 @@ function setup() {
 
 function draw() {
   background(220);
+
+  moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
+  clickValue = moneyPerSecond
 
   stroke(51);
   let c = color(52, 235, 152)
@@ -170,7 +173,7 @@ function draw() {
   textAlign(CENTER, CENTER);
   text("Floor " + currentFloor, elevator.x + elevator.width/2, elevator.y + elevator.height/2);
 
-  moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
+  //moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
 
   gameUI.checkPauseButtonHover(mouseX, mouseY);
   gameUI.checkToolboxButtonHover(mouseX, mouseY);
@@ -347,7 +350,7 @@ function restart() {
   numLvl5Workers = 0;
   numWorkers = 2;
   money = 50;
-  clickValue = numWorkers;
+  clickValue = moneyPerSecond;
   gameUI = new GameUI();
   timerMinutes = 3;
   timerSeconds = 0;
@@ -448,6 +451,20 @@ function mousePressed() {
     box.x = mouseX;
     box.y = mouseY;
     box.dragging = true;
+  }
+
+  //if click on upgrades menu buy worker
+  if (gameUI.showUpgradesMenu && mouseX >= 150 &&
+    mouseX <= 550 && mouseY >= 100 && mouseY <= 550 && money >= workerCost
+  ) {
+    buyWorker();
+    money -= workerCost;
+    workerCost += 100;
+    let newWorkerPos = getNextWorkerPosition();
+    if (newWorkerPos) {
+      occupiedPositions.push(newWorkerPos);
+    }
+    
   }
 
 }

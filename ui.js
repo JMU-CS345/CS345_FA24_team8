@@ -40,6 +40,8 @@ class GameUI {
     this.pauseButtonHovered = false;
     this.toolboxButtonHovered = false;
     this.showUpgradesMenu = false;
+
+    this.UpgradesFloorY = 160
   }
 
   checkPauseButtonHover(mouseX, mouseY) {
@@ -309,6 +311,48 @@ class GameUI {
          this.UPGRADES_MENU.width - 40, 
          this.UPGRADES_MENU.height - 80, 4);
     
+  fill(237,17, 20);
+  if (money >= workerCost && currentFloor === 1) {
+    fill('#9bbc0f');
+  }
+  text("Buy floor one Worker " + (numLvl1Workers + 1) + "/14", this.UPGRADES_MENU.x, 
+    this.UpgradesFloorY,
+    this.UPGRADES_MENU.width - 40, 
+    this.UPGRADES_MENU.height - 80, 4)
+  fill(237,17, 20);
+  if (money >= workerCost && currentFloor === 2) {
+    fill('#9bbc0f');
+  }
+  text("Buy floor two Worker " + (numLvl2Workers + 1) + "/14", this.UPGRADES_MENU.x, 
+    this.UpgradesFloorY + 40,
+    this.UPGRADES_MENU.width - 40, 
+    this.UPGRADES_MENU.height - 80, 4)
+  fill(237,17, 20);
+  if (money >= workerCost && currentFloor === 3) {
+    fill('#9bbc0f');
+  }
+  text("Buy floor three Worker " + (numLvl3Workers + 1) + "/14", this.UPGRADES_MENU.x + 9,
+    this.UpgradesFloorY + 80,
+    this.UPGRADES_MENU.width - 40, 
+    this.UPGRADES_MENU.height - 80, 4)
+  fill(237,17, 20);
+  if (money >= workerCost && currentFloor === 4) {
+    fill('#9bbc0f');
+  }
+  text("Buy floor four Worker " + (numLvl4Workers + 1) + "/14", this.UPGRADES_MENU.x + 2,
+    this.UpgradesFloorY + 120,
+    this.UPGRADES_MENU.width - 40, 
+    this.UPGRADES_MENU.height - 80, 4)
+  fill(237,17, 20);
+  if (money >= workerCost && currentFloor === 5) {
+    fill('#9bbc0f');
+  }
+  text("Buy floor five Worker " + (numLvl5Workers + 1) + "/14", this.UPGRADES_MENU.x, 
+    this.UpgradesFloorY + 160,
+    this.UPGRADES_MENU.width - 40, 
+    this.UPGRADES_MENU.height - 80, 4)
+
+      
     pop();
   }
 }
