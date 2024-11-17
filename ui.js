@@ -74,6 +74,30 @@ class GameUI {
       width: 32,
       height: 32
     }
+    this.BUY_FLOOR_TWO_BUTTON = {
+      x: this.UPGRADES_MENU.x + this.UPGRADES_MENU.width - 55,
+      y: this.UpgradesFloorY + 200,
+      width: 32,
+      height: 32
+    }
+    this.BUY_FLOOR_THREE_BUTTON = {
+      x: this.UPGRADES_MENU.x + this.UPGRADES_MENU.width - 55,
+      y: this.UpgradesFloorY + 240,
+      width: 32,
+      height: 32
+    }
+    this.BUY_FLOOR_FOUR_BUTTON = {
+      x: this.UPGRADES_MENU.x + this.UPGRADES_MENU.width - 55,
+      y: this.UpgradesFloorY + 280,
+      width: 32,
+      height: 32
+    }
+    this.BUY_FLOOR_FIVE_BUTTON = {
+      x: this.UPGRADES_MENU.x + this.UPGRADES_MENU.width - 55,
+      y: this.UpgradesFloorY + 320,
+      width: 32,
+      height: 32
+    }
   }
 
   checkPauseButtonHover(mouseX, mouseY) {
@@ -348,6 +372,9 @@ class GameUI {
   if (money >= workerCost && currentFloor === 1) {
     fill('#9bbc0f');
   }
+  if (numLvl1Workers === maxWorkerCount) {
+    fill(19, 84, 38)
+  }
   text("Buy floor one Worker " + (numLvl1Workers) + "/14", this.UPGRADES_MENU.x, 
     this.UpgradesFloorY,
     this.UPGRADES_MENU.width - 40, 
@@ -357,6 +384,9 @@ class GameUI {
   fill(237,17, 20);
   if (money >= workerCost && currentFloor === 2) {
     fill('#9bbc0f');
+  }
+  if (numLvl2Workers === maxWorkerCount) {
+    fill(19, 84, 38)
   }
   text("Buy floor two Worker " + (numLvl2Workers) + "/14", this.UPGRADES_MENU.x, 
     this.UpgradesFloorY + 40,
@@ -368,6 +398,9 @@ class GameUI {
   if (money >= workerCost && currentFloor === 3) {
     fill('#9bbc0f');
   }
+  if (numLvl3Workers === maxWorkerCount) {
+    fill(19, 84, 38)
+  }
   text("Buy floor three Worker " + (numLvl3Workers) + "/14", this.UPGRADES_MENU.x + 9,
     this.UpgradesFloorY + 80,
     this.UPGRADES_MENU.width - 40, 
@@ -377,6 +410,9 @@ class GameUI {
   fill(237,17, 20);
   if (money >= workerCost && currentFloor === 4) {
     fill('#9bbc0f');
+  }
+  if (numLvl4Workers === maxWorkerCount) {
+    fill(19, 84, 38)
   }
   text("Buy floor four Worker " + (numLvl4Workers) + "/14", this.UPGRADES_MENU.x + 2,
     this.UpgradesFloorY + 120,
@@ -388,17 +424,74 @@ class GameUI {
   if (money >= workerCost && currentFloor === 5) {
     fill('#9bbc0f');
   }
+  if (numLvl5Workers === maxWorkerCount) {
+    fill(19, 84, 38)
+  }
   text("Buy floor five Worker " + (numLvl5Workers) + "/14", this.UPGRADES_MENU.x, 
     this.UpgradesFloorY + 160,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
   
-    this.drawUpgradeButtons();
+  this.drawUpgradeButtons();
+
+  //print floor purchases
+  //floor two purchase
+  fill(237,17, 20);
+  if (money >= floorPrice) {
+    fill('#9bbc0f');
+  }
+  if (purchasedFloors[2] === true) {
+    fill(19, 84, 38)
+  }
+  text("Buy second floor", this.UPGRADES_MENU.x - 50, 
+    this.UpgradesFloorY + 200,
+    this.UPGRADES_MENU.width - 40, 
+    this.UPGRADES_MENU.height - 80, 4)
+  
+  //floor three purchase
+  fill(237,17, 20);
+  if (money >= floorPrice && purchasedFloors[2] === true || purchasedFloors[3] === true) {
+    fill('#9bbc0f');
+  }
+  if (purchasedFloors[3] === true) {
+    fill(19, 84, 38)
+  }
+  text("Buy third floor", this.UPGRADES_MENU.x - 64, 
+    this.UpgradesFloorY + 240,
+    this.UPGRADES_MENU.width - 40, 
+    this.UPGRADES_MENU.height - 80, 4)
+  
+  //floor four purchase
+  fill(237,17, 20);
+  if (money >= floorPrice && purchasedFloors[3] === true || purchasedFloors[4] === true) {
+    fill('#9bbc0f');
+  }
+  if (purchasedFloors[4] === true) {
+    fill(19, 84, 38)
+  }
+  text("Buy fourth floor", this.UPGRADES_MENU.x - 57, 
+    this.UpgradesFloorY + 280,
+    this.UPGRADES_MENU.width - 40, 
+    this.UPGRADES_MENU.height - 80, 4)
+  
+  //floor five purchase
+  fill(237,17, 20);
+  if (money >= floorPrice && purchasedFloors[4] === true || purchasedFloors[5] === true) {
+    fill('#9bbc0f');
+  }
+  if (purchasedFloors[5] === true) {
+    fill(19, 84, 38)
+  }
+  text("Buy fifth floor", this.UPGRADES_MENU.x - 68, 
+    this.UpgradesFloorY + 320,
+    this.UPGRADES_MENU.width - 40, 
+    this.UPGRADES_MENU.height - 80, 4)
+
     pop();
   }
   
   drawUpgradeButtons() {
-    // floor one
+    // floor one workers
     fill('#4a5c68');
     if (this.checkUpgradeButtonHover(mouseX, mouseY) === 1) {
       rect(this.UPGRADE_FLOOR_ONE_BUTTON.x, this.UPGRADE_FLOOR_ONE_BUTTON.y,
@@ -415,7 +508,7 @@ class GameUI {
         this.UPGRADE_FLOOR_ONE_BUTTON.y + ((this.UPGRADE_FLOOR_ONE_BUTTON.height) / 20)) 
     }
   
-    //floor two
+    //floor two workers
     fill('#4a5c68');
     if (this.checkUpgradeButtonHover(mouseX, mouseY) === 2) {
       rect(this.UPGRADE_FLOOR_TWO_BUTTON.x, this.UPGRADE_FLOOR_TWO_BUTTON.y,
@@ -431,7 +524,7 @@ class GameUI {
         this.UPGRADE_FLOOR_TWO_BUTTON.y + ((this.UPGRADE_FLOOR_TWO_BUTTON.height) / 20)) 
     }
   
-    //floor three
+    //floor three workers
     fill('#4a5c68');
     if (this.checkUpgradeButtonHover(mouseX, mouseY) === 3) {
       rect(this.UPGRADE_FLOOR_THREE_BUTTON.x, this.UPGRADE_FLOOR_THREE_BUTTON.y,
@@ -447,7 +540,7 @@ class GameUI {
         this.UPGRADE_FLOOR_THREE_BUTTON.y + ((this.UPGRADE_FLOOR_THREE_BUTTON.height) / 20)) 
     }
   
-    //FLOOR FOUR
+    //FLOOR FOUR workers
     fill('#4a5c68');
     if (this.checkUpgradeButtonHover(mouseX, mouseY) === 4) {
       rect(this.UPGRADE_FLOOR_FOUR_BUTTON.x, this.UPGRADE_FLOOR_FOUR_BUTTON.y,
@@ -463,7 +556,7 @@ class GameUI {
         this.UPGRADE_FLOOR_FOUR_BUTTON.y + ((this.UPGRADE_FLOOR_FOUR_BUTTON.height) / 20)) 
     }
   
-    //FLOOR FIVE
+    //FLOOR FIVE workers
     fill('#4a5c68');
     if (this.checkUpgradeButtonHover(mouseX, mouseY) === 5) {
       rect(this.UPGRADE_FLOOR_FIVE_BUTTON.x, this.UPGRADE_FLOOR_FIVE_BUTTON.y,
@@ -477,6 +570,71 @@ class GameUI {
       fill('#9bbc0f')
       text("$", this.UPGRADE_FLOOR_FIVE_BUTTON.x + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width) / 2),
         this.UPGRADE_FLOOR_FIVE_BUTTON.y + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height) / 20)) 
+    }
+
+    //Buying Floors
+    //floor two purchase button
+    fill('#4a5c68');
+    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 6) {
+      rect(this.BUY_FLOOR_TWO_BUTTON.x, this.BUY_FLOOR_TWO_BUTTON.y,
+        this.BUY_FLOOR_TWO_BUTTON.width * 1.1, this.BUY_FLOOR_TWO_BUTTON.height * 1.1, 4)
+      fill('#9bbc0f')
+      text("$", this.BUY_FLOOR_TWO_BUTTON.x + ((this.BUY_FLOOR_TWO_BUTTON.width * 1.1) / 2),
+          this.BUY_FLOOR_TWO_BUTTON.y + ((this.BUY_FLOOR_TWO_BUTTON.height) * 1.1) / 10)
+    } else {
+      rect(this.BUY_FLOOR_TWO_BUTTON.x, this.BUY_FLOOR_TWO_BUTTON.y,
+        this.BUY_FLOOR_TWO_BUTTON.width, this.BUY_FLOOR_TWO_BUTTON.height, 4)
+      fill('#9bbc0f')
+      text("$", this.BUY_FLOOR_TWO_BUTTON.x + ((this.BUY_FLOOR_TWO_BUTTON.width * 1.1) / 2),
+          this.BUY_FLOOR_TWO_BUTTON.y + ((this.BUY_FLOOR_TWO_BUTTON.height)) / 20)
+    }
+
+    //floor three purchase button
+    fill('#4a5c68');
+    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 7) {
+      rect(this.BUY_FLOOR_THREE_BUTTON.x, this.BUY_FLOOR_THREE_BUTTON.y,
+        this.BUY_FLOOR_THREE_BUTTON.width * 1.1, this.BUY_FLOOR_THREE_BUTTON.height * 1.1, 4)
+      fill('#9bbc0f')
+      text("$", this.BUY_FLOOR_THREE_BUTTON.x + ((this.BUY_FLOOR_THREE_BUTTON.width * 1.1) / 2),
+          this.BUY_FLOOR_THREE_BUTTON.y + ((this.BUY_FLOOR_THREE_BUTTON.height) * 1.1) / 10)
+    } else {
+      rect(this.BUY_FLOOR_THREE_BUTTON.x, this.BUY_FLOOR_THREE_BUTTON.y,
+        this.BUY_FLOOR_THREE_BUTTON.width, this.BUY_FLOOR_THREE_BUTTON.height, 4)
+      fill('#9bbc0f')
+      text("$", this.BUY_FLOOR_THREE_BUTTON.x + ((this.BUY_FLOOR_THREE_BUTTON.width * 1.1) / 2),
+          this.BUY_FLOOR_THREE_BUTTON.y + ((this.BUY_FLOOR_THREE_BUTTON.height)) / 20)
+    }
+
+    //floor four purchase button
+    fill('#4a5c68');
+    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 8) {
+      rect(this.BUY_FLOOR_FOUR_BUTTON.x, this.BUY_FLOOR_FOUR_BUTTON.y,
+        this.BUY_FLOOR_FOUR_BUTTON.width * 1.1, this.BUY_FLOOR_FOUR_BUTTON.height * 1.1, 4)
+      fill('#9bbc0f')
+      text("$", this.BUY_FLOOR_FOUR_BUTTON.x + ((this.BUY_FLOOR_FOUR_BUTTON.width * 1.1) / 2),
+          this.BUY_FLOOR_FOUR_BUTTON.y + ((this.BUY_FLOOR_FOUR_BUTTON.height) * 1.1) / 10)
+    } else {
+      rect(this.BUY_FLOOR_FOUR_BUTTON.x, this.BUY_FLOOR_FOUR_BUTTON.y,
+        this.BUY_FLOOR_FOUR_BUTTON.width, this.BUY_FLOOR_FOUR_BUTTON.height, 4)
+      fill('#9bbc0f')
+      text("$", this.BUY_FLOOR_FOUR_BUTTON.x + ((this.BUY_FLOOR_FOUR_BUTTON.width * 1.1) / 2),
+          this.BUY_FLOOR_FOUR_BUTTON.y + ((this.BUY_FLOOR_FOUR_BUTTON.height)) / 20)
+    }
+
+    //floor five purchase button
+    fill('#4a5c68');
+    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 9) {
+      rect(this.BUY_FLOOR_FIVE_BUTTON.x, this.BUY_FLOOR_FIVE_BUTTON.y,
+        this.BUY_FLOOR_FIVE_BUTTON.width * 1.1, this.BUY_FLOOR_FIVE_BUTTON.height * 1.1, 4)
+      fill('#9bbc0f')
+      text("$", this.BUY_FLOOR_FIVE_BUTTON.x + ((this.BUY_FLOOR_FIVE_BUTTON.width * 1.1) / 2),
+          this.BUY_FLOOR_FIVE_BUTTON.y + ((this.BUY_FLOOR_TWO_BUTTON.height) * 1.1) / 10)
+    } else {
+      rect(this.BUY_FLOOR_FIVE_BUTTON.x, this.BUY_FLOOR_FIVE_BUTTON.y,
+        this.BUY_FLOOR_FIVE_BUTTON.width, this.BUY_FLOOR_FIVE_BUTTON.height, 4)
+      fill('#9bbc0f')
+      text("$", this.BUY_FLOOR_FIVE_BUTTON.x + ((this.BUY_FLOOR_FIVE_BUTTON.width * 1.1) / 2),
+          this.BUY_FLOOR_FIVE_BUTTON.y + ((this.BUY_FLOOR_FIVE_BUTTON.height)) / 20)
     }
   }
   
@@ -516,6 +674,30 @@ class GameUI {
     ) {
       return 5;
     } 
+    if (mouseX >= this.BUY_FLOOR_TWO_BUTTON.x && 
+      mouseX <= this.BUY_FLOOR_TWO_BUTTON.x + this.BUY_FLOOR_TWO_BUTTON.width &&
+      mouseY >= this.BUY_FLOOR_TWO_BUTTON.y &&
+      mouseY <= this.BUY_FLOOR_TWO_BUTTON.y + this.BUY_FLOOR_TWO_BUTTON.height) {
+        return 6
+    }
+    if (mouseX >= this.BUY_FLOOR_THREE_BUTTON.x && 
+      mouseX <= this.BUY_FLOOR_THREE_BUTTON.x + this.BUY_FLOOR_THREE_BUTTON.width &&
+      mouseY >= this.BUY_FLOOR_THREE_BUTTON.y &&
+      mouseY <= this.BUY_FLOOR_THREE_BUTTON.y + this.BUY_FLOOR_THREE_BUTTON.height) {
+        return 7
+    }
+    if (mouseX >= this.BUY_FLOOR_FOUR_BUTTON.x && 
+      mouseX <= this.BUY_FLOOR_FOUR_BUTTON.x + this.BUY_FLOOR_FOUR_BUTTON.width &&
+      mouseY >= this.BUY_FLOOR_FOUR_BUTTON.y &&
+      mouseY <= this.BUY_FLOOR_FOUR_BUTTON.y + this.BUY_FLOOR_FOUR_BUTTON.height) {
+        return 8
+    }
+    if (mouseX >= this.BUY_FLOOR_FIVE_BUTTON.x && 
+      mouseX <= this.BUY_FLOOR_FIVE_BUTTON.x + this.BUY_FLOOR_FIVE_BUTTON.width &&
+      mouseY >= this.BUY_FLOOR_FIVE_BUTTON.y &&
+      mouseY <= this.BUY_FLOOR_FIVE_BUTTON.y + this.BUY_FLOOR_FIVE_BUTTON.height) {
+        return 9
+    }
     
     return 0;
   

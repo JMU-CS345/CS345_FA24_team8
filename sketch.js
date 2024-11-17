@@ -464,7 +464,29 @@ function mousePressed() {
         occupiedPositions.push(newWorkerPos);
       }
     }
-    
+  }
+
+  if (gameUI.showUpgradesMenu && money >= floorPrice) {
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 6) {
+      money -= floorPrice;
+      floorPrice += 500;
+      purchasedFloors[2] = true
+    }
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 7 && purchasedFloors[2]) {
+      money -= floorPrice;
+      floorPrice += 500;
+      purchasedFloors[3] = true
+    }
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 8 && purchasedFloors[3]) {
+      money -= floorPrice;
+      floorPrice += 500;
+      purchasedFloors[4] = true
+    }
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 9 && purchasedFloors[4]) {
+      money -= floorPrice;
+      floorPrice += 500;
+      purchasedFloors[5] = true
+    }
   }
 
 }
