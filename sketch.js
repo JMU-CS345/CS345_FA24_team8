@@ -454,15 +454,15 @@ function mousePressed() {
   }
 
   //if click on upgrades menu buy worker
-  if (gameUI.showUpgradesMenu && mouseX >= 150 &&
-    mouseX <= 550 && mouseY >= 100 && mouseY <= 550 && money >= workerCost
-  ) {
-    buyWorker();
-    money -= workerCost;
-    workerCost += 100;
-    let newWorkerPos = getNextWorkerPosition();
-    if (newWorkerPos) {
-      occupiedPositions.push(newWorkerPos);
+  if (gameUI.showUpgradesMenu && money >= workerCost) {
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1) {
+      buyWorker();
+      money -= workerCost;
+      workerCost += 100;
+      let newWorkerPos = getNextWorkerPosition();
+      if (newWorkerPos) {
+        occupiedPositions.push(newWorkerPos);
+      }
     }
     
   }

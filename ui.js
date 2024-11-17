@@ -40,8 +40,40 @@ class GameUI {
     this.pauseButtonHovered = false;
     this.toolboxButtonHovered = false;
     this.showUpgradesMenu = false;
+    this.currentUpgradeHover = 0;
 
     this.UpgradesFloorY = 160
+
+    this.UPGRADE_FLOOR_ONE_BUTTON = {
+      x: this.UPGRADES_MENU.x + this.UPGRADES_MENU.width - 55, 
+      y: this.UpgradesFloorY, 
+      width: 32,
+      height: 32
+    }
+    this.UPGRADE_FLOOR_TWO_BUTTON = {
+      x: this.UPGRADES_MENU.x + this.UPGRADES_MENU.width - 55, 
+      y: this.UpgradesFloorY + 40, 
+      width: 32,
+      height: 32
+    }
+    this.UPGRADE_FLOOR_THREE_BUTTON = {
+      x: this.UPGRADES_MENU.x + this.UPGRADES_MENU.width - 55, 
+      y: this.UpgradesFloorY + 80, 
+      width: 32,
+      height: 32
+    }
+    this.UPGRADE_FLOOR_FOUR_BUTTON = {
+      x: this.UPGRADES_MENU.x + this.UPGRADES_MENU.width - 55, 
+      y: this.UpgradesFloorY + 120, 
+      width: 32,
+      height: 32
+    }
+    this.UPGRADE_FLOOR_FIVE_BUTTON = {
+      x: this.UPGRADES_MENU.x + this.UPGRADES_MENU.width - 55, 
+      y: this.UpgradesFloorY + 160, 
+      width: 32,
+      height: 32
+    }
   }
 
   checkPauseButtonHover(mouseX, mouseY) {
@@ -311,48 +343,181 @@ class GameUI {
          this.UPGRADES_MENU.width - 40, 
          this.UPGRADES_MENU.height - 80, 4);
     
+  //Floor one Upgrade text and button
   fill(237,17, 20);
   if (money >= workerCost && currentFloor === 1) {
     fill('#9bbc0f');
   }
-  text("Buy floor one Worker " + (numLvl1Workers + 1) + "/14", this.UPGRADES_MENU.x, 
+  text("Buy floor one Worker " + (numLvl1Workers) + "/14", this.UPGRADES_MENU.x, 
     this.UpgradesFloorY,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
+  
+  //Floor two Upgrade text and button
   fill(237,17, 20);
   if (money >= workerCost && currentFloor === 2) {
     fill('#9bbc0f');
   }
-  text("Buy floor two Worker " + (numLvl2Workers + 1) + "/14", this.UPGRADES_MENU.x, 
+  text("Buy floor two Worker " + (numLvl2Workers) + "/14", this.UPGRADES_MENU.x, 
     this.UpgradesFloorY + 40,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
+  
+  //Floor three Upgrade text and button
   fill(237,17, 20);
   if (money >= workerCost && currentFloor === 3) {
     fill('#9bbc0f');
   }
-  text("Buy floor three Worker " + (numLvl3Workers + 1) + "/14", this.UPGRADES_MENU.x + 9,
+  text("Buy floor three Worker " + (numLvl3Workers) + "/14", this.UPGRADES_MENU.x + 9,
     this.UpgradesFloorY + 80,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
+  
+  //Floor four Upgrade text and button
   fill(237,17, 20);
   if (money >= workerCost && currentFloor === 4) {
     fill('#9bbc0f');
   }
-  text("Buy floor four Worker " + (numLvl4Workers + 1) + "/14", this.UPGRADES_MENU.x + 2,
+  text("Buy floor four Worker " + (numLvl4Workers) + "/14", this.UPGRADES_MENU.x + 2,
     this.UpgradesFloorY + 120,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
+  
+  //Floor five Upgrade text and button
   fill(237,17, 20);
   if (money >= workerCost && currentFloor === 5) {
     fill('#9bbc0f');
   }
-  text("Buy floor five Worker " + (numLvl5Workers + 1) + "/14", this.UPGRADES_MENU.x, 
+  text("Buy floor five Worker " + (numLvl5Workers) + "/14", this.UPGRADES_MENU.x, 
     this.UpgradesFloorY + 160,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
-
-      
+  
+    this.drawUpgradeButtons();
     pop();
+  }
+  
+  drawUpgradeButtons() {
+    // floor one
+    fill('#4a5c68');
+    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 1) {
+      rect(this.UPGRADE_FLOOR_ONE_BUTTON.x, this.UPGRADE_FLOOR_ONE_BUTTON.y,
+        this.UPGRADE_FLOOR_ONE_BUTTON.width * 1.1, this.UPGRADE_FLOOR_ONE_BUTTON.height * 1.1, 4);
+      fill('#9bbc0f')
+      text("$", this.UPGRADE_FLOOR_ONE_BUTTON.x + ((this.UPGRADE_FLOOR_ONE_BUTTON.width * 1.1) / 2),
+        this.UPGRADE_FLOOR_ONE_BUTTON.y + ((this.UPGRADE_FLOOR_ONE_BUTTON.height * 1.1) / 10)) 
+        //this.UPGRADES_MENU.width - 40, this.UPGRADES_MENU.height - 80, 4)
+    } else {
+      rect(this.UPGRADE_FLOOR_ONE_BUTTON.x, this.UPGRADE_FLOOR_ONE_BUTTON.y,
+        this.UPGRADE_FLOOR_ONE_BUTTON.width, this.UPGRADE_FLOOR_ONE_BUTTON.height, 4);
+      fill('#9bbc0f')
+      text("$", this.UPGRADE_FLOOR_ONE_BUTTON.x + ((this.UPGRADE_FLOOR_ONE_BUTTON.width) / 2),
+        this.UPGRADE_FLOOR_ONE_BUTTON.y + ((this.UPGRADE_FLOOR_ONE_BUTTON.height) / 20)) 
+    }
+  
+    //floor two
+    fill('#4a5c68');
+    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 2) {
+      rect(this.UPGRADE_FLOOR_TWO_BUTTON.x, this.UPGRADE_FLOOR_TWO_BUTTON.y,
+        this.UPGRADE_FLOOR_TWO_BUTTON.width * 1.1, this.UPGRADE_FLOOR_TWO_BUTTON.height * 1.1, 4);
+      fill('#9bbc0f')
+      text("$", this.UPGRADE_FLOOR_TWO_BUTTON.x + ((this.UPGRADE_FLOOR_TWO_BUTTON.width * 1.1) / 2),
+        this.UPGRADE_FLOOR_TWO_BUTTON.y + ((this.UPGRADE_FLOOR_TWO_BUTTON.height * 1.1) / 10)) 
+    } else {
+      rect(this.UPGRADE_FLOOR_TWO_BUTTON.x, this.UPGRADE_FLOOR_TWO_BUTTON.y,
+        this.UPGRADE_FLOOR_TWO_BUTTON.width, this.UPGRADE_FLOOR_TWO_BUTTON.height, 4);
+      fill('#9bbc0f')
+      text("$", this.UPGRADE_FLOOR_TWO_BUTTON.x + ((this.UPGRADE_FLOOR_TWO_BUTTON.width) / 2),
+        this.UPGRADE_FLOOR_TWO_BUTTON.y + ((this.UPGRADE_FLOOR_TWO_BUTTON.height) / 20)) 
+    }
+  
+    //floor three
+    fill('#4a5c68');
+    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 3) {
+      rect(this.UPGRADE_FLOOR_THREE_BUTTON.x, this.UPGRADE_FLOOR_THREE_BUTTON.y,
+        this.UPGRADE_FLOOR_THREE_BUTTON.width * 1.1, this.UPGRADE_FLOOR_THREE_BUTTON.height * 1.1, 4);
+      fill('#9bbc0f')
+      text("$", this.UPGRADE_FLOOR_THREE_BUTTON.x + ((this.UPGRADE_FLOOR_THREE_BUTTON.width * 1.1) / 2),
+          this.UPGRADE_FLOOR_THREE_BUTTON.y + ((this.UPGRADE_FLOOR_THREE_BUTTON.height * 1.1) / 10)) 
+    } else {
+      rect(this.UPGRADE_FLOOR_THREE_BUTTON.x, this.UPGRADE_FLOOR_THREE_BUTTON.y,
+        this.UPGRADE_FLOOR_THREE_BUTTON.width, this.UPGRADE_FLOOR_THREE_BUTTON.height, 4);
+      fill('#9bbc0f')
+      text("$", this.UPGRADE_FLOOR_THREE_BUTTON.x + ((this.UPGRADE_FLOOR_THREE_BUTTON.width) / 2),
+        this.UPGRADE_FLOOR_THREE_BUTTON.y + ((this.UPGRADE_FLOOR_THREE_BUTTON.height) / 20)) 
+    }
+  
+    //FLOOR FOUR
+    fill('#4a5c68');
+    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 4) {
+      rect(this.UPGRADE_FLOOR_FOUR_BUTTON.x, this.UPGRADE_FLOOR_FOUR_BUTTON.y,
+        this.UPGRADE_FLOOR_FOUR_BUTTON.width * 1.1, this.UPGRADE_FLOOR_FOUR_BUTTON.height * 1.1, 4);
+      fill('#9bbc0f')
+      text("$", this.UPGRADE_FLOOR_FOUR_BUTTON.x + ((this.UPGRADE_FLOOR_FOUR_BUTTON.width * 1.1) / 2),
+          this.UPGRADE_FLOOR_FOUR_BUTTON.y + ((this.UPGRADE_FLOOR_FOUR_BUTTON.height * 1.1) / 10)) 
+    } else {
+      rect(this.UPGRADE_FLOOR_FOUR_BUTTON.x, this.UPGRADE_FLOOR_FOUR_BUTTON.y,
+        this.UPGRADE_FLOOR_FOUR_BUTTON.width, this.UPGRADE_FLOOR_FOUR_BUTTON.height, 4);
+      fill('#9bbc0f')
+      text("$", this.UPGRADE_FLOOR_FOUR_BUTTON.x + ((this.UPGRADE_FLOOR_FOUR_BUTTON.width) / 2),
+        this.UPGRADE_FLOOR_FOUR_BUTTON.y + ((this.UPGRADE_FLOOR_FOUR_BUTTON.height) / 20)) 
+    }
+  
+    //FLOOR FIVE
+    fill('#4a5c68');
+    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 5) {
+      rect(this.UPGRADE_FLOOR_FIVE_BUTTON.x, this.UPGRADE_FLOOR_FIVE_BUTTON.y,
+        this.UPGRADE_FLOOR_FIVE_BUTTON.width * 1.1, this.UPGRADE_FLOOR_FIVE_BUTTON.height * 1.1, 4);
+      fill('#9bbc0f')
+      text("$", this.UPGRADE_FLOOR_FIVE_BUTTON.x + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width * 1.1) / 2),
+          this.UPGRADE_FLOOR_FIVE_BUTTON.y + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height * 1.1) / 10)) 
+    } else {
+      rect(this.UPGRADE_FLOOR_FIVE_BUTTON.x, this.UPGRADE_FLOOR_FIVE_BUTTON.y,
+        this.UPGRADE_FLOOR_FIVE_BUTTON.width, this.UPGRADE_FLOOR_FIVE_BUTTON.height, 4);
+      fill('#9bbc0f')
+      text("$", this.UPGRADE_FLOOR_FIVE_BUTTON.x + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width) / 2),
+        this.UPGRADE_FLOOR_FIVE_BUTTON.y + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height) / 20)) 
+    }
+  }
+  
+  checkUpgradeButtonHover(mouseX, mouseY) {
+    if (mouseX >= this.UPGRADE_FLOOR_ONE_BUTTON.x &&
+      mouseX <= this.UPGRADE_FLOOR_ONE_BUTTON.x + this.UPGRADE_FLOOR_ONE_BUTTON.width &&
+      mouseY >= this.UPGRADE_FLOOR_ONE_BUTTON.y &&
+      mouseY <= this.UPGRADE_FLOOR_ONE_BUTTON.y + this.UPGRADE_FLOOR_ONE_BUTTON.height
+    ) {
+      return 1;
+    } 
+    if (mouseX >= this.UPGRADE_FLOOR_TWO_BUTTON.x &&
+      mouseX <= this.UPGRADE_FLOOR_TWO_BUTTON.x + this.UPGRADE_FLOOR_TWO_BUTTON.width &&
+      mouseY >= this.UPGRADE_FLOOR_TWO_BUTTON.y &&
+      mouseY <= this.UPGRADE_FLOOR_TWO_BUTTON.y + this.UPGRADE_FLOOR_TWO_BUTTON.height
+    ) {
+      return 2;
+    } 
+    if (mouseX >= this.UPGRADE_FLOOR_THREE_BUTTON.x &&
+      mouseX <= this.UPGRADE_FLOOR_THREE_BUTTON.x + this.UPGRADE_FLOOR_THREE_BUTTON.width &&
+      mouseY >= this.UPGRADE_FLOOR_THREE_BUTTON.y &&
+      mouseY <= this.UPGRADE_FLOOR_THREE_BUTTON.y + this.UPGRADE_FLOOR_THREE_BUTTON.height
+    ) {
+      return 3;
+    } 
+    if (mouseX >= this.UPGRADE_FLOOR_FOUR_BUTTON.x &&
+      mouseX <= this.UPGRADE_FLOOR_FOUR_BUTTON.x + this.UPGRADE_FLOOR_FOUR_BUTTON.width &&
+      mouseY >= this.UPGRADE_FLOOR_FOUR_BUTTON.y &&
+      mouseY <= this.UPGRADE_FLOOR_FOUR_BUTTON.y + this.UPGRADE_FLOOR_FOUR_BUTTON.height
+    ) {
+      return 4;
+    } 
+    if (mouseX >= this.UPGRADE_FLOOR_FIVE_BUTTON.x &&
+      mouseX <= this.UPGRADE_FLOOR_FIVE_BUTTON.x + this.UPGRADE_FLOOR_FIVE_BUTTON.width &&
+      mouseY >= this.UPGRADE_FLOOR_FIVE_BUTTON.y &&
+      mouseY <= this.UPGRADE_FLOOR_FIVE_BUTTON.y + this.UPGRADE_FLOOR_FIVE_BUTTON.height
+    ) {
+      return 5;
+    } 
+    
+    return 0;
+  
   }
 }
