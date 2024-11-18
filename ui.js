@@ -211,15 +211,123 @@ class GameUI {
 
   drawPauseOverlay(width, height) {
     push();
+    // Semi-transparent dark background
     fill(0, 0, 0, 127);
     rect(0, 0, width, height);
-    fill(255);
-    textAlign(CENTER, CENTER);
+    
+    // Menu container
+    const menuWidth = 300;
+    const menuHeight = 400;
+    const menuX = width/2 - menuWidth/2;
+    const menuY = height/2 - menuHeight/2;
+    
+    // Menu background
+    fill('#4a5c68');
+    rect(menuX, menuY, menuWidth, menuHeight, 8);
+    
+    // Title
+    fill('#9bbc0f');
+    textAlign(CENTER, TOP);
     textSize(36);
-    text("PAUSED", width/2, height/2);
+    text("PAUSED", width/2, menuY + 40);
+    
+    // Resume button
+    const buttonWidth = 200;
+    const buttonHeight = 40;
+    const buttonX = width/2 - buttonWidth/2;
+    let buttonY = menuY + 120;
+    
+    // Check if mouse is hovering over resume button
+    const resumeHovered = mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
+                         mouseY >= buttonY && mouseY <= buttonY + buttonHeight;
+    
+    fill(resumeHovered ? '#8bac0f' : '#2c353b');
+    rect(buttonX, buttonY, buttonWidth, buttonHeight, 4);
+    fill('#9bbc0f');
+    textAlign(CENTER, CENTER);
+    textSize(20);
+    text("Resume", width/2, buttonY + buttonHeight/2);
+    
+    // Quit button
+    buttonY = menuY + 180;
+    const quitHovered = mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
+                       mouseY >= buttonY && mouseY <= buttonY + buttonHeight;
+    
+    fill(quitHovered ? '#8bac0f' : '#2c353b');
+    rect(buttonX, buttonY, buttonWidth, buttonHeight, 4);
+    fill('#9bbc0f');
+    text("Quit", width/2, buttonY + buttonHeight/2);
+    
+    // Volume slider
+    const sliderWidth = 200;
+    const sliderHeight = 8;
+    const sliderX = width/2 - sliderWidth/2;
+    const sliderY = menuY + 280;
+    
+    // Slider label
+    textAlign(CENTER, BOTTOM);
     textSize(16);
-    text("Click pause button or press P to resume", width/2, height/2 + 40);
+    fill('#9bbc0f');
+    text("Volume", width/2, sliderY - 10);
+    
+    // Slider track
+    fill('#2c353b');
+    rect(sliderX, sliderY, sliderWidth, sliderHeight, 4);
+    
+    // Slider handle
+    const handleWidth = 20;
+    const handleHeight = 20;
+    // We'll store the volume as a class property if it doesn't exist
+    if (this.volume === undefined) this.volume = 0.5;
+    
+    // Check if mouse is dragging the slider
+    if (mouseIsPressed && 
+        mouseX >= sliderX && mouseX <= sliderX + sliderWidth &&
+        mouseY >= sliderY - handleHeight/2 && mouseY <= sliderY + handleHeight/2) {
+      this.volume = constrain((mouseX - sliderX) / sliderWidth, 0, 1);
+    }
+    
+    // Draw slider handle
+    const handleX = sliderX + (sliderWidth * this.volume) - handleWidth/2;
+    fill('#8bac0f');
+    rect(handleX, sliderY - handleHeight/2 + sliderHeight/2, 
+         handleWidth, handleHeight, 4);
+    
+    // Volume percentage
+    textAlign(CENTER, TOP);
+    textSize(14);
+    text(Math.round(this.volume * 100) + "%", width/2, sliderY + 20);
+    
     pop();
+  }
+  
+  handlePauseMenuClick(mouseX, mouseY, width, height) {
+    if (!this.isPaused) return false;
+    
+    const menuWidth = 300;
+    const menuHeight = 400;
+    const menuX = width/2 - menuWidth/2;
+    const menuY = height/2 - menuHeight/2;
+    
+    const buttonWidth = 200;
+    const buttonHeight = 40;
+    const buttonX = width/2 - buttonWidth/2;
+    
+    // Resume button
+    const resumeY = menuY + 120;
+    if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
+        mouseY >= resumeY && mouseY <= resumeY + buttonHeight) {
+      return 'resume';
+    }
+    
+    // Quit button
+    const quitY = menuY + 180;
+    if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
+        mouseY >= quitY && mouseY <= quitY + buttonHeight) {
+      return 'quit';
+    }
+    
+    return false;
   }
 
   drawUI(gameState) {
@@ -375,7 +483,7 @@ class GameUI {
   if (numLvl1Workers === maxWorkerCount) {
     fill(19, 84, 38)
   }
-  text("Buy floor one Worker " + (numLvl1Workers) + "/14", this.UPGRADES_MENU.x, 
+  text("Buy Floor One Worker " + (numLvl1Workers) + "/14", this.UPGRADES_MENU.x, 
     this.UpgradesFloorY,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
@@ -388,7 +496,7 @@ class GameUI {
   if (numLvl2Workers === maxWorkerCount) {
     fill(19, 84, 38)
   }
-  text("Buy floor two Worker " + (numLvl2Workers) + "/14", this.UPGRADES_MENU.x, 
+  text("Buy Floor Two Worker " + (numLvl2Workers) + "/14", this.UPGRADES_MENU.x, 
     this.UpgradesFloorY + 40,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
@@ -401,7 +509,7 @@ class GameUI {
   if (numLvl3Workers === maxWorkerCount) {
     fill(19, 84, 38)
   }
-  text("Buy floor three Worker " + (numLvl3Workers) + "/14", this.UPGRADES_MENU.x + 9,
+  text("Buy Floor Three Worker " + (numLvl3Workers) + "/14", this.UPGRADES_MENU.x + 9,
     this.UpgradesFloorY + 80,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
@@ -414,7 +522,7 @@ class GameUI {
   if (numLvl4Workers === maxWorkerCount) {
     fill(19, 84, 38)
   }
-  text("Buy floor four Worker " + (numLvl4Workers) + "/14", this.UPGRADES_MENU.x + 2,
+  text("Buy Floor Four Worker " + (numLvl4Workers) + "/14", this.UPGRADES_MENU.x + 2,
     this.UpgradesFloorY + 120,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
@@ -427,7 +535,7 @@ class GameUI {
   if (numLvl5Workers === maxWorkerCount) {
     fill(19, 84, 38)
   }
-  text("Buy floor five Worker " + (numLvl5Workers) + "/14", this.UPGRADES_MENU.x, 
+  text("Buy Floor Five Worker " + (numLvl5Workers) + "/14", this.UPGRADES_MENU.x, 
     this.UpgradesFloorY + 160,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
@@ -443,7 +551,7 @@ class GameUI {
   if (purchasedFloors[2] === true) {
     fill(19, 84, 38)
   }
-  text("Buy second floor", this.UPGRADES_MENU.x - 50, 
+  text("Buy Second Floor", this.UPGRADES_MENU.x - 50, 
     this.UpgradesFloorY + 200,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
@@ -456,7 +564,7 @@ class GameUI {
   if (purchasedFloors[3] === true) {
     fill(19, 84, 38)
   }
-  text("Buy third floor", this.UPGRADES_MENU.x - 64, 
+  text("Buy Third Floor", this.UPGRADES_MENU.x - 64, 
     this.UpgradesFloorY + 240,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
@@ -469,7 +577,7 @@ class GameUI {
   if (purchasedFloors[4] === true) {
     fill(19, 84, 38)
   }
-  text("Buy fourth floor", this.UPGRADES_MENU.x - 57, 
+  text("Buy Fourth Floor", this.UPGRADES_MENU.x - 57, 
     this.UpgradesFloorY + 280,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
@@ -482,7 +590,7 @@ class GameUI {
   if (purchasedFloors[5] === true) {
     fill(19, 84, 38)
   }
-  text("Buy fifth floor", this.UPGRADES_MENU.x - 68, 
+  text("Buy Fifth Floor", this.UPGRADES_MENU.x - 68, 
     this.UpgradesFloorY + 320,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)

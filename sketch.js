@@ -340,6 +340,9 @@ function draw() {
   image(desk, 90, 120);
 }
 
+var audio = new Audio('assets/music/345 - P-Funk 16 Bit.mp3');
+audio.play();
+
 function restart() {
   x = 125;
   y = 282;
