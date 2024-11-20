@@ -136,7 +136,6 @@ function draw() {
   textSize(100);
   text(currentFloor, 140, 570)
 
-  //noStroke();
 
   if (showFloorMenu) {
     gameUI.drawFloorMenu(currentFloor);
@@ -416,7 +415,7 @@ function mousePressed() {
           purchasedFloors[selectedFloor] = true; // Mark floor as purchased
           floorPrice += 500; // Increment price for the next floor
         } else {
-          console.log("Not enough money to buy this floor!");
+          alert("Not enough money to buy this floor!");
           return; // Exit if the player can't afford the floor
         }
       }
