@@ -277,7 +277,7 @@ class GameUI {
     // Slider handle
     const handleWidth = 20;
     const handleHeight = 20;
-    // We'll store the volume as a class property if it doesn't exist
+    
     if (this.volume === undefined) this.volume = 0.5;
     
     // Check if mouse is dragging the slider
