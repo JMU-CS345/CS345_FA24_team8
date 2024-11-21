@@ -351,12 +351,18 @@ const musicTracks = [
 let currentTrackIndex = 0;
 let audio = new Audio(musicTracks[currentTrackIndex]);
 
+// Initialize volume
+let volume = 0.5;
+audio.volume = volume;
+
 function playNextTrack() {
   currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
   audio.src = musicTracks[currentTrackIndex];
+  audio.volume = volume; // Ensure volume persists across tracks
   audio.play();
 }
 
+// Event listeners
 audio.addEventListener("ended", playNextTrack);
 
 function restart() {
