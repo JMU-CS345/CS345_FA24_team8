@@ -464,13 +464,13 @@ class GameUI {
     text("Upgrades", 
          this.UPGRADES_MENU.x + this.UPGRADES_MENU.width/2, 
          this.UPGRADES_MENU.y + 20);
-    
-    // Placeholder for upgrades content
+
     fill('#2c353b');
-    rect(this.UPGRADES_MENU.x + 20, 
-         this.UPGRADES_MENU.y + 60,
-         this.UPGRADES_MENU.width - 40, 
-         this.UPGRADES_MENU.height - 80, 4);
+      rect(this.UPGRADES_MENU.x + 20, 
+        this.UPGRADES_MENU.y + 60,
+        this.UPGRADES_MENU.width - 40, 
+        this.UPGRADES_MENU.height - 80, 4);
+         
     
   //Floor one Upgrade text and button
   fill(237,17, 20);
