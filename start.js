@@ -15,7 +15,7 @@ let spriteDisplayWidth = spriteWidth * spriteScale; // Scaled width
 let spriteDisplayHeight = spriteHeight * spriteScale; // Scaled height
 
 function preload() {
-  img = loadImage("2211.w030.n003.491B.p1.491-2.jpg");
+  img = loadImage("assets/2211.w030.n003.491B.p1.491-2.jpg");
   spriteSheet = loadImage("assets/mort/base/move.png");
 }
 
