@@ -258,7 +258,6 @@ class GameUI {
     fill('#9bbc0f');
     text("Quit", width/2, buttonY + buttonHeight/2);
     
-    // Volume slider
     const sliderWidth = 200;
     const sliderHeight = 8;
     const sliderX = width/2 - sliderWidth/2;
@@ -277,29 +276,27 @@ class GameUI {
     // Slider handle
     const handleWidth = 20;
     const handleHeight = 20;
-    // We'll store the volume as a class property if it doesn't exist
-    if (this.volume === undefined) this.volume = 0.5;
     
     // Check if mouse is dragging the slider
-    if (mouseIsPressed && 
+    if (mouseIsPressed &&
         mouseX >= sliderX && mouseX <= sliderX + sliderWidth &&
         mouseY >= sliderY - handleHeight/2 && mouseY <= sliderY + handleHeight/2) {
-      this.volume = constrain((mouseX - sliderX) / sliderWidth, 0, 1);
+        volume = constrain((mouseX - sliderX) / sliderWidth, 0, 1);
+        audio.volume = volume; // Update audio volume when slider moves
     }
     
     // Draw slider handle
-    const handleX = sliderX + (sliderWidth * this.volume) - handleWidth/2;
+    const handleX = sliderX + (sliderWidth * volume) - handleWidth/2;
     fill('#8bac0f');
-    rect(handleX, sliderY - handleHeight/2 + sliderHeight/2, 
-         handleWidth, handleHeight, 4);
+    rect(handleX, sliderY - handleHeight/2 + sliderHeight/2,
+        handleWidth, handleHeight, 4);
     
     // Volume percentage
     textAlign(CENTER, TOP);
     textSize(14);
-    text(Math.round(this.volume * 100) + "%", width/2, sliderY + 20);
-    
-    pop();
-  }
+    text(Math.round(volume * 100) + "%", width/2, sliderY + 20);
+}
+
   
   handlePauseMenuClick(mouseX, mouseY, width, height) {
     if (!this.isPaused) return false;
