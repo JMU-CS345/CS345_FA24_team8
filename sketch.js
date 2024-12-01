@@ -339,8 +339,31 @@ function draw() {
   image(desk, 90, 120);
 }
 
-var audio = new Audio('assets/music/345 - P-Funk 16 Bit.mp3');
-audio.play();
+const musicTracks = [
+  "assets/music/345 - P-Funk 16 Bit.mp3",
+  "assets/music/345 - 16 Bit Soul.mp3",
+  "assets/music/345 - P-Funk 2.mp3",
+  "assets/music/Untitled.mp3",
+  "assets/music/Untitled-2.mp3",
+  "assets/music/Untitled-3.mp3"
+]
+
+let currentTrackIndex = 0;
+let audio = new Audio(musicTracks[currentTrackIndex]);
+
+// Initialize volume
+let volume = 0.5;
+audio.volume = volume;
+
+function playNextTrack() {
+  currentTrackIndex = (currentTrackIndex + 1) % musicTracks.length;
+  audio.src = musicTracks[currentTrackIndex];
+  audio.volume = volume; // Ensure volume persists across tracks
+  audio.play();
+}
+
+// Event listeners
+audio.addEventListener("ended", playNextTrack);
 
 function restart() {
   x = 125;
@@ -515,6 +538,10 @@ function keyPressed() {
 
   if (key === 'u' || key === 'U') {
     gameUI.showUpgradesMenu = !gameUI.showUpgradesMenu;
+  }
+
+  if (key === 't' || key === 'T') {
+    audio.play();
   }
 
   if (gameOver && key === 'r' || key === 'R') {
