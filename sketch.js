@@ -1,8 +1,7 @@
-let workerPositions1 = []; // buy worker 
-let workerPositions2 = [];  // but worker 
+let workerPositions1 = []; // buy worker
+let workerPositions2 = [];  // but worker
 let occupiedPositions = []; // buy worker
 let workerCost = 50;
-let money = 1000;
 
 // Coordinates and size of the worker to clone
 const worker1X = 130;
@@ -53,6 +52,11 @@ let warning = false;
 let negative = 0;
 let gameOver = false;
 
+let toBeCollected = 0
+let money = 1000;
+
+
+
 let box = { x: 0, y: 0, width: 0, height: 0, dragging: false };
 let cornersHovered = null;
 let hoveredWall = null;
@@ -71,6 +75,13 @@ let hitbox = {
   height: 35,
 };
 
+let moneyBag = {
+  x: 400,
+  y: 560,
+  width: 35,
+  height: 35,
+};
+
 
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
@@ -79,6 +90,9 @@ function preload() {
   chair2 = loadImage('assets/chair.png');
   test = loadImage('assets/test.png');
   desk = loadImage('assets/desk_occupied.png');
+  money = loadImage('assets/office_assets/money/money_1.png');
+  money2 = loadImage('assets/office_assets/money/money_2.png');
+  money3 = loadImage('assets/office_assets/money/money_3.png');
 }
 
 function setup() {
@@ -151,7 +165,7 @@ function draw() {
 
 
 
-  // buy worker 
+  // buy worker
   for (let pos of occupiedPositions) {
     if (pos.workerType === 1) {
       // Copy worker 1's image to the new position
@@ -171,6 +185,9 @@ function draw() {
   textSize(12);
   textAlign(CENTER, CENTER);
   text("Floor " + currentFloor, elevator.x + elevator.width/2, elevator.y + elevator.height/2);
+
+
+
 
   //moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
 
@@ -198,6 +215,14 @@ function draw() {
       inElevator = true;
       showFloorMenu = true;
     }
+  }
+
+  if (checkCollision(x, y, guyWidth * 2, guyHeight * 2, {
+    topLeft: { x: moneyBag.x, y: moneyBag.y },
+    bottomRight: { x: moneyBag.x + moneyBag.width, y: moneyBag.y + elevator.height }
+  })) {
+    money = toBeCollected + money;
+    toBeCollected = 0;
   }
 
   if (box.width > 0 && box.height > 0) {
@@ -333,10 +358,17 @@ function draw() {
     }
   }
 
-  image(chair, 185, 292 );
-  image(chair2, 377, 292);
+  /*image(chair, 185, 292 );
+  image(chair2, 377, 292); */
   image(test, 90, 120);
   image(desk, 90, 120);
+  image(money2, 400, 500);
+
+  fill(255, 0, 0);
+  textSize(12);
+  textAlign(CENTER, CENTER);
+  text(toBeCollected, moneyBag.x + moneyBag.width/2, moneyBag.y + moneyBag.height/2);
+
 }
 
 const musicTracks = [
@@ -464,7 +496,7 @@ function mousePressed() {
   }
 
   if (!isPaused && !gameUI.showUpgradesMenu) {
-    money += clickValue;
+    toBeCollected += clickValue;
   }
 
   if (!isPaused && gameOver) {
@@ -563,7 +595,7 @@ function keyPressed() {
   }
 }
 
-// buy worker 
+// buy worker
 function getNextWorkerPosition() {
   if (workerPositions1.length > 0) {
     let position = workerPositions1.shift();
@@ -596,7 +628,7 @@ function initializeWorkerPositions() {
 
 }
 
-// buy worker 
+// buy worker
 function buyWorker() {
   if (currentFloor === 1 && (numLvl1Workers < maxWorkerCount)) {
     numLvl1Workers++;
@@ -626,7 +658,7 @@ function timeIt() {
       timerSeconds = 59;
     } else {
       timerSeconds--;
-      money += moneyPerSecond
+      toBeCollected += moneyPerSecond
     }
   }
 }
@@ -650,8 +682,9 @@ let walls = [
   { topLeft: { x: 516, y: 231 }, bottomRight: { x: 562, y: 259 } },
   { topLeft: { x: 455, y: 442 }, bottomRight: { x: 570, y: 503 } },
   { topLeft: { x: 160, y: 338 }, bottomRight: { x: 532, y: 394 } },
-  { topLeft: { x: 188, y: 215 }, bottomRight: { x: 471, y: 278 } },
+  { topLeft: { x: 188, y: 215 }, bottomRight: { x: 471, y: 250 } },
   { topLeft: { x: 158, y: 331 }, bottomRight: { x: 526, y: 352 } },
+  { topLeft: { x: 410, y: 569 }, bottomRight: { x: 420, y: 590 } },
 ];
 
 function checkCollision(px, py, pWidth, pHeight, wall) {
