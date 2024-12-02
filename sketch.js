@@ -187,7 +187,7 @@ function draw() {
     gameOver
   });
 
-  if (isPaused || gameUI.showUpgradesMenu) return;
+  if (isPaused || gameUI.showUpgradesMenu || gameUI.showFloorUpgradesMenu || gameUI.showWorkerUpgradesMenu) return;
 
   // Check for elevator collision
   if (checkCollision(x, y, guyWidth * 2, guyHeight * 2, {
@@ -479,7 +479,16 @@ function mousePressed() {
   }
 
   //if click on upgrades menu buy worker
-  if (gameUI.showUpgradesMenu && money >= workerCost) {
+  if (gameUI.showUpgradesMenu) {
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1) {
+      gameUI.showWorkerUpgradesMenu = true
+      gameUI.showUpgradesMenu = false
+    }
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 2) {
+      gameUI.showFloorUpgradesMenu = true
+      gameUI.showUpgradesMenu = false
+    }
+  } else if (gameUI.showWorkerUpgradesMenu && money >= workerCost) {
     if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1) {
       buyWorker();
       money -= workerCost;
@@ -489,25 +498,23 @@ function mousePressed() {
         occupiedPositions.push(newWorkerPos);
       }
     }
-  }
-
-  if (gameUI.showUpgradesMenu && money >= floorPrice) {
-    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 6) {
+  } else if (gameUI.showFloorUpgradesMenu && money >= floorPrice) {
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1) {
       money -= floorPrice;
       floorPrice += 500;
       purchasedFloors[2] = true
     }
-    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 7 && purchasedFloors[2]) {
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 2 && purchasedFloors[2]) {
       money -= floorPrice;
       floorPrice += 500;
       purchasedFloors[3] = true
     }
-    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 8 && purchasedFloors[3]) {
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 3 && purchasedFloors[3]) {
       money -= floorPrice;
       floorPrice += 500;
       purchasedFloors[4] = true
     }
-    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 9 && purchasedFloors[4]) {
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 4 && purchasedFloors[4]) {
       money -= floorPrice;
       floorPrice += 500;
       purchasedFloors[5] = true
@@ -546,6 +553,11 @@ function keyPressed() {
 
   if (gameOver && key === 'r' || key === 'R') {
     restart();
+  }
+  if (key === 'q') {
+    gameUI.showFloorUpgradesMenu = false;
+    gameUI.showUpgradesMenu = false;
+    gameUI.showWorkerUpgradesMenu = false;
   }
 
 
