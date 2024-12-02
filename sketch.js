@@ -2,7 +2,7 @@ let workerPositions1 = []; // buy worker
 let workerPositions2 = [];  // but worker 
 let occupiedPositions = []; // buy worker
 let workerCost = 50;
-let money = 1000;
+
 
 // Coordinates and size of the worker to clone
 const worker1X = 130;
@@ -71,6 +71,15 @@ let hitbox = {
   height: 35,
 };
 
+let floorWorkers = {
+  1: [], 
+  2: [], 
+  3: [], 
+  4: [], 
+  5: []  
+};
+
+
 
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
@@ -79,6 +88,8 @@ function preload() {
   chair2 = loadImage('assets/chair.png');
   test = loadImage('assets/test.png');
   desk = loadImage('assets/desk_occupied.png');
+  worker1 = loadImage('assets/Worker1.gif');
+  worker2 = loadImage('assets/Worker2.gif'); 
 }
 
 function setup() {
@@ -152,17 +163,22 @@ function draw() {
 
 
   // buy worker 
-  for (let pos of occupiedPositions) {
-    if (pos.workerType === 1) {
-      // Copy worker 1's image to the new position
-      copy(map1, worker1X, worker1Y, workerWidth, workerHeight,
-           mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
-    } else if (pos.workerType === 2) {
-      // Copy worker 2's image to the new position
-      copy(map1, worker2X, worker2Y, workerWidth, workerHeight,
-           mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
-    }
-  }
+  // for (let pos of occupiedPositions) {
+  //   if (pos.workerType === 1) {
+  //     // Copy worker 1's image to the new position
+  //     copy(map1, worker1X, worker1Y, workerWidth, workerHeight,
+  //          mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
+  //   } else if (pos.workerType === 2) {
+  //     // Copy worker 2's image to the new position
+  //     copy(map1, worker2X, worker2Y, workerWidth, workerHeight,
+  //          mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
+  //   }
+  // }
+
+  floorWorkers[currentFloor].forEach(worker => {
+    let workerImage = worker.workerType === 1 ? worker1 : worker2;
+    image(workerImage, mapOffsetX + worker.x, mapOffsetY + worker.y, workerWidth, workerHeight);
+  });
 
   // Draw elevator
   fill(100);
@@ -434,12 +450,12 @@ function mousePressed() {
       if (!purchasedFloors[selectedFloor]) {
         // Check if the player has enough money
         if (money >= floorPrice) {
-          money -= floorPrice; // Deduct the floor price
-          purchasedFloors[selectedFloor] = true; // Mark floor as purchased
-          floorPrice += 500; // Increment price for the next floor
+          money -= floorPrice; 
+          purchasedFloors[selectedFloor] = true;
+          floorPrice += 500; 
         } else {
           alert("Not enough money to buy this floor!");
-          return; // Exit if the player can't afford the floor
+          return; 
         }
       }
 
@@ -552,9 +568,9 @@ function keyPressed() {
   if (key === 'b' || key === 'B') {
     if (money >= workerCost) {
       WorkerUpgradeQueue.pop();
-      money -= workerCost;
+      //money -= workerCost;
       buyWorker();
-      workerCost += 100;
+      //workerCost += 100;
       let newWorkerPos = getNextWorkerPosition();
       if (newWorkerPos) {
         occupiedPositions.push(newWorkerPos);
@@ -597,19 +613,37 @@ function initializeWorkerPositions() {
 }
 
 // buy worker 
+// function buyWorker() {
+//   if (currentFloor === 1 && (numLvl1Workers < maxWorkerCount)) {
+//     numLvl1Workers++;
+//   } else if (currentFloor === 2 && (numLvl2Workers < maxWorkerCount)) {
+//     numLvl2Workers++;
+//   } else if (currentFloor === 3 && (numLvl3Workers < maxWorkerCount)) {
+//     numLvl3Workers++;
+//   } else if (currentFloor === 4 && (numLvl4Workers < maxWorkerCount)) {
+//     numLvl4Workers++;
+//   } else if (currentFloor === 5 && (numLvl5Workers < maxWorkerCount)) {
+//     numLvl5Workers++;
+//   }
+// }
+
 function buyWorker() {
-  if (currentFloor === 1 && (numLvl1Workers < maxWorkerCount)) {
-    numLvl1Workers++;
-  } else if (currentFloor === 2 && (numLvl2Workers < maxWorkerCount)) {
-    numLvl2Workers++;
-  } else if (currentFloor === 3 && (numLvl3Workers < maxWorkerCount)) {
-    numLvl3Workers++;
-  } else if (currentFloor === 4 && (numLvl4Workers < maxWorkerCount)) {
-    numLvl4Workers++;
-  } else if (currentFloor === 5 && (numLvl5Workers < maxWorkerCount)) {
-    numLvl5Workers++;
+  if (money >= workerCost) {
+    let newWorkerPos = getNextWorkerPosition();
+    if (newWorkerPos) {
+      // Add worker data to the current floor
+      floorWorkers[currentFloor].push({
+        x: newWorkerPos.x,
+        y: newWorkerPos.y,
+        workerType: newWorkerPos.workerType
+      });
+
+      money -= workerCost;
+      //workerCost += 100;
+    }
   }
 }
+
 
 
 function timeIt() {
