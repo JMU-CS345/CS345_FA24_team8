@@ -188,17 +188,17 @@ function draw() {
   });
 
   // buy worker
-  for (let pos of occupiedPositions) {
-    if (pos.workerType === 1) {
-      // Copy worker 1's image to the new position
-      copy(map1, worker1X, worker1Y, workerWidth, workerHeight,
-           mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
-    } else if (pos.workerType === 2) {
-      // Copy worker 2's image to the new position
-      copy(map1, worker2X, worker2Y, workerWidth, workerHeight,
-           mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
-    }
-  }
+  // for (let pos of occupiedPositions) {
+  //   if (pos.workerType === 1) {
+  //     // Copy worker 1's image to the new position
+  //     copy(map1, worker1X, worker1Y, workerWidth, workerHeight,
+  //          mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
+  //   } else if (pos.workerType === 2) {
+  //     // Copy worker 2's image to the new position
+  //     copy(map1, worker2X, worker2Y, workerWidth, workerHeight,
+  //          mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
+  //   }
+  // }
 
   // Draw elevator
   fill(100);
