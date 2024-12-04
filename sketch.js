@@ -180,25 +180,7 @@ function draw() {
   }
 
 
-
-
-  floorWorkers[currentFloor].forEach(worker => {
-    let workerImage = worker.workerType === 1 ? worker1 : worker2;
-    image(workerImage, mapOffsetX + worker.x, mapOffsetY + worker.y, workerWidth, workerHeight);
-  });
-
-  // buy worker
-  // for (let pos of occupiedPositions) {
-  //   if (pos.workerType === 1) {
-  //     // Copy worker 1's image to the new position
-  //     copy(map1, worker1X, worker1Y, workerWidth, workerHeight,
-  //          mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
-  //   } else if (pos.workerType === 2) {
-  //     // Copy worker 2's image to the new position
-  //     copy(map1, worker2X, worker2Y, workerWidth, workerHeight,
-  //          mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
-  //   }
-  // }
+  renderWorkers();
 
   // Draw elevator
   fill(100);
@@ -209,9 +191,6 @@ function draw() {
   text("Floor " + currentFloor, elevator.x + elevator.width/2, elevator.y + elevator.height/2);
 
 
-
-
-  //moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
 
   gameUI.checkPauseButtonHover(mouseX, mouseY);
   gameUI.checkToolboxButtonHover(mouseX, mouseY);
@@ -618,9 +597,7 @@ function keyPressed() {
   if (key === 'b' || key === 'B') {
     if (money >= workerCost) {
       WorkerUpgradeQueue.pop();
-      //money -= workerCost;
       buyWorker();
-      //workerCost += 100;
       let newWorkerPos = getNextWorkerPosition();
       if (newWorkerPos) {
         occupiedPositions.push(newWorkerPos);
@@ -643,6 +620,21 @@ function getNextWorkerPosition() {
 }
 
 
+function renderWorkers() {
+  for (let worker of floorWorkers[currentFloor]) {
+    if (worker.workerType === 1) {
+      // Copy worker 1's image to the worker's position
+      copy(map1, worker1X, worker1Y, workerWidth, workerHeight,
+           mapOffsetX + worker.x, mapOffsetY + worker.y, workerWidth, workerHeight);
+    } else if (worker.workerType === 2) {
+      // Copy worker 2's image to the worker's position
+      copy(map1, worker2X, worker2Y, workerWidth, workerHeight,
+           mapOffsetX + worker.x, mapOffsetY + worker.y, workerWidth, workerHeight);
+    }
+  }
+}
+
+
 //w buy worker
 function initializeWorkerPositions() {
   workerPositions1.push({ x: 221, y: 50 });
@@ -662,13 +654,11 @@ function initializeWorkerPositions() {
 
 }
 
-
-
 function buyWorker() {
   if (money >= workerCost) {
     let newWorkerPos = getNextWorkerPosition();
     if (newWorkerPos) {
-      // Add worker data to the current floor
+      // Add the new worker to the current floor's worker list
       floorWorkers[currentFloor].push({
         x: newWorkerPos.x,
         y: newWorkerPos.y,
@@ -676,7 +666,8 @@ function buyWorker() {
       });
 
       money -= workerCost;
-      //workerCost += 100;
+      // Optional: Increment worker cost for balancing
+      // workerCost += 100;
     }
   }
 }
