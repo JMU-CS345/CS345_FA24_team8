@@ -54,7 +54,7 @@ let negative = 0;
 let gameOver = false;
 
 let toBeCollected = 0
-let money = 1000;
+let money;
 
 
 
@@ -666,8 +666,7 @@ function buyWorker() {
       });
 
       money -= workerCost;
-      // Optional: Increment worker cost for balancing
-      // workerCost += 100;
+      workerCost += 100; 
     }
   }
 }
