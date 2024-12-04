@@ -330,8 +330,7 @@ function displayMainGame() {
   });
 
 
-  if (isPaused || gameUI.showUpgradesMenu) return;
-
+  if (isPaused || gameUI.showUpgradesMenu || gameUI.showFloorUpgradesMenu || gameUI.showWorkerUpgradesMenu) return;
 
   // Check for elevator collision
   if (checkCollision(x, y, guyWidth * 2, guyHeight * 2, {
@@ -1041,19 +1040,19 @@ function renderWorkers() {
 
 // buy worker
 function buyWorker() {
-  /*if (currentFloor === 1 && (numLvl1Workers < maxWorkerCount)) {
-    numLvl1Workers++;
-  } else if (currentFloor === 2 && (numLvl2Workers < maxWorkerCount)) {
-    numLvl2Workers++;
-  } else if (currentFloor === 3 && (numLvl3Workers < maxWorkerCount)) {
-    numLvl3Workers++;
-  } else if (currentFloor === 4 && (numLvl4Workers < maxWorkerCount)) {
-    numLvl4Workers++;
-  } else if (currentFloor === 5 && (numLvl5Workers < maxWorkerCount)) {
-    numLvl5Workers++;
-  }*/
   if (money >= workerCost) {
     let newWorkerPos = getNextWorkerPosition();
+    if (currentFloor === 1 && (numLvl1Workers < maxWorkerCount)) {
+      numLvl1Workers++;
+    } else if (currentFloor === 2 && (numLvl2Workers < maxWorkerCount)) {
+      numLvl2Workers++;
+    } else if (currentFloor === 3 && (numLvl3Workers < maxWorkerCount)) {
+      numLvl3Workers++;
+    } else if (currentFloor === 4 && (numLvl4Workers < maxWorkerCount)) {
+      numLvl4Workers++;
+    } else if (currentFloor === 5 && (numLvl5Workers < maxWorkerCount)) {
+      numLvl5Workers++;
+    }
     if (newWorkerPos) {
       // Add worker data to the current floor
       floorWorkers[currentFloor].push({
@@ -1063,9 +1062,9 @@ function buyWorker() {
       });
 
       money -= workerCost;
-      //workerCost += 100;
+      workerCost += 100;
     }
-}
+  }
 }
 
 
