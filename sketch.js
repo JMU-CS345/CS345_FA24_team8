@@ -867,6 +867,17 @@ function mousePressed() {
       x = elevator.x + elevator.width + 30;
       y = elevator.y + elevator.height / 2 - (guyHeight);
     }
+
+    if (inElevator && showFloorMenu) {
+      let selectedFloor = gameUI.handleFloorSelection(mouseX, mouseY); // Determine selected floor
+      if (selectedFloor !== null && purchasedFloors[selectedFloor]) {
+        switchFloor(selectedFloor); 
+        showFloorMenu = false;      
+        inElevator = false;        
+      }
+    }
+    
+
   }
 
   if (gameUI.pauseButtonHovered) {
@@ -1004,6 +1015,26 @@ function getNextWorkerPosition() {
 }
 
 
+
+function switchFloor(newFloor) {
+  saveWorkersToFloor(currentFloor); 
+  currentFloor = newFloor;
+  loadWorkersForFloor(currentFloor); 
+}
+
+function saveWorkersToFloor(floor) {
+  floorWorkers[floor] = [occupiedPositions]; // ...
+}
+
+function loadWorkersForFloor(floor) {
+  if (floorWorkers[floor]) {
+    occupiedPositions = [floorWorkers[floor]]; //...
+  } else {
+    occupiedPositions = []; 
+  }
+}
+
+
 //w buy worker
 function initializeWorkerPositions() {
   workerPositions1.push({ x: 221, y: 50 });
@@ -1053,16 +1084,18 @@ function buyWorker() {
     } else if (currentFloor === 5 && (numLvl5Workers < maxWorkerCount)) {
       numLvl5Workers++;
     }
-    if (newWorkerPos) {
-      // Add worker data to the current floor
-      floorWorkers[currentFloor].push({
-        x: newWorkerPos.x,
-        y: newWorkerPos.y,
-        workerType: newWorkerPos.workerType
-      });
-
-      money -= workerCost;
-      workerCost += 100;
+    if (money >= workerCost) {
+      let newWorkerPos = getNextWorkerPosition();
+      if (newWorkerPos && floorWorkers[currentFloor].length < maxWorkerCount) {
+        floorWorkers[currentFloor].push({
+          x: newWorkerPos.x,
+          y: newWorkerPos.y,
+          workerType: newWorkerPos.workerType,
+        });
+        occupiedPositions.push(newWorkerPos);
+        money -= workerCost;
+        workerCost += 100;
+      }
     }
   }
 }
