@@ -3,6 +3,7 @@ let workerPositions2 = [];  // but worker
 let occupiedPositions = []; // buy worker
 let workerCost = 50;
 let money = 1000;
+let startScreen = true;
 
 // Coordinates and size of the worker to clone
 const worker1X = 130;
@@ -71,6 +72,11 @@ let hitbox = {
   height: 35,
 };
 
+let map1;
+let chair;
+let chair2;
+let test;
+let desk;
 
 function preload() {
   map1 = loadImage('assets/Office_Design_2.gif');
@@ -109,8 +115,8 @@ function setup() {
 
     // If the worker number exceeds 14, move to the next floor
     if (workerNumber > 14) {
-        workerNumber = 3;
-        floor++;
+      workerNumber = 3;
+      floor++;
     }
   }
   gameUI = new GameUI();
@@ -118,225 +124,228 @@ function setup() {
 
 
   initializeWorkerPositions();
-
-
 }
 
 function draw() {
-  background(220);
-
-  moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
-  clickValue = moneyPerSecond
-
-  stroke(51);
-  let c = color(52, 235, 152)
-  c.setAlpha(128);
-
-  fill(c);
-  textSize(100);
-  text(currentFloor, 140, 570)
-
-
-  if (showFloorMenu) {
-    gameUI.drawFloorMenu(currentFloor);
-    return;
-  }
-
-  image(map1, 90, 120);
-  gameTracker();
-  if (warning) {
-    getPositive();
-    isGameOver();
-  }
-
-
-
-  // buy worker 
-  for (let pos of occupiedPositions) {
-    if (pos.workerType === 1) {
-      // Copy worker 1's image to the new position
-      copy(map1, worker1X, worker1Y, workerWidth, workerHeight,
-           mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
-    } else if (pos.workerType === 2) {
-      // Copy worker 2's image to the new position
-      copy(map1, worker2X, worker2Y, workerWidth, workerHeight,
-           mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
-    }
-  }
-
-  // Draw elevator
-  fill(100);
-  rect(elevator.x, elevator.y, elevator.width, elevator.height);
-  fill(150);
-  textSize(12);
-  textAlign(CENTER, CENTER);
-  text("Floor " + currentFloor, elevator.x + elevator.width/2, elevator.y + elevator.height/2);
-
-  //moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
-
-  gameUI.checkPauseButtonHover(mouseX, mouseY);
-  gameUI.checkToolboxButtonHover(mouseX, mouseY);
-  gameUI.drawUI({
-    money,
-    timerMinutes,
-    timerSeconds,
-    isPaused,
-    width,
-    height,
-    moneyPerSecond,
-    gameOver
-  });
-
-  if (isPaused || gameUI.showUpgradesMenu || gameUI.showFloorUpgradesMenu || gameUI.showWorkerUpgradesMenu) return;
-
-  // Check for elevator collision
-  if (checkCollision(x, y, guyWidth * 2, guyHeight * 2, {
-    topLeft: { x: elevator.x, y: elevator.y },
-    bottomRight: { x: elevator.x + elevator.width, y: elevator.y + elevator.height }
-  })) {
-    if (!inElevator) {
-      inElevator = true;
-      showFloorMenu = true;
-    }
-  }
-
-  if (box.width > 0 && box.height > 0) {
-    fill(255, 0, 0, 150);
-    rect(box.x, box.y, box.width, box.height);
-
-    cornersHovered = checkCornersHover(mouseX, mouseY);
-    if (cornersHovered) {
-      fill(0);
-      text(`(${cornersHovered.x}, ${cornersHovered.y})`, mouseX + 5, mouseY - 5);
-    }
-  }
-
-  moving = false;
-  let newX = x;
-  let newY = y;
-
-  let collisionDetectedX = false;
-  let collisionDetectedY = false;
-
-  if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-    newX -= 1;
-    moving = true;
-    facingRight = false;
-  }
-
-  if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-    newX += 1;
-    moving = true;
-    facingRight = true;
-  }
-
-  hitbox.x = newX + (facingRight ? 14 : 4); // Adjust based on direction
-
-  for (let wall of walls) {
-    if (checkCollision(hitbox.x, hitbox.y, hitbox.width, hitbox.height, wall)) {
-      collisionDetectedX = true;
-      break;
-    }
-  }
-
-  if (!collisionDetectedX) {
-    x = newX;
+  if (startScreen) {
+    displayStartScreen();
   } else {
-    // If collision is detected, stop movement in X direction
+    background(220);
+
+    moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
+    clickValue = moneyPerSecond
+
+    strokeWeight(1);
+    stroke(51);
+    let c = color(52, 235, 152)
+    c.setAlpha(128);
+
+    fill(c);
+    textSize(100);
+    text(currentFloor, 140, 570)
+
+
+    if (showFloorMenu) {
+      gameUI.drawFloorMenu(currentFloor);
+      return;
+    }
+
+    console.log("Hello!");
+    image(map1, 90, 120);
+    console.log("Goodbye!");
+    gameTracker();
+    if (warning) {
+      getPositive();
+      isGameOver();
+    }
+
+    // buy worker 
+    for (let pos of occupiedPositions) {
+      if (pos.workerType === 1) {
+        // Copy worker 1's image to the new position
+        copy(map1, worker1X, worker1Y, workerWidth, workerHeight,
+          mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
+      } else if (pos.workerType === 2) {
+        // Copy worker 2's image to the new position
+        copy(map1, worker2X, worker2Y, workerWidth, workerHeight,
+          mapOffsetX + pos.x, mapOffsetY + pos.y, workerWidth, workerHeight);
+      }
+    }
+
+    // Draw elevator
+    fill(100);
+    rect(elevator.x, elevator.y, elevator.width, elevator.height);
+    fill(150);
+    textSize(12);
+    textAlign(CENTER, CENTER);
+    text("Floor " + currentFloor, elevator.x + elevator.width / 2, elevator.y + elevator.height / 2);
+
+    //moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
+
+    gameUI.checkPauseButtonHover(mouseX, mouseY);
+    gameUI.checkToolboxButtonHover(mouseX, mouseY);
+    gameUI.drawUI({
+      money,
+      timerMinutes,
+      timerSeconds,
+      isPaused,
+      width,
+      height,
+      moneyPerSecond,
+      gameOver
+    });
+
+    if (isPaused || gameUI.showUpgradesMenu || gameUI.showFloorUpgradesMenu || gameUI.showWorkerUpgradesMenu) return;
+
+    // Check for elevator collision
+    if (checkCollision(x, y, guyWidth * 2, guyHeight * 2, {
+      topLeft: { x: elevator.x, y: elevator.y },
+      bottomRight: { x: elevator.x + elevator.width, y: elevator.y + elevator.height }
+    })) {
+      if (!inElevator) {
+        inElevator = true;
+        showFloorMenu = true;
+      }
+    }
+
+    if (box.width > 0 && box.height > 0) {
+      fill(255, 0, 0, 150);
+      rect(box.x, box.y, box.width, box.height);
+
+      cornersHovered = checkCornersHover(mouseX, mouseY);
+      if (cornersHovered) {
+        fill(0);
+        text(`(${cornersHovered.x}, ${cornersHovered.y})`, mouseX + 5, mouseY - 5);
+      }
+    }
+
+    moving = false;
+    let newX = x;
+    let newY = y;
+
+    let collisionDetectedX = false;
+    let collisionDetectedY = false;
+
     if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-      x += 1; // Undo movement
+      newX -= 1;
+      moving = true;
+      facingRight = false;
     }
+
     if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-      x -= 1; // Undo movement
+      newX += 1;
+      moving = true;
+      facingRight = true;
     }
-  }
 
-  // Movement logic for Y
-  if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-    newY -= 1;
-    moving = true;
-  }
-  if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-    newY += 1;
-    moving = true;
-  }
+    hitbox.x = newX + (facingRight ? 14 : 4); // Adjust based on direction
 
-  // Collision check for Y direction
-  hitbox.y = newY + 6;
-  for (let wall of walls) {
-    if (checkCollision(hitbox.x, hitbox.y, hitbox.width, hitbox.height, wall)) {
-      collisionDetectedY = true;
-      break;
+    for (let wall of walls) {
+      if (checkCollision(hitbox.x, hitbox.y, hitbox.width, hitbox.height, wall)) {
+        collisionDetectedX = true;
+        break;
+      }
     }
-  }
 
-  // Apply Y movement if no collision detected
-  if (!collisionDetectedY) {
-    y = newY;
-  } else {
-    // If collision is detected, stop movement in Y direction
+    if (!collisionDetectedX) {
+      x = newX;
+    } else {
+      // If collision is detected, stop movement in X direction
+      if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+        x += 1; // Undo movement
+      }
+      if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+        x -= 1; // Undo movement
+      }
+    }
+
+    // Movement logic for Y
     if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-      y += 1; // Undo movement
+      newY -= 1;
+      moving = true;
     }
     if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-      y -= 1; // Undo movement
+      newY += 1;
+      moving = true;
     }
-  }
 
-  if (moving) {
-    if (frameCount % dela === 0) {
-      frame = (frame + 1) % 6;
-    }
-  } else {
-    frame = 0;
-  }
-
-  guyX = frame * guyWidth;
-  guyY = 0;
-
-  push();
-  if (facingRight) {
-    translate(x, y);
-    hitbox.x = x + 14;
-  } else {
-    translate(x + guyWidth * 2, y);
-    scale(-1, 1);
-    hitbox.x = x + 5;
-  }
-  image(guy, 0, 0, guyWidth * 2, guyHeight * 2, guyX, guyY, guyWidth, guyHeight);
-  pop();
-
-  // Show walls if toggled
-  if (showWalls && box.width > 0 && box.height > 0) {
-    fill(255, 0, 0, 150);
-    rect(box.x, box.y, box.width, box.height);
-
-    // Show the coordinates of the top-left and bottom-right corners
-    fill(0);
-    textSize(12);
-    text(`Top Left: (${Math.floor(box.x)}, ${Math.floor(box.y)})`, box.x + 5, box.y - 10);
-    text(`Bottom Right: (${Math.floor(box.x + box.width)}, ${Math.floor(box.y + box.height)})`, box.x + 5, box.y + box.height + 10);
-  }
-
-  // Update box width and height if dragging
-  if (box.dragging) {
-    box.width = mouseX - box.x;
-    box.height = mouseY - box.y;
-  }
-  if (showWalls) {
-    fill(255, 0, 0, 0);  // Fully transparent fill
-    rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+    // Collision check for Y direction
+    hitbox.y = newY + 6;
     for (let wall of walls) {
-      fill(0, 100);
-      rect(wall.topLeft.x, wall.topLeft.y, wall.bottomRight.x - wall.topLeft.x, wall.bottomRight.y - wall.topLeft.y);
-
+      if (checkCollision(hitbox.x, hitbox.y, hitbox.width, hitbox.height, wall)) {
+        collisionDetectedY = true;
+        break;
+      }
     }
-  }
 
-  image(chair, 185, 292 );
-  image(chair2, 377, 292);
-  image(test, 90, 120);
-  image(desk, 90, 120);
+    // Apply Y movement if no collision detected
+    if (!collisionDetectedY) {
+      y = newY;
+    } else {
+      // If collision is detected, stop movement in Y direction
+      if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+        y += 1; // Undo movement
+      }
+      if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+        y -= 1; // Undo movement
+      }
+    }
+
+    if (moving) {
+      if (frameCount % dela === 0) {
+        frame = (frame + 1) % 6;
+      }
+    } else {
+      frame = 0;
+    }
+
+    guyX = frame * guyWidth;
+    guyY = 0;
+
+    push();
+    if (facingRight) {
+      translate(x, y);
+      hitbox.x = x + 14;
+    } else {
+      translate(x + guyWidth * 2, y);
+      scale(-1, 1);
+      hitbox.x = x + 5;
+    }
+    image(guy, 0, 0, guyWidth * 2, guyHeight * 2, guyX, guyY, guyWidth, guyHeight);
+    pop();
+
+    // Show walls if toggled
+    if (showWalls && box.width > 0 && box.height > 0) {
+      fill(255, 0, 0, 150);
+      rect(box.x, box.y, box.width, box.height);
+
+      // Show the coordinates of the top-left and bottom-right corners
+      fill(0);
+      textSize(12);
+      text(`Top Left: (${Math.floor(box.x)}, ${Math.floor(box.y)})`, box.x + 5, box.y - 10);
+      text(`Bottom Right: (${Math.floor(box.x + box.width)}, ${Math.floor(box.y + box.height)})`, box.x + 5, box.y + box.height + 10);
+    }
+
+    // Update box width and height if dragging
+    if (box.dragging) {
+      box.width = mouseX - box.x;
+      box.height = mouseY - box.y;
+    }
+    if (showWalls) {
+      fill(255, 0, 0, 0);  // Fully transparent fill
+      rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+      for (let wall of walls) {
+        fill(0, 100);
+        rect(wall.topLeft.x, wall.topLeft.y, wall.bottomRight.x - wall.topLeft.x, wall.bottomRight.y - wall.topLeft.y);
+
+      }
+    }
+
+    image(chair, 185, 292);
+    image(chair2, 377, 292);
+    image(test, 90, 120);
+    image(desk, 90, 120);
+  }
 }
 
 const musicTracks = [
@@ -394,35 +403,35 @@ function gameTracker() {
         alert("Warning!");
         warning = true;
       }
-      }
     }
   }
+}
 
 
-  function getPositive() {
-    if (money >= 0) {
-      negative++;
+function getPositive() {
+  if (money >= 0) {
+    negative++;
+  }
+}
+
+
+function isGameOver() {
+  if (!isPaused) {
+    if (warning && money < 0 && negative >= 1) {
+      gameOver = true;
     }
   }
+}
 
+let purchasedFloors = {
+  1: true, // The first floor is already purchased at the start
+  2: false,
+  3: false,
+  4: false,
+  5: false
+};
 
-  function isGameOver() {
-    if (!isPaused) {
-      if (warning && money < 0 && negative >= 1) {
-        gameOver = true;
-      }
-    }
-  }
-
-  let purchasedFloors = {
-    1: true, // The first floor is already purchased at the start
-    2: false,
-    3: false,
-    4: false,
-    5: false
-  };
-
-  let floorPrice = 500; // Initial price for a floor
+let floorPrice = 500; // Initial price for a floor
 
 
 function mousePressed() {
@@ -469,7 +478,7 @@ function mousePressed() {
 
   if (!isPaused && gameOver) {
     restart();
-    }
+  }
 
 
   if (showWalls && !box.dragging) {
@@ -524,10 +533,10 @@ function mousePressed() {
 }
 
 function mouseReleased() {
-// Stop dragging the boxwd when mouse is released
-if (box.dragging) {
-  box.dragging = false;
-}
+  // Stop dragging the boxwd when mouse is released
+  if (box.dragging) {
+    box.dragging = false;
+  }
 }
 
 function togglePause() {
@@ -645,7 +654,7 @@ function timeIt() {
 
 let walls = [
   { topLeft: { x: 79, y: 182 }, bottomRight: { x: 122, y: 247 } },
-  { topLeft: { x: 122, y: 131 }, bottomRight: { x: 570, y: 160} },
+  { topLeft: { x: 122, y: 131 }, bottomRight: { x: 570, y: 160 } },
   { topLeft: { x: 570, y: 121 }, bottomRight: { x: 592, y: 643 } },
   { topLeft: { x: 90, y: 312 }, bottomRight: { x: 121, y: 451 } },
   { topLeft: { x: 204, y: 450 }, bottomRight: { x: 217, y: 644 } },
