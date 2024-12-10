@@ -40,6 +40,7 @@ class GameUI {
     this.pauseButtonHovered = false;
     this.toolboxButtonHovered = false;
     this.showUpgradesMenu = false;
+    this.showPlayerUpgradesMenu = false;
     this.currentUpgradeHover = 0;
 
     this.showWorkerUpgradesMenu = false;
@@ -350,6 +351,9 @@ class GameUI {
       if (this.showFloorUpgradesMenu) {
         this.drawFloorUpgradesMenu();
       }
+      if (this.showPlayerUpgradesMenu) {
+        this.drawPlayerUpgradesMenu();
+      }
     }
   }
 
@@ -494,6 +498,12 @@ class GameUI {
     this.UpgradesFloorY + 40,
     this.UPGRADES_MENU.width - 40, 
     this.UPGRADES_MENU.height - 80, 4)
+  //Buy player upgrades dropdown
+  fill('#9bbc0f');
+  text("Buy Player Upgrades", this.UPGRADES_MENU.x + 20, 
+    this.UpgradesFloorY + 80,
+    this.UPGRADES_MENU.width - 40, 
+    this.UPGRADES_MENU.height - 80, 4)
   
   this.drawUpgradeButtons()
     pop();
@@ -517,134 +527,93 @@ class GameUI {
         this.UPGRADE_FLOOR_ONE_BUTTON.y + ((this.UPGRADE_FLOOR_ONE_BUTTON.height) / 20)) 
     }
   
-    //floor two workers
-    fill('#4a5c68');
-    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 2) {
-      rect(this.UPGRADE_FLOOR_TWO_BUTTON.x, this.UPGRADE_FLOOR_TWO_BUTTON.y,
-        this.UPGRADE_FLOOR_TWO_BUTTON.width * 1.1, this.UPGRADE_FLOOR_TWO_BUTTON.height * 1.1, 4);
-      fill('#9bbc0f')
-      text("$", this.UPGRADE_FLOOR_TWO_BUTTON.x + ((this.UPGRADE_FLOOR_TWO_BUTTON.width * 1.1) / 2),
-        this.UPGRADE_FLOOR_TWO_BUTTON.y + ((this.UPGRADE_FLOOR_TWO_BUTTON.height * 1.1) / 10)) 
-    } else {
-      rect(this.UPGRADE_FLOOR_TWO_BUTTON.x, this.UPGRADE_FLOOR_TWO_BUTTON.y,
-        this.UPGRADE_FLOOR_TWO_BUTTON.width, this.UPGRADE_FLOOR_TWO_BUTTON.height, 4);
-      fill('#9bbc0f')
-      text("$", this.UPGRADE_FLOOR_TWO_BUTTON.x + ((this.UPGRADE_FLOOR_TWO_BUTTON.width) / 2),
-        this.UPGRADE_FLOOR_TWO_BUTTON.y + ((this.UPGRADE_FLOOR_TWO_BUTTON.height) / 20)) 
+    if (!this.showPlayerUpgradesMenu) {
+      fill('#4a5c68');
+      if (this.checkUpgradeButtonHover(mouseX, mouseY) === 2) {
+        rect(this.UPGRADE_FLOOR_TWO_BUTTON.x, this.UPGRADE_FLOOR_TWO_BUTTON.y,
+          this.UPGRADE_FLOOR_TWO_BUTTON.width * 1.1, this.UPGRADE_FLOOR_TWO_BUTTON.height * 1.1, 4);
+        fill('#9bbc0f')
+        text("$", this.UPGRADE_FLOOR_TWO_BUTTON.x + ((this.UPGRADE_FLOOR_TWO_BUTTON.width * 1.1) / 2),
+          this.UPGRADE_FLOOR_TWO_BUTTON.y + ((this.UPGRADE_FLOOR_TWO_BUTTON.height * 1.1) / 10)) 
+      } else {
+        rect(this.UPGRADE_FLOOR_TWO_BUTTON.x, this.UPGRADE_FLOOR_TWO_BUTTON.y,
+          this.UPGRADE_FLOOR_TWO_BUTTON.width, this.UPGRADE_FLOOR_TWO_BUTTON.height, 4);
+        fill('#9bbc0f')
+        text("$", this.UPGRADE_FLOOR_TWO_BUTTON.x + ((this.UPGRADE_FLOOR_TWO_BUTTON.width) / 2),
+          this.UPGRADE_FLOOR_TWO_BUTTON.y + ((this.UPGRADE_FLOOR_TWO_BUTTON.height) / 20)) 
+      }
+    }
+    
+    if (!this.showPlayerUpgradesMenu) {
+      fill('#4a5c68');
+      if (this.checkUpgradeButtonHover(mouseX, mouseY) === 3) {
+        rect(this.UPGRADE_FLOOR_THREE_BUTTON.x, this.UPGRADE_FLOOR_THREE_BUTTON.y,
+          this.UPGRADE_FLOOR_THREE_BUTTON.width * 1.1, this.UPGRADE_FLOOR_THREE_BUTTON.height * 1.1, 4);
+        fill('#9bbc0f')
+        text("$", this.UPGRADE_FLOOR_THREE_BUTTON.x + ((this.UPGRADE_FLOOR_THREE_BUTTON.width * 1.1) / 2),
+            this.UPGRADE_FLOOR_THREE_BUTTON.y + ((this.UPGRADE_FLOOR_THREE_BUTTON.height * 1.1) / 10)) 
+      } else {
+        rect(this.UPGRADE_FLOOR_THREE_BUTTON.x, this.UPGRADE_FLOOR_THREE_BUTTON.y,
+          this.UPGRADE_FLOOR_THREE_BUTTON.width, this.UPGRADE_FLOOR_THREE_BUTTON.height, 4);
+        fill('#9bbc0f')
+        text("$", this.UPGRADE_FLOOR_THREE_BUTTON.x + ((this.UPGRADE_FLOOR_THREE_BUTTON.width) / 2),
+          this.UPGRADE_FLOOR_THREE_BUTTON.y + ((this.UPGRADE_FLOOR_THREE_BUTTON.height) / 20)) 
+      }
     }
   
-    //floor three workers
-    fill('#4a5c68');
-    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 3) {
-      rect(this.UPGRADE_FLOOR_THREE_BUTTON.x, this.UPGRADE_FLOOR_THREE_BUTTON.y,
-        this.UPGRADE_FLOOR_THREE_BUTTON.width * 1.1, this.UPGRADE_FLOOR_THREE_BUTTON.height * 1.1, 4);
-      fill('#9bbc0f')
-      text("$", this.UPGRADE_FLOOR_THREE_BUTTON.x + ((this.UPGRADE_FLOOR_THREE_BUTTON.width * 1.1) / 2),
-          this.UPGRADE_FLOOR_THREE_BUTTON.y + ((this.UPGRADE_FLOOR_THREE_BUTTON.height * 1.1) / 10)) 
-    } else {
-      rect(this.UPGRADE_FLOOR_THREE_BUTTON.x, this.UPGRADE_FLOOR_THREE_BUTTON.y,
-        this.UPGRADE_FLOOR_THREE_BUTTON.width, this.UPGRADE_FLOOR_THREE_BUTTON.height, 4);
-      fill('#9bbc0f')
-      text("$", this.UPGRADE_FLOOR_THREE_BUTTON.x + ((this.UPGRADE_FLOOR_THREE_BUTTON.width) / 2),
-        this.UPGRADE_FLOOR_THREE_BUTTON.y + ((this.UPGRADE_FLOOR_THREE_BUTTON.height) / 20)) 
+    if (!this.showPlayerUpgradesMenu && !this.showUpgradesMenu) {
+      fill('#4a5c68');
+      if (this.checkUpgradeButtonHover(mouseX, mouseY) === 4) {
+        rect(this.UPGRADE_FLOOR_FOUR_BUTTON.x, this.UPGRADE_FLOOR_FOUR_BUTTON.y,
+          this.UPGRADE_FLOOR_FOUR_BUTTON.width * 1.1, this.UPGRADE_FLOOR_FOUR_BUTTON.height * 1.1, 4);
+        fill('#9bbc0f')
+        text("$", this.UPGRADE_FLOOR_FOUR_BUTTON.x + ((this.UPGRADE_FLOOR_FOUR_BUTTON.width * 1.1) / 2),
+            this.UPGRADE_FLOOR_FOUR_BUTTON.y + ((this.UPGRADE_FLOOR_FOUR_BUTTON.height * 1.1) / 10)) 
+      } else {
+        rect(this.UPGRADE_FLOOR_FOUR_BUTTON.x, this.UPGRADE_FLOOR_FOUR_BUTTON.y,
+          this.UPGRADE_FLOOR_FOUR_BUTTON.width, this.UPGRADE_FLOOR_FOUR_BUTTON.height, 4);
+        fill('#9bbc0f')
+        text("$", this.UPGRADE_FLOOR_FOUR_BUTTON.x + ((this.UPGRADE_FLOOR_FOUR_BUTTON.width) / 2),
+          this.UPGRADE_FLOOR_FOUR_BUTTON.y + ((this.UPGRADE_FLOOR_FOUR_BUTTON.height) / 20)) 
+      }
     }
   
-    //FLOOR FOUR workers
-    fill('#4a5c68');
-    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 4) {
-      rect(this.UPGRADE_FLOOR_FOUR_BUTTON.x, this.UPGRADE_FLOOR_FOUR_BUTTON.y,
-        this.UPGRADE_FLOOR_FOUR_BUTTON.width * 1.1, this.UPGRADE_FLOOR_FOUR_BUTTON.height * 1.1, 4);
-      fill('#9bbc0f')
-      text("$", this.UPGRADE_FLOOR_FOUR_BUTTON.x + ((this.UPGRADE_FLOOR_FOUR_BUTTON.width * 1.1) / 2),
-          this.UPGRADE_FLOOR_FOUR_BUTTON.y + ((this.UPGRADE_FLOOR_FOUR_BUTTON.height * 1.1) / 10)) 
-    } else {
-      rect(this.UPGRADE_FLOOR_FOUR_BUTTON.x, this.UPGRADE_FLOOR_FOUR_BUTTON.y,
-        this.UPGRADE_FLOOR_FOUR_BUTTON.width, this.UPGRADE_FLOOR_FOUR_BUTTON.height, 4);
-      fill('#9bbc0f')
-      text("$", this.UPGRADE_FLOOR_FOUR_BUTTON.x + ((this.UPGRADE_FLOOR_FOUR_BUTTON.width) / 2),
-        this.UPGRADE_FLOOR_FOUR_BUTTON.y + ((this.UPGRADE_FLOOR_FOUR_BUTTON.height) / 20)) 
+    if (!this.showPlayerUpgradesMenu && !this.showUpgradesMenu && !this.showFloorUpgradesMenu) {
+      fill('#4a5c68');
+      if (this.checkUpgradeButtonHover(mouseX, mouseY) === 5) {
+        rect(this.UPGRADE_FLOOR_FIVE_BUTTON.x, this.UPGRADE_FLOOR_FIVE_BUTTON.y,
+          this.UPGRADE_FLOOR_FIVE_BUTTON.width * 1.1, this.UPGRADE_FLOOR_FIVE_BUTTON.height * 1.1, 4);
+        fill('#9bbc0f')
+        text("$", this.UPGRADE_FLOOR_FIVE_BUTTON.x + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width * 1.1) / 2),
+            this.UPGRADE_FLOOR_FIVE_BUTTON.y + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height * 1.1) / 10)) 
+      } else {
+        rect(this.UPGRADE_FLOOR_FIVE_BUTTON.x, this.UPGRADE_FLOOR_FIVE_BUTTON.y,
+          this.UPGRADE_FLOOR_FIVE_BUTTON.width, this.UPGRADE_FLOOR_FIVE_BUTTON.height, 4);
+        fill('#9bbc0f')
+        text("$", this.UPGRADE_FLOOR_FIVE_BUTTON.x + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width) / 2),
+          this.UPGRADE_FLOOR_FIVE_BUTTON.y + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height) / 20)) 
+      }
     }
-  
-    //FLOOR FIVE workers
+
+    //back button
     fill('#4a5c68');
-    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 5) {
-      rect(this.UPGRADE_FLOOR_FIVE_BUTTON.x, this.UPGRADE_FLOOR_FIVE_BUTTON.y,
+    if (this.checkUpgradeButtonHover(mouseX, mouseY) === 7) {
+      rect(this.UPGRADE_FLOOR_FIVE_BUTTON.x - 325, this.UPGRADE_FLOOR_FIVE_BUTTON.y - 205,
         this.UPGRADE_FLOOR_FIVE_BUTTON.width * 1.1, this.UPGRADE_FLOOR_FIVE_BUTTON.height * 1.1, 4);
       fill('#9bbc0f')
-      text("$", this.UPGRADE_FLOOR_FIVE_BUTTON.x + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width * 1.1) / 2),
-          this.UPGRADE_FLOOR_FIVE_BUTTON.y + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height * 1.1) / 10)) 
+      text("-", this.UPGRADE_FLOOR_FIVE_BUTTON.x - 320 + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width * 1.1) / 2),
+        this.UPGRADE_FLOOR_FIVE_BUTTON.y - 207 + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height * 1.1) / 10)) 
+      text("<", this.UPGRADE_FLOOR_FIVE_BUTTON.x - 330 + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width * 1.1) / 2),
+        this.UPGRADE_FLOOR_FIVE_BUTTON.y - 205 + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height * 1.1) / 10)) 
     } else {
-      rect(this.UPGRADE_FLOOR_FIVE_BUTTON.x, this.UPGRADE_FLOOR_FIVE_BUTTON.y,
+      rect(this.UPGRADE_FLOOR_FIVE_BUTTON.x - 325, this.UPGRADE_FLOOR_FIVE_BUTTON.y - 205,
         this.UPGRADE_FLOOR_FIVE_BUTTON.width, this.UPGRADE_FLOOR_FIVE_BUTTON.height, 4);
       fill('#9bbc0f')
-      text("$", this.UPGRADE_FLOOR_FIVE_BUTTON.x + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width) / 2),
-        this.UPGRADE_FLOOR_FIVE_BUTTON.y + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height) / 20)) 
+      text("-", this.UPGRADE_FLOOR_FIVE_BUTTON.x - 320 + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width) / 2),
+        this.UPGRADE_FLOOR_FIVE_BUTTON.y - 207 + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height) / 20)) 
+      text("<", this.UPGRADE_FLOOR_FIVE_BUTTON.x - 330 + ((this.UPGRADE_FLOOR_FIVE_BUTTON.width) / 2),
+        this.UPGRADE_FLOOR_FIVE_BUTTON.y - 205 + ((this.UPGRADE_FLOOR_FIVE_BUTTON.height) / 20)) 
     }
-
-    // //Buying Floors
-    // //floor two purchase button
-    // fill('#4a5c68');
-    // if (this.checkUpgradeButtonHover(mouseX, mouseY) === 6) {
-    //   rect(this.BUY_FLOOR_TWO_BUTTON.x, this.BUY_FLOOR_TWO_BUTTON.y,
-    //     this.BUY_FLOOR_TWO_BUTTON.width * 1.1, this.BUY_FLOOR_TWO_BUTTON.height * 1.1, 4)
-    //   fill('#9bbc0f')
-    //   text("$", this.BUY_FLOOR_TWO_BUTTON.x + ((this.BUY_FLOOR_TWO_BUTTON.width * 1.1) / 2),
-    //       this.BUY_FLOOR_TWO_BUTTON.y + ((this.BUY_FLOOR_TWO_BUTTON.height) * 1.1) / 10)
-    // } else {
-    //   rect(this.BUY_FLOOR_TWO_BUTTON.x, this.BUY_FLOOR_TWO_BUTTON.y,
-    //     this.BUY_FLOOR_TWO_BUTTON.width, this.BUY_FLOOR_TWO_BUTTON.height, 4)
-    //   fill('#9bbc0f')
-    //   text("$", this.BUY_FLOOR_TWO_BUTTON.x + ((this.BUY_FLOOR_TWO_BUTTON.width * 1.1) / 2),
-    //       this.BUY_FLOOR_TWO_BUTTON.y + ((this.BUY_FLOOR_TWO_BUTTON.height)) / 20)
-    // }
-
-    // //floor three purchase button
-    // fill('#4a5c68');
-    // if (this.checkUpgradeButtonHover(mouseX, mouseY) === 7) {
-    //   rect(this.BUY_FLOOR_THREE_BUTTON.x, this.BUY_FLOOR_THREE_BUTTON.y,
-    //     this.BUY_FLOOR_THREE_BUTTON.width * 1.1, this.BUY_FLOOR_THREE_BUTTON.height * 1.1, 4)
-    //   fill('#9bbc0f')
-    //   text("$", this.BUY_FLOOR_THREE_BUTTON.x + ((this.BUY_FLOOR_THREE_BUTTON.width * 1.1) / 2),
-    //       this.BUY_FLOOR_THREE_BUTTON.y + ((this.BUY_FLOOR_THREE_BUTTON.height) * 1.1) / 10)
-    // } else {
-    //   rect(this.BUY_FLOOR_THREE_BUTTON.x, this.BUY_FLOOR_THREE_BUTTON.y,
-    //     this.BUY_FLOOR_THREE_BUTTON.width, this.BUY_FLOOR_THREE_BUTTON.height, 4)
-    //   fill('#9bbc0f')
-    //   text("$", this.BUY_FLOOR_THREE_BUTTON.x + ((this.BUY_FLOOR_THREE_BUTTON.width * 1.1) / 2),
-    //       this.BUY_FLOOR_THREE_BUTTON.y + ((this.BUY_FLOOR_THREE_BUTTON.height)) / 20)
-    // }
-
-    // //floor four purchase button
-    // fill('#4a5c68');
-    // if (this.checkUpgradeButtonHover(mouseX, mouseY) === 8) {
-    //   rect(this.BUY_FLOOR_FOUR_BUTTON.x, this.BUY_FLOOR_FOUR_BUTTON.y,
-    //     this.BUY_FLOOR_FOUR_BUTTON.width * 1.1, this.BUY_FLOOR_FOUR_BUTTON.height * 1.1, 4)
-    //   fill('#9bbc0f')
-    //   text("$", this.BUY_FLOOR_FOUR_BUTTON.x + ((this.BUY_FLOOR_FOUR_BUTTON.width * 1.1) / 2),
-    //       this.BUY_FLOOR_FOUR_BUTTON.y + ((this.BUY_FLOOR_FOUR_BUTTON.height) * 1.1) / 10)
-    // } else {
-    //   rect(this.BUY_FLOOR_FOUR_BUTTON.x, this.BUY_FLOOR_FOUR_BUTTON.y,
-    //     this.BUY_FLOOR_FOUR_BUTTON.width, this.BUY_FLOOR_FOUR_BUTTON.height, 4)
-    //   fill('#9bbc0f')
-    //   text("$", this.BUY_FLOOR_FOUR_BUTTON.x + ((this.BUY_FLOOR_FOUR_BUTTON.width * 1.1) / 2),
-    //       this.BUY_FLOOR_FOUR_BUTTON.y + ((this.BUY_FLOOR_FOUR_BUTTON.height)) / 20)
-    // }
-
-    // //floor five purchase button
-    // fill('#4a5c68');
-    // if (this.checkUpgradeButtonHover(mouseX, mouseY) === 9) {
-    //   rect(this.BUY_FLOOR_FIVE_BUTTON.x, this.BUY_FLOOR_FIVE_BUTTON.y,
-    //     this.BUY_FLOOR_FIVE_BUTTON.width * 1.1, this.BUY_FLOOR_FIVE_BUTTON.height * 1.1, 4)
-    //   fill('#9bbc0f')
-    //   text("$", this.BUY_FLOOR_FIVE_BUTTON.x + ((this.BUY_FLOOR_FIVE_BUTTON.width * 1.1) / 2),
-    //       this.BUY_FLOOR_FIVE_BUTTON.y + ((this.BUY_FLOOR_TWO_BUTTON.height) * 1.1) / 10)
-    // } else {
-    //   rect(this.BUY_FLOOR_FIVE_BUTTON.x, this.BUY_FLOOR_FIVE_BUTTON.y,
-    //     this.BUY_FLOOR_FIVE_BUTTON.width, this.BUY_FLOOR_FIVE_BUTTON.height, 4)
-    //   fill('#9bbc0f')
-    //   text("$", this.BUY_FLOOR_FIVE_BUTTON.x + ((this.BUY_FLOOR_FIVE_BUTTON.width * 1.1) / 2),
-    //       this.BUY_FLOOR_FIVE_BUTTON.y + ((this.BUY_FLOOR_FIVE_BUTTON.height)) / 20)
-    // }
   }
   
   checkUpgradeButtonHover(mouseX, mouseY) {
@@ -689,10 +658,10 @@ class GameUI {
       mouseY <= this.BUY_FLOOR_TWO_BUTTON.y + this.BUY_FLOOR_TWO_BUTTON.height) {
         return 6
     }
-    if (mouseX >= this.BUY_FLOOR_THREE_BUTTON.x && 
-      mouseX <= this.BUY_FLOOR_THREE_BUTTON.x + this.BUY_FLOOR_THREE_BUTTON.width &&
-      mouseY >= this.BUY_FLOOR_THREE_BUTTON.y &&
-      mouseY <= this.BUY_FLOOR_THREE_BUTTON.y + this.BUY_FLOOR_THREE_BUTTON.height) {
+    if (mouseX >= this.BUY_FLOOR_THREE_BUTTON.x  - 325 && 
+      mouseX <= this.BUY_FLOOR_THREE_BUTTON.x - 325 + this.BUY_FLOOR_THREE_BUTTON.width &&
+      mouseY >= this.UPGRADE_FLOOR_FIVE_BUTTON.y - 205 &&
+      mouseY <= this.UPGRADE_FLOOR_FIVE_BUTTON.y - 205+ this.UPGRADE_FLOOR_FIVE_BUTTON.height) {
         return 7
     }
     if (mouseX >= this.BUY_FLOOR_FOUR_BUTTON.x && 
@@ -884,6 +853,46 @@ class GameUI {
       this.UPGRADES_MENU.width - 40, 
       this.UPGRADES_MENU.height - 80, 4)
 
+    this.drawUpgradeButtons();
+  }
+
+  drawPlayerUpgradesMenu() {
+    push();
+    // Dim background
+    fill(0, 0, 0, 127);
+    rect(0, 0, width, height);
+    
+    // Menu background
+    fill('#4a5c68');
+    rect(this.UPGRADES_MENU.x, this.UPGRADES_MENU.y, 
+          this.UPGRADES_MENU.width, this.UPGRADES_MENU.height, 8);
+    
+    // Title
+    textAlign(CENTER, TOP);
+    textSize(24);
+    fill('#9bbc0f');
+    text("Buy Floors", 
+          this.UPGRADES_MENU.x + this.UPGRADES_MENU.width/2, 
+          this.UPGRADES_MENU.y + 20);
+
+    fill('#2c353b');
+      rect(this.UPGRADES_MENU.x + 20, 
+        this.UPGRADES_MENU.y + 60,
+        this.UPGRADES_MENU.width - 40, 
+        this.UPGRADES_MENU.height - 80, 4);
+    
+    fill(237,17, 20);
+    if (money >= speedUpgradeCost) {
+      fill('#9bbc0f');
+    }
+    if (guySpeed === maxGuySpeed) {
+      fill(19, 84, 38)
+    }
+    text("Buy Speed Upgrade "  + (guySpeed - 1) + "/3", this.UPGRADES_MENU.x + 20, 
+      this.UpgradesFloorY,
+      this.UPGRADES_MENU.width - 40, 
+      this.UPGRADES_MENU.height - 80, 4)
+    
     this.drawUpgradeButtons();
   }
 }

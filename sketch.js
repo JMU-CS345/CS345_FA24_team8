@@ -4,6 +4,7 @@ let occupiedPositions = []; // buy worker
 let workerCost = 50;
 let money = 1000;
 let startScreen = true;
+let speedUpgradeCost = 500;
 
 // Coordinates and size of the worker to clone
 const worker1X = 130;
@@ -25,6 +26,8 @@ let guyX;
 let guyY;
 let guyWidth = 24;
 let guyHeight = 24;
+let guySpeed = 1;
+let maxGuySpeed = 3;
 
 // Relating to number or workers
 let numWorkers;
@@ -101,6 +104,7 @@ function setup() {
   money = 50;
   clickValue = moneyPerSecond;
   WorkerUpgradeQueue = []
+  guySpeed = 1;
 
   // Start from floor 1 with worker #3
   let floor = 1;
@@ -195,7 +199,8 @@ function draw() {
       gameOver
     });
 
-    if (isPaused || gameUI.showUpgradesMenu || gameUI.showFloorUpgradesMenu || gameUI.showWorkerUpgradesMenu) return;
+    if (isPaused || gameUI.showUpgradesMenu || gameUI.showFloorUpgradesMenu
+       || gameUI.showWorkerUpgradesMenu || gameUI.showPlayerUpgradesMenu) return;
 
     // Check for elevator collision
     if (checkCollision(x, y, guyWidth * 2, guyHeight * 2, {
@@ -227,13 +232,13 @@ function draw() {
     let collisionDetectedY = false;
 
     if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-      newX -= 1;
+      newX -= guySpeed;
       moving = true;
       facingRight = false;
     }
 
     if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-      newX += 1;
+      newX += guySpeed;
       moving = true;
       facingRight = true;
     }
@@ -252,20 +257,20 @@ function draw() {
     } else {
       // If collision is detected, stop movement in X direction
       if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-        x += 1; // Undo movement
+        x += guySpeed; // Undo movement
       }
       if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
-        x -= 1; // Undo movement
+        x -= guySpeed; // Undo movement
       }
     }
 
     // Movement logic for Y
     if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-      newY -= 1;
+      newY -= guySpeed;
       moving = true;
     }
     if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-      newY += 1;
+      newY += guySpeed;
       moving = true;
     }
 
@@ -284,10 +289,10 @@ function draw() {
     } else {
       // If collision is detected, stop movement in Y direction
       if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-        y += 1; // Undo movement
+        y += guySpeed; // Undo movement
       }
       if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
-        y -= 1; // Undo movement
+        y -= guySpeed; // Undo movement
       }
     }
 
@@ -497,36 +502,70 @@ function mousePressed() {
       gameUI.showFloorUpgradesMenu = true
       gameUI.showUpgradesMenu = false
     }
-  } else if (gameUI.showWorkerUpgradesMenu && money >= workerCost) {
-    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1) {
-      buyWorker();
-      money -= workerCost;
-      workerCost += 100;
-      let newWorkerPos = getNextWorkerPosition();
-      if (newWorkerPos) {
-        occupiedPositions.push(newWorkerPos);
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 7) {
+      gameUI.showUpgradesMenu = false
+    }
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 3) {
+      gameUI.showPlayerUpgradesMenu = true;
+      gameUI.showUpgradesMenu = false;
+    }
+  } else if (gameUI.showWorkerUpgradesMenu) {
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 7) {
+      gameUI.showWorkerUpgradesMenu = false
+      gameUI.showUpgradesMenu = true
+    }
+    if (money >= workerCost) {
+      if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1 && currentFloor === 1 &&
+          numLvl1Workers < maxWorkerCount) {
+        buyWorker();
+        money -= workerCost;
+        workerCost += 100;
+        let newWorkerPos = getNextWorkerPosition();
+        if (newWorkerPos) {
+          occupiedPositions.push(newWorkerPos);
+        }
       }
     }
-  } else if (gameUI.showFloorUpgradesMenu && money >= floorPrice) {
-    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1) {
-      money -= floorPrice;
-      floorPrice += 500;
-      purchasedFloors[2] = true
+  } else if (gameUI.showFloorUpgradesMenu) {
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 7) {
+      gameUI.showFloorUpgradesMenu = false
+      gameUI.showUpgradesMenu = true
     }
-    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 2 && purchasedFloors[2]) {
-      money -= floorPrice;
-      floorPrice += 500;
-      purchasedFloors[3] = true
+    if (money >= floorPrice) {
+      if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1) {
+        money -= floorPrice;
+        floorPrice += 500;
+        purchasedFloors[2] = true
+      }
+      if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 2 && purchasedFloors[2]) {
+        money -= floorPrice;
+        floorPrice += 500;
+        purchasedFloors[3] = true
+      }
+      if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 3 && purchasedFloors[3]) {
+        money -= floorPrice;
+        floorPrice += 500;
+        purchasedFloors[4] = true
+      }
+      if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 4 && purchasedFloors[4]) {
+        money -= floorPrice;
+        floorPrice += 500;
+        purchasedFloors[5] = true
+      }
     }
-    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 3 && purchasedFloors[3]) {
-      money -= floorPrice;
-      floorPrice += 500;
-      purchasedFloors[4] = true
+  } else if (gameUI.showPlayerUpgradesMenu) {
+    if ((gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 7)) {
+      gameUI.showPlayerUpgradesMenu = false;
+      gameUI.showUpgradesMenu = true;
     }
-    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 4 && purchasedFloors[4]) {
-      money -= floorPrice;
-      floorPrice += 500;
-      purchasedFloors[5] = true
+    if (money >= speedUpgradeCost) {
+      if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1) {
+        if (guySpeed <= maxGuySpeed) {
+          guySpeed += 1;
+          money -= speedUpgradeCost;
+          speedUpgradeCost += 500;
+        }
+      }
     }
   }
 
