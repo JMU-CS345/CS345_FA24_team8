@@ -35,6 +35,7 @@ function preload() {
   chair2 = loadImage('assets/chair.png');
   test = loadImage('assets/test.png');
   desk = loadImage('assets/desk_occupied.png');
+  moneyIMAGE = loadImage('assets/moneyIMAGE.png');
 }
 
 function setup() {

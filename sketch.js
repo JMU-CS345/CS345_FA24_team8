@@ -99,7 +99,7 @@ function preload() {
   chair2 = loadImage('assets/chair.png');
   test = loadImage('assets/test.png');
   desk = loadImage('assets/money_2.png');
-  //moneyIMAGE = loadImage('assets/moneyIMAGE.png');
+  moneyIMAGE = loadImage('assets/moneyIMAGE');
 
 }
 
@@ -371,7 +371,7 @@ function draw() {
     //image(chair2, 377, 292);
     //image(test, 90, 120);
     //image(desk, 90, 120);
-    image(desk, 400, 500);
+    image(moneyIMAGE, 400, 500);
     fill(255, 0, 0);
     textSize(12);
     textAlign(CENTER, CENTER);
