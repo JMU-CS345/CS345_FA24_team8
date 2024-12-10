@@ -2,7 +2,7 @@ let workerPositions1 = []; // buy worker
 let workerPositions2 = [];  // but worker
 let occupiedPositions = []; // buy worker
 let workerCost = 50;
-let money = 1000;
+let money;
 let toBeCollected = 0;
 let startScreen = true;
 let speedUpgradeCost = 500;
@@ -84,6 +84,57 @@ let hitbox = {
   width: 30,
   height: 35,
 };
+
+let floorWorkers = {
+  1: [], 
+  2: [], 
+  3: [], 
+  4: [], 
+  5: []
+};
+
+function saveWorkersToFloor(floor) {
+  floorWorkers[floor] = [...occupiedPositions];
+}
+
+function loadWorkersForFloor(floor) {
+  if (floorWorkers[floor]) {
+    occupiedPositions = [...floorWorkers[floor]];
+  } else {
+    occupiedPositions = [];
+  }
+}
+
+
+function switchFloor(newFloor) {
+  if (purchasedFloors[newFloor]) {
+    saveWorkersToFloor(currentFloor); 
+    currentFloor = newFloor;        
+    loadWorkersForFloor(currentFloor);
+    x = elevator.x + elevator.width + 30;
+    y = elevator.y + elevator.height / 2 - guyHeight;
+  } else {
+    alert("You haven't purchased this floor yet!");
+  }
+}
+
+let floorWorkerCounts = {
+  1: 0,
+  2: 0,
+  3: 0,
+  4: 0,
+  5: 0
+};
+
+let floorWorkerPositions = {
+  1: [],
+  2: [],
+  3: [],
+  4: [],
+  5: []
+};
+
+
 
 let map1;
 let chair;
@@ -456,7 +507,7 @@ function isGameOver() {
 }
 
 let purchasedFloors = {
-  1: true, // The first floor is already purchased at the start
+  1: true, 
   2: false,
   3: false,
   4: false,
@@ -472,20 +523,14 @@ function mousePressed() {
     let selectedFloor = gameUI.handleFloorSelection(mouseX, mouseY);
 
     if (selectedFloor !== null) {
-      if (!purchasedFloors[selectedFloor]) {
-        // Check if the player has enough money
-        if (money >= floorPrice) {
-          money -= floorPrice; // Deduct the floor price
-          purchasedFloors[selectedFloor] = true; // Mark floor as purchased
-          floorPrice += 500; // Increment price for the next floor
-        } else {
-          alert("Not enough money to buy this floor!");
-          return; // Exit if the player can't afford the floor
-        }
+      if (!purchasedFloors[selectedFloor] && money >= floorPrice) {
+        money -= floorPrice; 
+        purchasedFloors[selectedFloor] = true; 
+        floorPrice += 500; 
       }
+  
 
-      // Switch to the selected floor
-      currentFloor = selectedFloor;
+      switchFloor(selectedFloor);
       showFloorMenu = false;
       inElevator = false;
 
@@ -653,40 +698,45 @@ function keyPressed() {
   }
 }
 
-// buy worker
 function getNextWorkerPosition() {
-  if (workerPositions1.length > 0) {
-    let position = workerPositions1.shift();
-    return { x: position.x, y: position.y, workerType: 1 };
+  // Check if positions for worker type 1 are still available
+  if (floorWorkerPositions[currentFloor].length > 0) {
+    // Determine worker type based on position
+    let position = floorWorkerPositions[currentFloor].shift();
+    let workerType = (position.x === 221 || position.x === 320 || position.x === 98 || position.x === 194 || position.x === 290 || position.x === 383) ? 1 : 2;
+
+    return { x: position.x, y: position.y, workerType: workerType };
   }
-  if (workerPositions2.length > 0) {
-    let position = workerPositions2.shift();
-    return { x: position.x, y: position.y, workerType: 2 };
-  }
-  return null;
+  return null; // No positions available
 }
+
 
 
 //w buy worker
 function initializeWorkerPositions() {
-  workerPositions1.push({ x: 221, y: 50 });
-  workerPositions1.push({ x: 320, y: 50 });
-  workerPositions1.push({ x: 98, y: 175 });
-  workerPositions1.push({ x: 194, y: 175 });
-  workerPositions1.push({ x: 290, y: 175 });
-  workerPositions1.push({ x: 383, y: 175 });
 
-  // // Predefined coordinates for worker type 2
-  workerPositions2.push({ x: 386, y: 250 });
-  workerPositions2.push({ x: 98, y: 250 });
-  workerPositions2.push({ x: 194, y: 250 });
-  workerPositions2.push({ x: 130, y: 120 });
-  workerPositions2.push({ x: 226, y: 120 });
-  workerPositions2.push({ x: 323, y: 120 });
+  const defaultPositions = [
+    { x: 221, y: 50 },
+    { x: 320, y: 50 },
+    { x: 98, y: 175 },
+    { x: 194, y: 175 },
+    { x: 290, y: 175 },
+    { x: 383, y: 175 },
+    { x: 386, y: 250 },
+    { x: 98, y: 250 },
+    { x: 194, y: 250 },
+    { x: 130, y: 120 },
+    { x: 226, y: 120 },
+    { x: 323, y: 120 }
+  ];
+
+  for (let floor = 1; floor <= 5; floor++) {
+    floorWorkerPositions[floor] = [...defaultPositions];
+  }
 
 }
 
-// buy worker
+
 function buyWorker() {
   if (currentFloor === 1 && (numLvl1Workers < maxWorkerCount)) {
     numLvl1Workers++;
@@ -699,7 +749,19 @@ function buyWorker() {
   } else if (currentFloor === 5 && (numLvl5Workers < maxWorkerCount)) {
     numLvl5Workers++;
   }
+  if (floorWorkerCounts[currentFloor] < 14 && money >= workerCost) {
+    let newWorkerPos = getNextWorkerPosition();
+    if (newWorkerPos) {
+      occupiedPositions.push(newWorkerPos); 
+      floorWorkerCounts[currentFloor]++;  
+      money -= workerCost;                 
+      workerCost += 100;                  
+    }
+  } else if (floorWorkerCounts[currentFloor] >= 14) {
+    alert("Maximum workers reached for this floor!");
 }
+}
+
 
 
 function timeIt() {
