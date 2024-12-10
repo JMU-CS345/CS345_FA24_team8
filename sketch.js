@@ -6,6 +6,7 @@ let money;
 let toBeCollected = 0;
 let startScreen = true;
 let speedUpgradeCost = 500;
+let time = false;
 
 let musicStarted = false;
 
@@ -188,8 +189,7 @@ function setup() {
     }
   }
   gameUI = new GameUI();
-  setInterval(timeIt, 1000);
-
+  setInterval(timeIt(), 1000);
 
   initializeWorkerPositions();
 }
@@ -655,15 +655,15 @@ function togglePause() {
 }
 
 function keyPressed() {
-  if (key === 'p' || key === 'P') {
+  if ((key === 'p' || key === 'P') && !startScreen) {
     togglePause();
   }
 
-  if (key === 'm' || key === 'M') {
+  if ((key === 'm' || key === 'M') && !startScreen) {
     showWalls = !showWalls; // Toggle wall visibility
   }
 
-  if (key === 'u' || key === 'U') {
+  if ((key === 'u' || key === 'U') && !startScreen) {
     gameUI.showUpgradesMenu = !gameUI.showUpgradesMenu;
   }
 
@@ -674,7 +674,7 @@ function keyPressed() {
     }
   }
 
-  if (gameOver && key === 'r' || key === 'R') {
+  if ((gameOver && key === 'r' || key === 'R') && !startScreen) {
     restart();
   }
   if (key === 'q') {
@@ -684,7 +684,7 @@ function keyPressed() {
   }
 
 
-  if (key === 'b' || key === 'B') {
+  if ((key === 'b' || key === 'B') && !startScreen) {
     if (money >= workerCost) {
       WorkerUpgradeQueue.pop();
       money -= workerCost;
@@ -765,7 +765,7 @@ function buyWorker() {
 
 
 function timeIt() {
-  if (!isPaused) {
+  if (!isPaused && !startScreen) {
     if (timerMinutes === 0 && timerSeconds === 0 && money < 0) {
       restart();
     } else if (timerMinutes === 0 && timerSeconds === 0) {
