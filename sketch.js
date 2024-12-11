@@ -697,17 +697,50 @@ function keyPressed() {
   }
 }
 
-function getNextWorkerPosition() {
-  // Check if positions for worker type 1 are still available
-  if (floorWorkerPositions[currentFloor].length > 0) {
-    // Determine worker type based on position
-    let position = floorWorkerPositions[currentFloor].shift();
-    let workerType = (position.x === 221 || position.x === 320 || position.x === 98 || position.x === 194 || position.x === 290 || position.x === 383) ? 1 : 2;
+// function getNextWorkerPosition() {
+//   // Check if positions for worker type 1 are still available
+//   if (floorWorkerPositions[currentFloor].length > 0) {
+//     // Determine worker type based on position
+//     let position = floorWorkerPositions[currentFloor].shift();
+//     let workerType = (position.x === 221 || position.x === 320 || position.x === 98 || position.x === 194 || position.x === 290 || position.x === 383) ? 1 : 2;
 
-    return { x: position.x, y: position.y, workerType: workerType };
+//     return { x: position.x, y: position.y, workerType: workerType };
+//   }
+//   return null; // No positions available
+// }
+
+function getNextWorkerPosition() {
+  if (floorWorkerPositions[currentFloor].length > 0) {
+    let position = floorWorkerPositions[currentFloor].shift();
+
+    // Define workerType based on specific positions
+    if (
+      (position.x === 221 && position.y === 50) ||
+      (position.x === 320 && position.y === 50) ||
+      (position.x === 98 && position.y === 175) ||
+      (position.x === 194 && position.y === 175) ||
+      (position.x === 290 && position.y === 175) ||
+      (position.x === 383 && position.y === 175)
+    ) {
+      position.workerType = 1;
+    } else if (
+      (position.x === 386 && position.y === 250) ||
+      (position.x === 98 && position.y === 250) ||
+      (position.x === 194 && position.y === 250) ||
+      (position.x === 130 && position.y === 120) ||
+      (position.x === 226 && position.y === 120) ||
+      (position.x === 323 && position.y === 120)
+    ) {
+      position.workerType = 2;
+    } else {
+      position.workerType = 1; // Default to workerType 1 if not explicitly mapped
+    }
+
+    return position;
   }
   return null; // No positions available
 }
+
 
 
 
@@ -716,11 +749,11 @@ function initializeWorkerPositions() {
 
   const defaultPositions = [
     { x: 221, y: 50 },
-    { x: 320, y: 50 },
-    { x: 98, y: 175 },
+   { x: 320, y: 50 },
+   { x: 98, y: 175 },
     { x: 194, y: 175 },
-    { x: 290, y: 175 },
-    { x: 383, y: 175 },
+   { x: 290, y: 175 },
+   { x: 383, y: 175 },
     { x: 386, y: 250 },
     { x: 98, y: 250 },
     { x: 194, y: 250 },
