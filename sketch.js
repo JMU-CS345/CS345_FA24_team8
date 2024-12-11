@@ -523,11 +523,11 @@ function mousePressed() {
     let selectedFloor = gameUI.handleFloorSelection(mouseX, mouseY);
 
     if (selectedFloor !== null) {
-      if (!purchasedFloors[selectedFloor] && money >= floorPrice) {
-        money -= floorPrice; 
-        purchasedFloors[selectedFloor] = true; 
-        floorPrice += 500; 
-      }
+      // if (!purchasedFloors[selectedFloor] && money >= floorPrice) {
+      //   money -= floorPrice; 
+      //   purchasedFloors[selectedFloor] = true; 
+      //   floorPrice += 500; 
+      // }
   
 
       switchFloor(selectedFloor);
@@ -616,21 +616,25 @@ function mousePressed() {
         money -= floorPrice;
         floorPrice += 500;
         purchasedFloors[2] = true
+        numLvl2Workers += 2
       }
       if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 2 && purchasedFloors[2]) {
         money -= floorPrice;
         floorPrice += 500;
         purchasedFloors[3] = true
+        numLvl3Workers += 2
       }
       if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 3 && purchasedFloors[3]) {
         money -= floorPrice;
         floorPrice += 500;
         purchasedFloors[4] = true
+        numLvl4Workers += 2
       }
       if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 4 && purchasedFloors[4]) {
         money -= floorPrice;
         floorPrice += 500;
         purchasedFloors[5] = true
+        numLvl5Workers += 2
       }
     }
   } else if (gameUI.showPlayerUpgradesMenu) {

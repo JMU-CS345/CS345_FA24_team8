@@ -773,11 +773,21 @@ class GameUI {
       this.UPGRADES_MENU.height - 80, 4)
     
     // present cost of worker upgrade
+    //check if all workers have been bought
+    if (numLvl1Workers != 14 || numLvl2Workers != 14 || 
+      numLvl3Workers != 14 || numLvl4Workers != 14 || numLvl5Workers != 14) {
     fill(252, 118, 0)
     text("Next worker costs $" + workerCost, this.UPGRADES_MENU.x + 17, 
       this.UpgradesFloorY + 200,
       this.UPGRADES_MENU.width - 40, 
       this.UPGRADES_MENU.height - 80, 4)
+    } else {
+      fill(252, 118, 0)
+      text("All Workers purchased!", this.UPGRADES_MENU.x + 17, 
+        this.UpgradesFloorY + 200,
+        this.UPGRADES_MENU.width - 40, 
+        this.UPGRADES_MENU.height - 80, 4)
+    }
     
     this.drawUpgradeButtons();
   }
@@ -861,11 +871,20 @@ class GameUI {
       this.UPGRADES_MENU.height - 80, 4)
 
     //present cost of next floor upgrade
-    fill(252, 118, 0)
-    text("Next floor costs $" + floorPrice, this.UPGRADES_MENU.x + 17, 
-      this.UpgradesFloorY + 160,
-      this.UPGRADES_MENU.width - 40, 
-      this.UPGRADES_MENU.height - 80, 4)
+    if (!purchasedFloors[1] || !purchasedFloors[2] || !purchasedFloors[3]
+      || !purchasedFloors[4] || !purchasedFloors[5]) {
+      fill(252, 118, 0)
+      text("Next floor costs $" + floorPrice, this.UPGRADES_MENU.x + 17, 
+        this.UpgradesFloorY + 160,
+        this.UPGRADES_MENU.width - 40, 
+        this.UPGRADES_MENU.height - 80, 4)
+    } else {
+      fill(252, 118, 0)
+      text("All floors purchased!", this.UPGRADES_MENU.x + 17, 
+        this.UpgradesFloorY + 160,
+        this.UPGRADES_MENU.width - 40, 
+        this.UPGRADES_MENU.height - 80, 4)
+    }
     
     this.drawUpgradeButtons();
 
@@ -910,11 +929,19 @@ class GameUI {
       this.UPGRADES_MENU.height - 80, 4)
 
     // present cost of player upgrade
-    fill(252, 118, 0)
-    text("Next player upgrade costs $" + speedUpgradeCost, this.UPGRADES_MENU.x + 17, 
-      this.UpgradesFloorY + 40,
-      this.UPGRADES_MENU.width - 40, 
-      this.UPGRADES_MENU.height - 80, 4)
+    if (guySpeed != maxGuySpeed) {
+      fill(252, 118, 0)
+      text("Next player upgrade costs $" + speedUpgradeCost, this.UPGRADES_MENU.x + 17, 
+        this.UpgradesFloorY + 40,
+        this.UPGRADES_MENU.width - 40, 
+        this.UPGRADES_MENU.height - 80, 4)
+    } else {
+      fill(252, 118, 0)
+      text("All player upgrades purchased!", this.UPGRADES_MENU.x + 17, 
+        this.UpgradesFloorY + 40,
+        this.UPGRADES_MENU.width - 40, 
+        this.UPGRADES_MENU.height - 80, 4)
+    }
     
     this.drawUpgradeButtons();
     
