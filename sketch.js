@@ -88,10 +88,10 @@ let hitbox = {
 };
 
 let floorWorkers = {
-  1: [], 
-  2: [], 
-  3: [], 
-  4: [], 
+  1: [],
+  2: [],
+  3: [],
+  4: [],
   5: []
 };
 
@@ -110,8 +110,8 @@ function loadWorkersForFloor(floor) {
 
 function switchFloor(newFloor) {
   if (purchasedFloors[newFloor]) {
-    saveWorkersToFloor(currentFloor); 
-    currentFloor = newFloor;        
+    saveWorkersToFloor(currentFloor);
+    currentFloor = newFloor;
     loadWorkersForFloor(currentFloor);
     x = elevator.x + elevator.width + 30;
     y = elevator.y + elevator.height / 2 - guyHeight;
@@ -252,6 +252,12 @@ function draw() {
     textAlign(CENTER, CENTER);
     text("Floor " + currentFloor, elevator.x + elevator.width / 2, elevator.y + elevator.height / 2);
 
+    image(moneyIMAGE, 400, 500);
+    fill(255, 0, 0);
+    textSize(12);
+    textAlign(CENTER, CENTER);
+    text(toBeCollected, moneyBag.x + moneyBag.width/2, moneyBag.y + moneyBag.height/2);
+
     //moneyPerSecond = numLvl1Workers + (2 * numLvl2Workers) + (3 * numLvl3Workers) + (4 * numLvl4Workers) + (5 * numLvl5Workers);
 
     gameUI.checkPauseButtonHover(mouseX, mouseY);
@@ -284,7 +290,7 @@ function draw() {
 
     if (checkCollision(x, y, guyWidth * 2, guyHeight * 2, {
       topLeft: { x: moneyBag.x, y: moneyBag.y },
-      bottomRight: { x: moneyBag.x + moneyBag.width, y: moneyBag.y + elevator.height }
+      bottomRight: { x: moneyBag.x + moneyBag.width, y: moneyBag.y + moneyBag.height }
     })) {
       money = toBeCollected + money;
       toBeCollected = 0;
@@ -427,11 +433,7 @@ function draw() {
     //image(chair2, 377, 292);
     //image(test, 90, 120);
     //image(desk, 90, 120);
-    image(moneyIMAGE, 400, 500);
-    fill(255, 0, 0);
-    textSize(12);
-    textAlign(CENTER, CENTER);
-    text(toBeCollected, moneyBag.x + moneyBag.width/2, moneyBag.y + moneyBag.height/2);
+
 
   }
 }
@@ -513,7 +515,7 @@ function isGameOver() {
 }
 
 let purchasedFloors = {
-  1: true, 
+  1: true,
   2: false,
   3: false,
   4: false,
@@ -530,11 +532,11 @@ function mousePressed() {
 
     if (selectedFloor !== null) {
       // if (!purchasedFloors[selectedFloor] && money >= floorPrice) {
-      //   money -= floorPrice; 
-      //   purchasedFloors[selectedFloor] = true; 
-      //   floorPrice += 500; 
+      //   money -= floorPrice;
+      //   purchasedFloors[selectedFloor] = true;
+      //   floorPrice += 500;
       // }
-  
+
 
       switchFloor(selectedFloor);
       showFloorMenu = false;
@@ -550,7 +552,7 @@ function mousePressed() {
     togglePause();
     return;
   }
-  
+
   if (isPaused) {
     console.log("Game is paused, checking for menu clicks");
     const pauseAction = gameUI.handlePauseMenuClick(mouseX, mouseY, width, height);
@@ -817,10 +819,10 @@ function buyWorker() {
     }
     let newWorkerPos = getNextWorkerPosition();
     if (newWorkerPos) {
-      occupiedPositions.push(newWorkerPos); 
-      floorWorkerCounts[currentFloor]++;  
-      money -= workerCost;                 
-      workerCost += 100;                  
+      occupiedPositions.push(newWorkerPos);
+      floorWorkerCounts[currentFloor]++;
+      money -= workerCost;
+      workerCost += 100;
     }
   } else if (floorWorkerCounts[currentFloor] >= 14) {
     alert("Maximum workers reached for this floor!");
