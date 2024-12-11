@@ -318,34 +318,45 @@ class GameUI {
 }
 
   
-  handlePauseMenuClick(mouseX, mouseY, width, height) {
-    if (!this.isPaused) return false;
-    
-    const menuWidth = 300;
-    const menuHeight = 400;
-    const menuX = width/2 - menuWidth/2;
-    const menuY = height/2 - menuHeight/2;
-    
-    const buttonWidth = 200;
-    const buttonHeight = 40;
-    const buttonX = width/2 - buttonWidth/2;
-    
-    // Resume button
-    const resumeY = menuY + 120;
-    if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
-        mouseY >= resumeY && mouseY <= resumeY + buttonHeight) {
-      return 'resume';
-    }
-    
-    // Quit button
-    const quitY = menuY + 180;
-    if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
-        mouseY >= quitY && mouseY <= quitY + buttonHeight) {
-      return 'quit';
-    }
-    
+handlePauseMenuClick(mouseX, mouseY, width, height) {
+  if (!this.isPaused) {
+    console.log("Not paused, returning false");
     return false;
   }
+  
+  const menuWidth = 300;
+  const menuHeight = 400;
+  const menuX = width/2 - menuWidth/2;
+  const menuY = height/2 - menuHeight/2;
+  const buttonWidth = 200;
+  const buttonHeight = 40;
+  const buttonX = width/2 - buttonWidth/2;
+  
+  // Resume button
+  const resumeY = menuY + 120;
+  console.log("Mouse position:", mouseX, mouseY);
+  console.log("Resume button bounds:", 
+    buttonX, resumeY, buttonX + buttonWidth, resumeY + buttonHeight);
+  
+  if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
+      mouseY >= resumeY && mouseY <= resumeY + buttonHeight) {
+    console.log("Resume button clicked!");
+    return 'resume';
+  }
+  
+  // Quit button
+  const quitY = menuY + 180;
+  console.log("Quit button bounds:", 
+    buttonX, quitY, buttonX + buttonWidth, quitY + buttonHeight);
+  
+  if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
+      mouseY >= quitY && mouseY <= quitY + buttonHeight) {
+    console.log("Quit button clicked!");
+    return 'quit';
+  }
+  
+  return false;
+}
 
   drawUI(gameState) {
     if (gameState.gameOver) {

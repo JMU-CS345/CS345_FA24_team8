@@ -550,6 +550,19 @@ function mousePressed() {
     togglePause();
     return;
   }
+  
+  if (isPaused) {
+    console.log("Game is paused, checking for menu clicks");
+    const pauseAction = gameUI.handlePauseMenuClick(mouseX, mouseY, width, height);
+    console.log("Pause action:", pauseAction);
+    if (pauseAction === 'resume') {
+      isPaused = false;
+      return;
+    } else if (pauseAction === 'quit') {
+      window.location.reload();
+      return;
+    }
+  }
 
   if (gameUI.handleToolboxClick(mouseX, mouseY)) {
     return;
@@ -670,6 +683,7 @@ function mouseReleased() {
 
 function togglePause() {
   isPaused = !isPaused;
+  gameUI.isPaused = isPaused;
 }
 
 function keyPressed() {
