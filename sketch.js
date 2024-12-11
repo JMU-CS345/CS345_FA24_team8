@@ -9,6 +9,7 @@ let speedUpgradeCost = 500;
 let time = false;
 
 let musicStarted = false;
+let gameWin = false;
 
 // Coordinates and size of the worker to clone
 const worker1X = 130;
@@ -226,6 +227,10 @@ function draw() {
       isGameOver();
     }
 
+    if (numLvl1Workers + numLvl2Workers + numLvl3Workers + numLvl4Workers + numLvl5Workers >= 70) {
+      gameWin = true;
+    }
+
     // buy worker
     for (let pos of occupiedPositions) {
       if (pos.workerType === 1) {
@@ -259,7 +264,8 @@ function draw() {
       width,
       height,
       moneyPerSecond,
-      gameOver
+      gameOver,
+      gameWin
     });
 
     if (isPaused || gameUI.showUpgradesMenu || gameUI.showFloorUpgradesMenu
@@ -475,6 +481,7 @@ function restart() {
   warning = false;
   backPos = false;
   gameOver = false;
+  gameWin = false;
   negative = 0;
 }
 
@@ -685,9 +692,18 @@ function keyPressed() {
     }
   }
 
+  if ((key === 'y' || key === 'Y') && !startScreen) {
+    gameWin = true;
+  }
+
   if ((gameOver && key === 'r' || key === 'R') && !startScreen) {
     restart();
   }
+
+  if ((gameWin && key === 'r' || key === 'R') && !startScreen) {
+    restart();
+  }
+
   if (key === 'q') {
     gameUI.showFloorUpgradesMenu = false;
     gameUI.showUpgradesMenu = false;
