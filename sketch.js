@@ -217,10 +217,9 @@ function draw() {
       gameUI.drawFloorMenu(currentFloor);
       return;
     }
-
-    console.log("Hello!");
     image(map1, 90, 120);
-    console.log("Goodbye!");
+    textSize(20);
+    text(companyName, width / 2 - 20, 90);
     gameTracker();
     if (warning) {
       getPositive();
