@@ -803,7 +803,7 @@ function buyWorker() {
 function timeIt() {
   if (!isPaused && !startScreen) {
     if (timerMinutes === 0 && timerSeconds === 0 && money < 0) {
-      restart();
+      gameOver = true;
     } else if (timerMinutes === 0 && timerSeconds === 0) {
       alert("Rent is due! $500 deducted.");
       money -= 500;
