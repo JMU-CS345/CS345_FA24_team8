@@ -31,7 +31,7 @@ let guyY;
 let guyWidth = 24;
 let guyHeight = 24;
 let guySpeed = 1;
-let maxGuySpeed = 3;
+let maxGuySpeed = 4;
 
 // Relating to number or workers
 let numWorkers;
@@ -586,17 +586,25 @@ function mousePressed() {
       gameUI.showWorkerUpgradesMenu = false
       gameUI.showUpgradesMenu = true
     }
-    if (money >= workerCost) {
-      if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1 && currentFloor === 1 &&
-          numLvl1Workers < maxWorkerCount) {
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 1 && currentFloor === 1 &&
+        numLvl1Workers < maxWorkerCount) {
+      buyWorker();
+    }
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 2 && currentFloor === 2 &&
+          numLvl2Workers < maxWorkerCount) {
         buyWorker();
-        money -= workerCost;
-        workerCost += 100;
-        let newWorkerPos = getNextWorkerPosition();
-        if (newWorkerPos) {
-          occupiedPositions.push(newWorkerPos);
-        }
-      }
+    }
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 3 && currentFloor === 3 &&
+          numLvl3Workers < maxWorkerCount) {
+        buyWorker();
+    }
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 4 && currentFloor === 4 &&
+          numLvl4Workers < maxWorkerCount) {
+        buyWorker();
+    }
+    if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 5 && currentFloor === 5 &&
+          numLvl5Workers < maxWorkerCount) {
+        buyWorker();
     }
   } else if (gameUI.showFloorUpgradesMenu) {
     if (gameUI.checkUpgradeButtonHover(mouseX, mouseY) === 7) {
@@ -685,16 +693,7 @@ function keyPressed() {
 
 
   if ((key === 'b' || key === 'B') && !startScreen) {
-    if (money >= workerCost) {
-      WorkerUpgradeQueue.pop();
-      money -= workerCost;
-      buyWorker();
-      workerCost += 100;
-      let newWorkerPos = getNextWorkerPosition();
-      if (newWorkerPos) {
-        occupiedPositions.push(newWorkerPos);
-      }
-    }
+    buyWorker()
   }
 }
 
@@ -738,18 +737,18 @@ function initializeWorkerPositions() {
 
 
 function buyWorker() {
-  if (currentFloor === 1 && (numLvl1Workers < maxWorkerCount)) {
-    numLvl1Workers++;
-  } else if (currentFloor === 2 && (numLvl2Workers < maxWorkerCount)) {
-    numLvl2Workers++;
-  } else if (currentFloor === 3 && (numLvl3Workers < maxWorkerCount)) {
-    numLvl3Workers++;
-  } else if (currentFloor === 4 && (numLvl4Workers < maxWorkerCount)) {
-    numLvl4Workers++;
-  } else if (currentFloor === 5 && (numLvl5Workers < maxWorkerCount)) {
-    numLvl5Workers++;
-  }
   if (floorWorkerCounts[currentFloor] < 14 && money >= workerCost) {
+    if (currentFloor === 1) {
+      numLvl1Workers++;
+    } else if (currentFloor === 2) {
+      numLvl2Workers++;
+    } else if (currentFloor === 3) {
+      numLvl3Workers++;
+    } else if (currentFloor === 4) {
+      numLvl4Workers++;
+    } else if (currentFloor === 5) {
+      numLvl5Workers++;
+    }
     let newWorkerPos = getNextWorkerPosition();
     if (newWorkerPos) {
       occupiedPositions.push(newWorkerPos); 

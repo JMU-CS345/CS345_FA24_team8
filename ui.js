@@ -715,7 +715,7 @@ class GameUI {
     if (numLvl1Workers === maxWorkerCount) {
       fill(19, 84, 38)
     }
-    text("Buy Floor One Worker " + (numLvl1Workers) + "/14", this.UPGRADES_MENU.x, 
+    text("Buy Floor 1 Worker " + (numLvl1Workers) + "/14", this.UPGRADES_MENU.x - 1, 
       this.UpgradesFloorY,
       this.UPGRADES_MENU.width - 40, 
       this.UPGRADES_MENU.height - 80, 4)
@@ -728,7 +728,7 @@ class GameUI {
     if (numLvl2Workers === maxWorkerCount) {
       fill(19, 84, 38)
     }
-    text("Buy Floor Two Worker " + (numLvl2Workers) + "/14", this.UPGRADES_MENU.x, 
+    text("Buy Floor 2 Worker " + (numLvl2Workers) + "/14", this.UPGRADES_MENU.x - 1, 
       this.UpgradesFloorY + 40,
       this.UPGRADES_MENU.width - 40, 
       this.UPGRADES_MENU.height - 80, 4)
@@ -741,7 +741,7 @@ class GameUI {
     if (numLvl3Workers === maxWorkerCount) {
       fill(19, 84, 38)
     }
-    text("Buy Floor Three Worker " + (numLvl3Workers) + "/14", this.UPGRADES_MENU.x + 9,
+    text("Buy Floor 3 Worker " + (numLvl3Workers) + "/14", this.UPGRADES_MENU.x - 1,
       this.UpgradesFloorY + 80,
       this.UPGRADES_MENU.width - 40, 
       this.UPGRADES_MENU.height - 80, 4)
@@ -754,7 +754,7 @@ class GameUI {
     if (numLvl4Workers === maxWorkerCount) {
       fill(19, 84, 38)
     }
-    text("Buy Floor Four Worker " + (numLvl4Workers) + "/14", this.UPGRADES_MENU.x + 2,
+    text("Buy Floor 4 Worker " + (numLvl4Workers) + "/14", this.UPGRADES_MENU.x - 1,
       this.UpgradesFloorY + 120,
       this.UPGRADES_MENU.width - 40, 
       this.UPGRADES_MENU.height - 80, 4)
@@ -767,7 +767,7 @@ class GameUI {
     if (numLvl5Workers === maxWorkerCount) {
       fill(19, 84, 38)
     }
-    text("Buy Floor Five Worker " + (numLvl5Workers) + "/14", this.UPGRADES_MENU.x, 
+    text("Buy Floor 5 Worker " + (numLvl5Workers) + "/14", this.UPGRADES_MENU.x - 1, 
       this.UpgradesFloorY + 160,
       this.UPGRADES_MENU.width - 40, 
       this.UPGRADES_MENU.height - 80, 4)
@@ -871,7 +871,7 @@ class GameUI {
     textAlign(CENTER, TOP);
     textSize(24);
     fill('#9bbc0f');
-    text("Buy Floors", 
+    text("Buy Player Upgrades", 
           this.UPGRADES_MENU.x + this.UPGRADES_MENU.width/2, 
           this.UPGRADES_MENU.y + 20);
 
