@@ -28,7 +28,6 @@ let startOn = true;
 function preload() {
   img = loadImage("assets/360_F_534160357_SRlpd1wPvPZiCghL.jpg");
   spriteSheet = loadImage("assets/mort/base/move.png");
-  audio = loadSound("assets/music/Untitled-2.mp3");
   map1 = loadImage('assets/Office_Design_2.gif');
   guy = loadImage('assets/mort/base/move.png');
   chair = loadImage('assets/chair.png');
