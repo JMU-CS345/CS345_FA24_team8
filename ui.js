@@ -772,6 +772,13 @@ class GameUI {
       this.UPGRADES_MENU.width - 40, 
       this.UPGRADES_MENU.height - 80, 4)
     
+    // present cost of worker upgrade
+    fill(252, 118, 0)
+    text("Next worker costs $" + workerCost, this.UPGRADES_MENU.x + 17, 
+      this.UpgradesFloorY + 200,
+      this.UPGRADES_MENU.width - 40, 
+      this.UPGRADES_MENU.height - 80, 4)
+    
     this.drawUpgradeButtons();
   }
 
@@ -853,6 +860,15 @@ class GameUI {
       this.UPGRADES_MENU.width - 40, 
       this.UPGRADES_MENU.height - 80, 4)
 
+    //present cost of next floor upgrade
+    fill(252, 118, 0)
+    text("Next floor costs $" + floorPrice, this.UPGRADES_MENU.x + 17, 
+      this.UpgradesFloorY + 160,
+      this.UPGRADES_MENU.width - 40, 
+      this.UPGRADES_MENU.height - 80, 4)
+    
+    this.drawUpgradeButtons();
+
     this.drawUpgradeButtons();
   }
 
@@ -892,6 +908,15 @@ class GameUI {
       this.UpgradesFloorY,
       this.UPGRADES_MENU.width - 40, 
       this.UPGRADES_MENU.height - 80, 4)
+
+    // present cost of player upgrade
+    fill(252, 118, 0)
+    text("Next player upgrade costs $" + speedUpgradeCost, this.UPGRADES_MENU.x + 17, 
+      this.UpgradesFloorY + 40,
+      this.UPGRADES_MENU.width - 40, 
+      this.UPGRADES_MENU.height - 80, 4)
+    
+    this.drawUpgradeButtons();
     
     this.drawUpgradeButtons();
   }
