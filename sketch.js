@@ -440,6 +440,7 @@ function draw() {
 
 const musicTracks = [
   "assets/music/Untitled-2.mp3",
+  "assets/music/JazzyDinos.mp3",
   "assets/music/345 - P-Funk 16 Bit.mp3",
   "assets/music/345 - 16 Bit Soul.mp3",
   "assets/music/345 - P-Funk 2.mp3",
